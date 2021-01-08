@@ -34,7 +34,7 @@ jobs:
         with:
           arguments: clean publish
         if: ${{ !startsWith(matrix.os, 'windows') }}
-      - name: Publish (windows)
-        shell: bash
-        run: ./gradlew clean publishWin64PublicationToMavenRepository
-        if: ${{ startsWith(matrix.os, 'windows') }}
+#      - name: Publish (windows)
+#        shell: bash
+#        run: ./gradlew clean publishWin64PublicationToMavenRepository
+#        if: ${{ startsWith(matrix.os, 'windows') }}
