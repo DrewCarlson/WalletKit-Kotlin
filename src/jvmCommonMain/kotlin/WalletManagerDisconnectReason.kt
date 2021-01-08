@@ -1,6 +1,6 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.core.WalletManagerDisconnectReason.*
+import drewcarlson.walletkit.WalletManagerDisconnectReason.*
 import com.breadwallet.corenative.crypto.BRCryptoWalletManagerDisconnectReason
 import com.breadwallet.corenative.crypto.BRCryptoWalletManagerDisconnectReasonType.*
 
