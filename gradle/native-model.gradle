@@ -1,0 +1,247 @@
+apply(plugin: "c")
+apply(plugin: "kotlin-multiplatform")
+
+def safeExec(String... script) {
+    if (!file("/usr/bin/" + script[0]).exists()) {
+        return ""
+    }
+    def retVal
+    exec {
+        commandLine script
+        standardOutput = new ByteArrayOutputStream()
+        retVal = {
+            standardOutput.toString().trim()
+        }
+    }
+    return retVal()
+}
+
+// Paths and compiler options to build WalletKitCore for iOS targets
+def iphoneOsSdk = safeExec("xcrun", "--sdk", "iphoneos", "--show-sdk-path")
+def iphoneSimSdk = safeExec("xcrun", "--sdk", "iphonesimulator", "--show-sdk-path")
+def macosSdk = safeExec("xcrun", "--sdk", "macosx", "--show-sdk-path")
+def iosClangCompilerArgs = { args, sdk, arch ->
+    args << "-isysroot"
+    args << "${sdk}"
+    args << "-arch"
+    args << "${arch}"
+    if (sdk == iphoneOsSdk || sdk == iphoneSimSdk) {
+        args << "-miphoneos-version-min=10.0"
+    }
+    args << "-std=c99"
+    args << "-stdlib=libc++"
+    args << "-fembed-bitcode"
+    args << "-O0"
+    args << "-F${sdk}/System/Library/Frameworks"
+    args << "-I${sdk}/usr/include"
+}
+
+def clangBin = safeExec("xcrun", "--sdk", "iphoneos", "--find", "clang")
+def clangPath = "/usr/bin"
+if (clangBin.length() > 0) {
+    clangPath = clangBin.substring(0, clangBin.lastIndexOf("/"))
+}
+
+def corePath = file("walletkit/WalletKitCore").absolutePath
+
+def cppSqliteSrcDir = "$corePath/vendor/sqlite3"
+def cppEd25519SrcDir = "$corePath/vendor/ed25519"
+def cppblake2SrcDir = "$corePath/vendor/blake2"
+def cppCryptoSrcDirs = [
+        "bcash",
+        "bitcoin",
+        "crypto",
+        "ethereum",
+        "generic",
+        "hedera",
+        "ripple",
+        "bsv",
+        "tezos",
+        "support"
+].collect { "$corePath/src/$it" }
+
+def cppCryptoIncDirs = cppCryptoSrcDirs + [
+        "src",
+        "src/support",
+        "include",
+        "vendor",
+        "vendor/secp256k1"
+].collect { "$corePath/$it" }
+
+model {
+    toolChains {
+        clang(Clang) {
+            // TODO: Share iOS config and select correct sdk path
+            target("macos") {
+                path clangPath
+                cCompiler.executable "clang"
+                cCompiler.withArguments { args ->
+                    iosClangCompilerArgs(args, macosSdk, "x86_64")
+                }
+            }
+            target("iosX64") {
+                path clangPath
+                cCompiler.executable "clang"
+                cCompiler.withArguments { args ->
+                    iosClangCompilerArgs(args, iphoneSimSdk, "x86_64")
+                }
+
+                linker.withArguments { args ->
+                    args.add("-v")
+                    args.add("-isysroot${iphoneSimSdk}")
+                    // TODO: Can this code be removed gracefully?
+                    //  Why are these args here if they fail?
+                    args.remove("-Wl,-soname,libcorecrypto.so")
+                    args.remove("-Wl,-soname,libsqlite3.so")
+                    args.remove("-Wl,-soname,libed25519.so")
+                    args.remove("-Wl,-soname,libblake2.so")
+                }
+            }
+            target("iosArm64") {
+                path clangPath
+                cCompiler.executable "clang"
+                cCompiler.withArguments { args ->
+                    iosClangCompilerArgs(args, iphoneOsSdk, "arm64")
+                }
+
+                linker.withArguments { args ->
+                    args.add("-v")
+                    args.add("-isysroot${iphoneOsSdk}")
+                    // TODO: Can this code be removed gracefully?
+                    //  Why are these args here if they fail?
+                    args.remove("-Wl,-soname,libcorecrypto.so")
+                    args.remove("-Wl,-soname,libsqlite3.so")
+                    args.remove("-Wl,-soname,libed25519.so")
+                    args.remove("-Wl,-soname,libblake2.so")
+                }
+            }
+        }
+    }
+    platforms {
+        macos {
+            operatingSystem "osx"
+            architecture "x86_64"
+        }
+        iosArm64 {
+            architecture "x86_64"
+            operatingSystem "ios"
+        }
+        iosX64 {
+            architecture "x86_64"
+            operatingSystem "ios"
+        }
+    }
+    components {
+        blake2(NativeLibrarySpec) {
+            if (kotlin.targets.macos.publishable) {
+                targetPlatform "macos"
+                targetPlatform "iosArm64"
+                targetPlatform "iosX64"
+            }
+            sources {
+                c {
+                    source {
+                        srcDir cppblake2SrcDir
+                        include "*.c"
+                    }
+                }
+            }
+        }
+        ed25519(NativeLibrarySpec) {
+            if (kotlin.targets.macos.publishable) {
+                targetPlatform "macos"
+                targetPlatform "iosArm64"
+                targetPlatform "iosX64"
+            }
+            sources {
+                c {
+                    source {
+                        srcDir cppEd25519SrcDir
+                        include "*.c"
+                    }
+                }
+            }
+        }
+        sqlite3(NativeLibrarySpec) {
+            if (kotlin.targets.macos.publishable) {
+                targetPlatform "macos"
+                targetPlatform "iosArm64"
+                targetPlatform "iosX64"
+            }
+
+            sources {
+                c {
+                    source {
+                        srcDir cppSqliteSrcDir
+                        include "sqlite3.c"
+                    }
+                }
+            }
+            binaries {
+                all {
+                    // TODO(fix): Do we want to use this approach (config.h)?
+                    cCompiler.define "_HAVE_SQLITE_CONFIG_H"
+                }
+                withType(StaticLibraryBinarySpec) {
+                    //buildable = false
+                }
+            }
+        }
+        corecrypto(NativeLibrarySpec) {
+            if (kotlin.targets.macos.publishable) {
+                targetPlatform "macos"
+                targetPlatform "iosArm64"
+                targetPlatform "iosX64"
+            }
+
+            sources {
+                c {
+                    source {
+                        srcDirs cppCryptoSrcDirs
+                        include "**/*.c"
+                    }
+                }
+            }
+            binaries {
+                all {
+                    cppCryptoIncDirs.forEach {
+                        cCompiler.args "-I$it"
+                    }
+
+                    lib library: "sqlite3", linkage: "static"
+                    lib library: "ed25519", linkage: "static"
+                    lib library: "blake2", linkage: "static"
+                }
+                withType(SharedLibraryBinarySpec) {
+                    def os = targetPlatform.operatingSystem.name
+                    if (os == "osx" || os == "ios") {
+                        linker.args "-framework", "Security"
+                        linker.args "-lresolv"
+                    }
+                }
+                withType(StaticLibraryBinarySpec) {
+                    //buildable = false
+
+                    def os = targetPlatform.operatingSystem.name
+                    if (os == "osx" || os == "ios") {
+                        linker.args "-framework", "Security"
+                        linker.args "-lresolv"
+                    }
+                }
+            }
+        }
+    }
+
+    tasks {
+        // Link native builds to the corresponding compileKotlin<Target> task
+        $.binaries
+                .findAll { it.buildable }
+                .each { spec ->
+                    def targetName = spec.targetPlatform.name.capitalize()
+                    def kCompileTask = project.tasks.findByName("compileKotlin$targetName")
+                    if (kCompileTask != null) {
+                        kCompileTask.dependsOn spec.tasks.getBuild()
+                    }
+                }
+    }
+}

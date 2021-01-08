@@ -1,0 +1,3 @@
+[submodule "walletkit"]
+	path = walletkit
+	url = git@github.com:blockset-corp/walletkit.git
