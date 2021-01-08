@@ -1,19 +1,19 @@
 package demo
 
-import com.breadwallet.core.Account
-import com.breadwallet.core.AddressScheme
-import com.breadwallet.core.Network
-import com.breadwallet.core.NetworkEvent
-import com.breadwallet.core.System
-import com.breadwallet.core.SystemListener
-import com.breadwallet.core.Wallet
-import com.breadwallet.core.WalletEvent
-import com.breadwallet.core.WalletListener
-import com.breadwallet.core.WalletManager
-import com.breadwallet.core.WalletManagerEvent
-import com.breadwallet.core.WalletManagerMode
-import com.breadwallet.core.WalletManagerState
-import com.breadwallet.core.api.BdbService
+import drewcarlson.walletkit.Account
+import drewcarlson.walletkit.AddressScheme
+import drewcarlson.walletkit.Network
+import drewcarlson.walletkit.NetworkEvent
+import drewcarlson.walletkit.System
+import drewcarlson.walletkit.SystemListener
+import drewcarlson.walletkit.Wallet
+import drewcarlson.walletkit.WalletEvent
+import drewcarlson.walletkit.WalletListener
+import drewcarlson.walletkit.WalletManager
+import drewcarlson.walletkit.WalletManagerEvent
+import drewcarlson.walletkit.WalletManagerMode
+import drewcarlson.walletkit.WalletManagerState
+import drewcarlson.walletkit.api.BdbService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
