@@ -4,11 +4,12 @@ import brcrypto.*
 import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_CREATED
 import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_DELETED
 import kotlinx.cinterop.*
+import kotlinx.coroutines.CoroutineScope
 
 actual class Wallet internal constructor(
         core: BRCryptoWallet,
         actual val manager: WalletManager,
-        actual val callbackCoordinator: SystemCallbackCoordinator,
+        internal actual val scope: CoroutineScope,
         take: Boolean
 ) {
 
@@ -112,17 +113,13 @@ actual class Wallet internal constructor(
         TODO("Not implemented")
     }
 
-    actual fun estimateLimitMaximum(
-            target: Address,
-            fee: NetworkFee,
-            completion: CompletionHandler<Amount, LimitEstimationError>
-    ): Unit = TODO()
+    actual suspend fun estimateLimitMaximum(target: Address, fee: NetworkFee): Amount {
+        TODO()
+    }
 
-    actual fun estimateLimitMinimum(
-            target: Address,
-            fee: NetworkFee,
-            completion: CompletionHandler<Amount, LimitEstimationError>
-    ): Unit = TODO()
+    actual suspend fun estimateLimitMinimum(target: Address, fee: NetworkFee): Amount {
+        TODO()
+    }
 
     actual override fun equals(other: Any?): Boolean =
             other is Wallet && CRYPTO_TRUE == cryptoWalletEqual(core, other.core)

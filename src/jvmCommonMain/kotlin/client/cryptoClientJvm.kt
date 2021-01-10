@@ -79,15 +79,18 @@ private val funcGetTransactions =
             val system = checkNotNull(cookie.system)
             val manager = checkNotNull(system.getWalletManager(coreManager))
             runCatching {
-                val transactions = system.query.getTransactions(
-                    manager.network.uids,
-                    addrs,
-                    if (begBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) null else begBlockNumber.toULong(),
-                    if (endBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) null else endBlockNumber.toULong(),
-                    includeRaw = true,
-                    includeProof = false,
-                    maxPageSize = null
-                ).embedded.transactions
+                val transactions = addrs.chunked(50).flatMap { chunk ->
+                    // TODO: Exhaust more links
+                    system.query.getTransactions(
+                            manager.network.uids,
+                            chunk,
+                            if (begBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) null else begBlockNumber.toULong(),
+                            if (endBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) null else endBlockNumber.toULong(),
+                            includeRaw = true,
+                            includeProof = false,
+                            maxPageSize = null
+                    ).embedded.transactions
+                }
 
                 transactions.forEach { bdbTx ->
                     val rawTxData = checkNotNull(bdbTx.raw).decodeBase64Bytes()

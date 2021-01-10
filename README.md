@@ -15,6 +15,29 @@ WalletKit-Kotlin is written in common Kotlin to support multiplatform developmen
 
 Kotlin
 ```kotlin
+// handleManagerEvent, handleNetworkEvent, handleTransferEvent, handleWalletEvent
+val listener = object : SystemListener {
+    override fun handleSystemEvent(system: System, event: SystemEvent) {
+        println("System Event: $event")
+    }
+}
+
+val uids = "..."
+val timestamp = 0
+val account = Account.createFromPhrase(PHRASE_BYTES, timestamp, uids)
+
+val isMainnet = false
+val storagePath = "/path/to/data"
+
+val system = System.create(
+    listener,
+    checkNotNull(account),
+    isMainnet,
+    storagePath,
+    BdbToken.createForTest(bdbToken)
+)
+
+system.configure(emptyList())
 ```
 Swift
 ```swift

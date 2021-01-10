@@ -2,12 +2,13 @@ package drewcarlson.walletkit
 
 import drewcarlson.walletkit.common.Key
 import com.breadwallet.corenative.crypto.*
+import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
 actual class WalletManager(
         internal val core: BRCryptoWalletManager,
         actual val system: System,
-        private val callbackCoordinator: SystemCallbackCoordinator
+        private val scope: CoroutineScope
 ) {
 
     actual val account: Account = Account(core.account)
@@ -33,11 +34,11 @@ actual class WalletManager(
         get() = network.height
 
     actual val primaryWallet: Wallet by lazy {
-        Wallet(core.wallet, this, callbackCoordinator)
+        Wallet(core.wallet, this, scope)
     }
 
     actual val wallets: List<Wallet> by lazy {
-        core.wallets.map { Wallet(it, this, callbackCoordinator) }
+        core.wallets.map { Wallet(it, this, scope) }
     }
 
     actual val currency: Currency = network.currency
@@ -93,21 +94,17 @@ actual class WalletManager(
 
     actual fun registerWalletFor(currency: Currency): Wallet? {
         return core.registerWallet(currency.core)?.orNull()?.let { coreWallet ->
-            Wallet(coreWallet, this, callbackCoordinator)
+            Wallet(coreWallet, this, scope)
         }
     }
 
-    actual fun createSweeper(
-            wallet: Wallet,
-            key: Key,
-            completion: CompletionHandler<WalletSweeper, WalletSweeperError>
-    ) {
+    actual suspend fun createSweeper(wallet: Wallet, key: Key): WalletSweeper {
         TODO("not implemented")
     }
 
     internal fun getWallet(coreWallet: BRCryptoWallet): Wallet? =
             if (core.containsWallet(coreWallet))
-                Wallet(coreWallet.take(), this, callbackCoordinator)
+                Wallet(coreWallet.take(), this, scope)
             else null
 
     override fun toString(): String = name
@@ -118,6 +115,6 @@ actual class WalletManager(
             other is WalletManager && core == other.core
 
     internal fun createWallet(coreWallet: BRCryptoWallet): Wallet {
-        return Wallet(coreWallet.take(), this, callbackCoordinator)
+        return Wallet(coreWallet.take(), this, scope)
     }
 }

@@ -1,6 +1,7 @@
 package drewcarlson.walletkit
 
 import drewcarlson.walletkit.common.Key
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * A WallettManager manages one or more wallets one of which is designated the `primaryWallet`.
@@ -93,7 +94,8 @@ expect class WalletManager {
 
     public fun stop()
 
-    public fun createSweeper(wallet: Wallet, key: Key, completion: CompletionHandler<WalletSweeper, WalletSweeperError>)
+    @Throws(WalletSweeperError::class, CancellationException::class)
+    public suspend fun createSweeper(wallet: Wallet, key: Key): WalletSweeper
 
     public fun syncToDepth(depth: WalletManagerSyncDepth)
 

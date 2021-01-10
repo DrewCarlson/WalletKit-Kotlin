@@ -2,10 +2,10 @@ package drewcarlson.walletkit
 
 import drewcarlson.blockset.BdbService
 import drewcarlson.blockset.model.BdbCurrency
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers.Default
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.jvm.JvmOverloads
-
-
-typealias ScheduledExecutorService = String
 
 expect class System {
 
@@ -97,7 +97,8 @@ expect class System {
      *
      * @param completion An optional completion handler
      */
-    public fun updateNetworkFees(completion: CompletionHandler<List<Network>, NetworkFeeUpdateError>?)
+    @Throws(FeeEstimationError::class, CancellationException::class)
+    public suspend fun updateNetworkFees(): List<Network>
 
     /**
      * Set the network reachable flag for all managers.
@@ -121,23 +122,22 @@ expect class System {
         /**
          * Create a new system.
          *
-         * @param executor
          * @param listener the listener for handling events.
          * @param account the account, derived from a paper key, that will be used for all networks.
          * @param isMainnet flag to indicate if the system is for mainnet or for testnet; as blockchains
-         * are announced, we'll filter them to be for mainent or testnet.
+         * are announced, we'll filter them to be for mainnent or testnet.
          * @param storagePath the path to use for persistent storage of data, such as for blocks, peers, transactions and
          * logs.
          * @param query the BlockchainDB query engine.
          */
         public fun create(
-                executor: ScheduledExecutorService,
                 listener: SystemListener,
                 account: Account,
                 isMainnet: Boolean,
                 storagePath: String,
-                query: BdbService
-        ): System?
+                query: BdbService,
+                dispatcher: CoroutineDispatcher = Default
+        ): System
 
         /**
          * Create a BlockChainDB.Model.Currency to be used in the event that the BlockChainDB does

@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 actual class System internal constructor(
-        private val callbackCoordinator: SystemCallbackCoordinator,
+        private val dispatcher: CoroutineDispatcher,
         private val listener: SystemListener,
         actual val account: Account,
         internal actual val isMainnet: Boolean,
@@ -27,7 +27,7 @@ actual class System internal constructor(
 ) {
 
     internal val scope = CoroutineScope(
-            SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
+            SupervisorJob() + dispatcher + CoroutineExceptionHandler { _, throwable ->
                 throwable.printStackTrace(java.lang.System.err)
             })
 
@@ -81,7 +81,7 @@ actual class System internal constructor(
                 BRCryptoAddressScheme.fromCore(addressScheme.core.toInt()),
                 storagePath
         ).orNull()?.let {
-            WalletManager(it, this, callbackCoordinator)
+            WalletManager(it, this, scope)
         } ?: return false
 
         currencies
@@ -120,12 +120,12 @@ actual class System internal constructor(
         TODO("Not implemented")
     }
 
-    actual fun updateNetworkFees(completion: CompletionHandler<List<Network>, NetworkFeeUpdateError>?) {
+    actual suspend fun updateNetworkFees(): List<Network> {
         scope.launch {
             val blockchains = try {
                 query.getBlockchains(isMainnet).embedded.blockchains
             } catch (e: Exception) {
-                completion?.invoke(null, NetworkFeeUpdateError.FeesUnavailable)
+                //completion?.invoke(null, NetworkFeeUpdateError.FeesUnavailable)
                 return@launch
             }
 
@@ -152,8 +152,9 @@ actual class System internal constructor(
                 networks2.add(network)
             }
 
-            completion?.invoke(networks, null)
+            //completion?.invoke(networks, null)
         }
+        return emptyList()
     }
 
     actual fun setNetworkReachable(isNetworkReachable: Boolean) {
@@ -164,28 +165,24 @@ actual class System internal constructor(
     }
 
     private fun announceSystemEvent(event: SystemEvent) {
-        // TODO: Run on executor
         scope.launch {
             listener.handleSystemEvent(this@System, event)
         }
     }
 
     private fun announceNetworkEvent(network: Network, event: NetworkEvent) {
-        // TODO: Run on executor
         scope.launch {
             listener.handleNetworkEvent(this@System, network, event)
         }
     }
 
     internal fun announceWalletManagerEvent(walletManager: WalletManager, event: WalletManagerEvent) {
-        // TODO: Run on executor
         scope.launch {
             listener.handleManagerEvent(this@System, walletManager, event)
         }
     }
 
     internal fun announceWalletEvent(walletManager: WalletManager, wallet: Wallet, event: WalletEvent) {
-        // TODO: Run on executor
         scope.launch {
             listener.handleWalletEvent(this@System, walletManager, wallet, event)
         }
@@ -197,20 +194,19 @@ actual class System internal constructor(
             transfer: Transfer,
             event: TransferEvent
     ) {
-        // TODO: Run on executor
         scope.launch {
             listener.handleTransferEvent(this@System, walletManager, wallet, transfer, event)
         }
     }
 
     internal fun createWalletManager(coreWalletManager: BRCryptoWalletManager): WalletManager =
-            WalletManager(coreWalletManager.take(), this, callbackCoordinator)
+            WalletManager(coreWalletManager.take(), this, scope)
                     .also { walletManager ->
                         _walletManagers.add(walletManager)
                     }
 
     internal fun getWalletManager(coreWalletManager: BRCryptoWalletManager): WalletManager? {
-        val walletManager = WalletManager(coreWalletManager.take(), this, callbackCoordinator)
+        val walletManager = WalletManager(coreWalletManager.take(), this, scope)
         return if (_walletManagers.contains(walletManager)) walletManager else null
     }
 
@@ -234,13 +230,13 @@ actual class System internal constructor(
         }
 
         actual fun create(
-                executor: ScheduledExecutorService,
                 listener: SystemListener,
                 account: Account,
                 isMainnet: Boolean,
                 storagePath: String,
-                query: BdbService
-        ): System? {
+                query: BdbService,
+                dispatcher: CoroutineDispatcher
+        ): System {
             val pathSeparator = if (storagePath.endsWith(File.separator)) "" else File.separator
             val accountStoragePath = storagePath + pathSeparator + account.core.filesystemIdentifier
 
@@ -261,7 +257,7 @@ actual class System internal constructor(
             val cwmClient = cryptoClient(context)
 
             val system = System(
-                    "", // TODO: SystemCallbackCoordinator
+                    dispatcher,
                     listener,
                     account,
                     isMainnet,

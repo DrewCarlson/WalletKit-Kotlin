@@ -6,6 +6,7 @@ import co.touchlab.stately.collections.IsoMutableMap
 import co.touchlab.stately.collections.IsoMutableSet
 import drewcarlson.blockset.BdbService
 import drewcarlson.blockset.model.BdbCurrency
+import drewcarlson.walletkit.System.Companion.system
 import io.ktor.client.*
 import kotlinx.atomicfu.atomic
 import kotlinx.cinterop.*
@@ -16,7 +17,7 @@ import kotlin.native.concurrent.Worker
 import kotlin.native.concurrent.freeze
 
 actual class System(
-        private val callbackCoordinator: SystemCallbackCoordinator,
+        private val dispatcher: CoroutineDispatcher,
         private val listener: SystemListener,
         actual val account: Account,
         internal actual val isMainnet: Boolean,
@@ -28,7 +29,7 @@ actual class System(
 ) {
 
     internal val scope = CoroutineScope(
-            SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
+            SupervisorJob() + dispatcher + CoroutineExceptionHandler { _, throwable ->
                 println("ERROR: ${throwable.message}")
                 throwable.printStackTrace()
             })
@@ -86,7 +87,7 @@ actual class System(
                 storagePath
         ) ?: return false
 
-        val walletManager = WalletManager(cwm, this, callbackCoordinator, false)
+        val walletManager = WalletManager(cwm, this, scope, false)
 
         currencies
                 .filter(network::hasCurrency)
@@ -118,12 +119,12 @@ actual class System(
         TODO("Not implemented")
     }
 
-    actual fun updateNetworkFees(completion: CompletionHandler<List<Network>, NetworkFeeUpdateError>?) {
+    actual suspend fun updateNetworkFees(): List<Network> {
         scope.launch {
             val blockchains = try {
                 runBlocking { query.getBlockchains(isMainnet).embedded.blockchains }
             } catch (e: Exception) {
-                completion?.invoke(null, NetworkFeeUpdateError.FeesUnavailable)
+                //completion?.invoke(null, NetworkFeeUpdateError.FeesUnavailable)
                 return@launch
             }
 
@@ -147,8 +148,9 @@ actual class System(
                 }
             }
 
-            completion?.invoke(networks, null)
+            //completion?.invoke(networks, null)
         }
+        return emptyList()
     }
 
     actual fun setNetworkReachable(isNetworkReachable: Boolean) {
@@ -158,67 +160,49 @@ actual class System(
         }
     }
 
-    private val listenerWorker = Worker.start(name = "ListenerWorker").freeze()
     private fun announceSystemEvent(event: SystemEvent) {
-        listenerWorker.execute(TransferMode.SAFE, {
-            Triple(listener, context, event).freeze()
-        }) { (listener, ctx, event) ->
-            listener.handleSystemEvent(ctx.system, event)
+        scope.launch {
+            listener.handleSystemEvent(context.system, event)
         }
     }
 
     private fun announceNetworkEvent(network: Network, event: NetworkEvent) {
-        listenerWorker.execute(TransferMode.SAFE, {
-            Triple(listener, context to network, event).freeze()
-        }) { (listener, ctxAndNetwork, event) ->
-            val (ctx, network) = ctxAndNetwork
-            listener.handleNetworkEvent(ctx.system, network, event)
+        scope.launch {
+            listener.handleNetworkEvent(context.system, network, event)
         }
     }
 
-    internal fun announceWalletManagerEvent(walletManager: WalletManager, event: WalletManagerEvent) {
-        listenerWorker.execute(TransferMode.SAFE, {
-            Triple(listener, this to walletManager, event).freeze()
-        }) { (listener, systemAndManager, event) ->
-            val (system, manager) = systemAndManager
-            listener.handleManagerEvent(system, manager, event)
+    internal fun announceWalletManagerEvent(manager: WalletManager, event: WalletManagerEvent) {
+        scope.launch {
+            listener.handleManagerEvent(this@System, manager, event)
         }
     }
 
-    internal fun announceWalletEvent(walletManager: WalletManager, wallet: Wallet, event: WalletEvent) {
-        listenerWorker.execute(TransferMode.SAFE, {
-            Triple(listener, this to walletManager, wallet to event).freeze()
-        }) { (listener, systemAndManager, walletAndEvent) ->
-            val (system, manager) = systemAndManager
-            val (wallet, event) = walletAndEvent
-            listener.handleWalletEvent(system, manager, wallet, event)
+    internal fun announceWalletEvent(manager: WalletManager, wallet: Wallet, event: WalletEvent) {
+        scope.launch {
+            listener.handleWalletEvent(this@System, manager, wallet, event)
         }
     }
 
     internal fun announceTransferEvent(
-            walletManager: WalletManager,
+            manager: WalletManager,
             wallet: Wallet,
             transfer: Transfer,
             event: TransferEvent
     ) {
-        listenerWorker.execute(TransferMode.SAFE, {
-            Triple(listener to transfer, this to walletManager, wallet to event).freeze()
-        }) { (listenerAndTransfer, systemAndManager, walletAndEvent) ->
-            val (listener, transfer) = listenerAndTransfer
-            val (system, manager) = systemAndManager
-            val (wallet, event) = walletAndEvent
-            listener.handleTransferEvent(system, manager, wallet, transfer, event)
+        scope.launch {
+            listener.handleTransferEvent(this@System, manager, wallet, transfer, event)
         }
     }
 
     internal fun createWalletManager(coreWalletManager: BRCryptoWalletManager): WalletManager =
-            WalletManager(coreWalletManager, this, callbackCoordinator, true)
+            WalletManager(coreWalletManager, this, scope, true)
                     .also { walletManager ->
                         _walletManagers.add(walletManager)
                     }
 
     internal fun getWalletManager(coreWalletManager: BRCryptoWalletManager): WalletManager? {
-        val walletManager = WalletManager(coreWalletManager, this, callbackCoordinator, true)
+        val walletManager = WalletManager(coreWalletManager, this, scope, true)
         // TODO: return if (_walletManagers.contains(walletManager)) walletManager else null
         return walletManager
     }
@@ -237,13 +221,13 @@ actual class System(
             get() = checkNotNull(activeSystem.value)//checkNotNull(SYSTEMS_ACTIVE[this])
 
         actual fun create(
-                executor: ScheduledExecutorService,
                 listener: SystemListener,
                 account: Account,
                 isMainnet: Boolean,
                 storagePath: String,
-                query: BdbService
-        ): System? {
+                query: BdbService,
+                dispatcher: CoroutineDispatcher
+        ): System {
             val accountStoragePath = "${storagePath.trimEnd('/')}/${account.filesystemIdentifier}"
             check(ensurePath(accountStoragePath)) {
                 "Failed to validate storage path."
@@ -254,7 +238,7 @@ actual class System(
             }.ptr
 
             val system = System(
-                    "", // TODO: SystemCallbackCoordinator
+                    dispatcher,
                     listener,
                     account,
                     isMainnet,

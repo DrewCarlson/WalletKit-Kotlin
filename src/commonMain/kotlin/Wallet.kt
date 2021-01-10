@@ -1,5 +1,6 @@
 package drewcarlson.walletkit
 
+import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.cancellation.CancellationException
 
 typealias SystemCallbackCoordinator = String
@@ -12,7 +13,7 @@ expect class Wallet {
     /** The owning system */
     public val system: System
 
-    internal val callbackCoordinator: SystemCallbackCoordinator
+    internal val scope: CoroutineScope
 
     /** The unit for display of the wallet's balance */
     public val unit: CUnit
@@ -114,11 +115,8 @@ expect class Wallet {
      * @param fee the network fees
      * @param completion the handler for the results
      */
-    fun estimateLimitMaximum(
-            target: Address,
-            fee: NetworkFee,
-            completion: CompletionHandler<Amount, LimitEstimationError>
-    )
+    @Throws(LimitEstimationError::class, CancellationException::class)
+    public suspend fun estimateLimitMaximum(target: Address, fee: NetworkFee): Amount
 
     /**
      * Estimate the minimum amount that can be transfered from Wallet.
@@ -140,11 +138,8 @@ expect class Wallet {
      * @param fee the network fees
      * @param completion the handler for the results
      */
-    fun estimateLimitMinimum(
-            target: Address,
-            fee: NetworkFee,
-            completion: CompletionHandler<Amount, LimitEstimationError>
-    )
+    @Throws(LimitEstimationError::class, CancellationException::class)
+    public suspend fun estimateLimitMinimum(target: Address, fee: NetworkFee): Amount
 
     override fun equals(other: Any?): Boolean
 

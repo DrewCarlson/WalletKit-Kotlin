@@ -37,7 +37,6 @@ class DemoApplication {
         GlobalScope.launch {
             val account = Account.createFromPhrase(PHRASE.encodeToByteArray(), 0, uids)
             val system = System.create(
-                "",
                 createSystemListener(
                     DEFAULT_CURRENCY_ID,
                     walletListener
@@ -48,7 +47,7 @@ class DemoApplication {
                 BdbService.createForTest(BDB_CLIENT_TOKEN)
             )
 
-            checkNotNull(system).configure(emptyList())
+            system.configure(emptyList())
         }
     }
 }

@@ -18,17 +18,16 @@ fun createSystem(
     bdbToken: String,
     isMainnet: Boolean,
     listener: SystemListener
-): System? {
+): System {
     val account = Account.createFromPhrase(phrase.toByteArray(), timestamp, uids)
     val system = System.create(
-        "",
         listener,
         checkNotNull(account),
         isMainnet,
         storagePath,
         createBdbService(bdbToken)
     )
-    checkNotNull(system).configure(emptyList())
+    system.configure(emptyList())
     return system
 }
 

@@ -1,15 +1,13 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.crypto.BRCryptoAddressScheme
-import com.breadwallet.corenative.crypto.BRCryptoTransfer
-import com.breadwallet.corenative.crypto.BRCryptoWallet
-import com.breadwallet.corenative.crypto.BRCryptoWalletState
+import com.breadwallet.corenative.crypto.*
+import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
 actual class Wallet internal constructor(
         internal val core: BRCryptoWallet,
         actual val manager: WalletManager,
-        actual val callbackCoordinator: SystemCallbackCoordinator
+        actual val scope: CoroutineScope
 ) {
 
     actual val system: System
@@ -24,9 +22,8 @@ actual class Wallet internal constructor(
     actual val balance: Amount
         get() = core.balance.run(::Amount)
 
-    actual val transfers: List<Transfer> by lazy {
-        core.transfers.map { Transfer(it, this) }
-    }
+    actual val transfers: List<Transfer>
+        get() = core.transfers.map { Transfer(it, this) }
 
     actual val target: Address
         get() = getTargetForScheme(manager.addressScheme)
@@ -82,20 +79,15 @@ actual class Wallet internal constructor(
         TODO("not implemented")
     }
 
-    actual fun estimateLimitMaximum(
-            target: Address,
-            fee: NetworkFee,
-            completion: CompletionHandler<Amount, LimitEstimationError>
-    ) {
-        //manager.core.estimateLimit()
+    actual suspend fun estimateLimitMaximum(target: Address, fee: NetworkFee): Amount {
+        val limitResult = manager.core.estimateLimit(core, true, target.core, fee.core)
         TODO()
     }
 
-    actual fun estimateLimitMinimum(
-            target: Address,
-            fee: NetworkFee,
-            completion: CompletionHandler<Amount, LimitEstimationError>
-    ): Unit = TODO()
+    actual suspend fun estimateLimitMinimum(target: Address, fee: NetworkFee): Amount {
+        val limitResult = manager.core.estimateLimit(core, false, target.core, fee.core)
+        TODO()
+    }
 
     actual override fun equals(other: Any?): Boolean =
             other is Wallet && core == other.core

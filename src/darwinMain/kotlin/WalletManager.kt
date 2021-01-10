@@ -8,12 +8,13 @@ import drewcarlson.walletkit.WalletManagerState.*
 import drewcarlson.walletkit.WalletManagerSyncDepth.*
 import drewcarlson.walletkit.common.Key
 import kotlinx.cinterop.*
+import kotlinx.coroutines.CoroutineScope
 import platform.posix.size_tVar
 
 actual class WalletManager internal constructor(
         core: BRCryptoWalletManager,
         actual val system: System,
-        private val callbackCoordinator: SystemCallbackCoordinator,
+        private val scope: CoroutineScope,
         take: Boolean
 ) {
 
@@ -77,7 +78,7 @@ actual class WalletManager internal constructor(
 
     actual val primaryWallet: Wallet by lazy {
         val coreWallet = cryptoWalletManagerGetWallet(core)
-        Wallet(checkNotNull(coreWallet), this, callbackCoordinator, false)
+        Wallet(checkNotNull(coreWallet), this, scope, false)
     }
 
     actual val wallets: List<Wallet>
@@ -87,7 +88,7 @@ actual class WalletManager internal constructor(
                 defer { cryptoMemoryFree(pointer) }
             }
             List(count.value.toInt()) { i ->
-                Wallet(checkNotNull(coreWallets!![i]), this@WalletManager, callbackCoordinator, false)
+                Wallet(checkNotNull(coreWallets!![i]), this@WalletManager, scope, false)
             }
         }
 
@@ -143,12 +144,8 @@ actual class WalletManager internal constructor(
         cryptoWalletManagerSetNetworkReachable(core, isNetworkReachable.toCryptoBoolean())
     }
 
-    actual fun createSweeper(
-            wallet: Wallet,
-            key: Key,
-            completion: CompletionHandler<WalletSweeper, WalletSweeperError>
-    ) {
-
+    actual suspend fun createSweeper(wallet: Wallet, key: Key): WalletSweeper {
+        TODO("")
     }
 
     actual fun registerWalletFor(currency: Currency): Wallet? {
@@ -156,7 +153,7 @@ actual class WalletManager internal constructor(
             "Currency '${currency.uids}' not found in network '${network.name}'"
         }
         val coreWallet = cryptoWalletManagerRegisterWallet(core, currency.core)
-        return Wallet(coreWallet ?: return null, this, callbackCoordinator, false)
+        return Wallet(coreWallet ?: return null, this, scope, false)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -174,6 +171,6 @@ actual class WalletManager internal constructor(
     }
 
     internal fun createWallet(coreWallet: BRCryptoWallet): Wallet {
-        return Wallet(coreWallet, this, callbackCoordinator, true)
+        return Wallet(coreWallet, this, scope, true)
     }
 }
