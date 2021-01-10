@@ -42,6 +42,7 @@ kotlin {
             framework {
                 baseName = "DemoWalletKotlin"
                 export(rootProject)
+                export("drewcarlson.blockset:blockset:$BLOCKSET_VERSION")
                 isStatic = true
                 linkerOpts.addAll(listOf("-framework", "Security"))
             }
@@ -59,6 +60,7 @@ kotlin {
             kotlin.srcDir(genSrcFile)
             dependencies {
                 api(rootProject)
+                api("drewcarlson.blockset:blockset:$BLOCKSET_VERSION")
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")
                 implementation("drewcarlson.coingecko:coingecko:$COINGECKO_VERSION")
             }

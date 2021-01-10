@@ -1,5 +1,7 @@
 package drewcarlson.walletkit
 
+open class DefaultSystemListener : SystemListener
+
 interface SystemListener : WalletManagerListener, WalletListener, TransferListener, NetworkListener {
     fun handleSystemEvent(system: System, event: SystemEvent) = Unit
     override fun handleManagerEvent(system: System, manager: WalletManager, event: WalletManagerEvent) = Unit

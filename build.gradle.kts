@@ -49,25 +49,25 @@ val blake2LibPath = file("libs/blake2/build/lib/main").absolutePath
 val cppCryptoSrcDir = "$corePath/src"
 val cppCryptoIncludeDir = "$corePath/include"
 val cppCryptoSrcDirs = listOf(
-    "bcash",
-    "bitcoin",
-    "crypto",
-    "ethereum",
-    "generic",
-    "hedera",
-    "ripple",
-    "bsv",
-    "tezos",
-    "support"
+        "bcash",
+        "bitcoin",
+        "crypto",
+        "ethereum",
+        "generic",
+        "hedera",
+        "ripple",
+        "bsv",
+        "tezos",
+        "support"
 ).map { "$corePath/src/$it" }
 
 val cppCryptoIncDirs = cppCryptoSrcDirs + listOf(
-    "src",
-    "include",
-    "vendor",
-    "vendor/secp256k1",
-    "vendor/ed25519",
-    "vendor/sqlite3"
+        "src",
+        "include",
+        "vendor",
+        "vendor/secp256k1",
+        "vendor/ed25519",
+        "vendor/sqlite3"
 ).map { "$corePath/$it" }
 
 if (hasAndroid) {
@@ -93,9 +93,9 @@ if (!wkdir.exists() || wkdir.listFiles()?.isNullOrEmpty() == true) {
 }
 
 val publicApiHeaders = (file("$corePath/include").listFiles() ?: emptyArray())
-    .filter { it.name.endsWith(".h") }
+        .filter { it.name.endsWith(".h") }
 val privateApiHeaders = (file("$corePath/src/crypto").listFiles() ?: emptyArray())
-    .filter { it.name.endsWith(".h") }
+        .filter { it.name.endsWith(".h") }
 
 System.getenv("GITHUB_REF")?.let { ref ->
     if (ref.startsWith("refs/tags/")) {
@@ -149,11 +149,11 @@ kotlin {
         val blake2StaticPath = file("./build/libs/blake2/static/$name").absolutePath
         binaries {
             getTest(DEBUG).linkerOpts(
-                "-L$coreStaticPath",
-                "-L$sqliteStaticPath",
-                "-L$ed25519StaticPath",
-                "-L$blake2StaticPath",
-                "-framework", "Security"
+                    "-L$coreStaticPath",
+                    "-L$sqliteStaticPath",
+                    "-L$ed25519StaticPath",
+                    "-L$blake2StaticPath",
+                    "-framework", "Security"
             )
         }
 
@@ -161,11 +161,11 @@ kotlin {
             // Create .frameworks for use in Obj-c/Swift projects
             binaries.framework {
                 linkerOpts(
-                    "-L$coreStaticPath",
-                    "-L$sqliteStaticPath",
-                    "-L$ed25519StaticPath",
-                    "-L$blake2StaticPath",
-                    "-framework", "Security"
+                        "-L$coreStaticPath",
+                        "-L$sqliteStaticPath",
+                        "-L$ed25519StaticPath",
+                        "-L$blake2StaticPath",
+                        "-framework", "Security"
                 )
             }
         }
@@ -181,12 +181,12 @@ kotlin {
             }*/
             kotlinOptions {
                 freeCompilerArgs += listOf(
-                    "-include-binary", "$coreStaticPath/libcorecrypto.a",
-                    "-include-binary", "$sqliteStaticPath/libsqlite3.a",
-                    "-include-binary", "$ed25519StaticPath/libed25519.a",
-                    "-include-binary", "$blake2StaticPath/libblake2.a",
-                    //"-memory-model", "experimental",
-                    "-Xallocator=mimalloc"
+                        "-include-binary", "$coreStaticPath/libcorecrypto.a",
+                        "-include-binary", "$sqliteStaticPath/libsqlite3.a",
+                        "-include-binary", "$ed25519StaticPath/libed25519.a",
+                        "-include-binary", "$blake2StaticPath/libblake2.a",
+                        //"-memory-model", "experimental",
+                        "-Xallocator=mimalloc"
                 )
             }
             val BRCrypto by cinterops.creating {

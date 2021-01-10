@@ -3,7 +3,10 @@ package drewcarlson.walletkit
 import brcrypto.*
 import brcrypto.BRCryptoWalletEventType.*
 import drewcarlson.walletkit.System.Companion.system
-import kotlinx.cinterop.*
+import kotlinx.cinterop.CValue
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.pointed
+import kotlinx.cinterop.toKStringFromUtf8
 
 
 internal fun walletEventHandler(
@@ -31,16 +34,15 @@ internal fun walletEventHandler(
             val eventString = cryptoWalletEventTypeString(event.type)?.toKStringFromUtf8()
 
             val walletEvent = when (event.type) {
-                CRYPTO_WALLET_EVENT_BALANCE_UPDATED -> {
-                    val balance = Amount(event.u.balanceUpdated.amount!!, false)
-                    WalletEvent.BalanceUpdated(balance)
-                }
                 CRYPTO_WALLET_EVENT_CREATED -> WalletEvent.Created
+                CRYPTO_WALLET_EVENT_DELETED -> WalletEvent.Deleted
+                CRYPTO_WALLET_EVENT_BALANCE_UPDATED -> WalletEvent.BalanceUpdated(
+                        balance = Amount(event.u.balanceUpdated.amount!!, false)
+                )
                 CRYPTO_WALLET_EVENT_CHANGED -> WalletEvent.Change(
                         oldState = event.u.state.oldState.asApiState(),
                         newState = event.u.state.newState.asApiState()
                 )
-                CRYPTO_WALLET_EVENT_DELETED -> WalletEvent.Deleted
                 CRYPTO_WALLET_EVENT_TRANSFER_ADDED -> {
                     val coreTransfer = checkNotNull(event.u.transfer.value)
                     defer { cryptoTransferGive(coreTransfer) }
@@ -52,38 +54,36 @@ internal fun walletEventHandler(
                 CRYPTO_WALLET_EVENT_TRANSFER_CHANGED -> {
                     val coreTransfer = checkNotNull(event.u.transfer.value)
                     defer { cryptoTransferGive(coreTransfer) }
-                    val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
-                    WalletEvent.TransferChanged(transfer)
+                    WalletEvent.TransferChanged(
+                            transfer = checkNotNull(wallet.getTransfer(coreTransfer))
+                    )
                 }
                 CRYPTO_WALLET_EVENT_TRANSFER_SUBMITTED -> {
                     val coreTransfer = checkNotNull(event.u.transfer.value)
                     defer { cryptoTransferGive(coreTransfer) }
-                    val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
-                    WalletEvent.TransferSubmitted(transfer)
+                    WalletEvent.TransferSubmitted(
+                            transfer = checkNotNull(wallet.getTransfer(coreTransfer))
+                    )
                 }
                 CRYPTO_WALLET_EVENT_TRANSFER_DELETED -> {
                     val coreTransfer = checkNotNull(event.u.transfer.value)
                     defer { cryptoTransferGive(coreTransfer) }
-                    val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
-                    WalletEvent.TransferDeleted(transfer)
+                    WalletEvent.TransferDeleted(
+                            transfer = checkNotNull(wallet.getTransfer(coreTransfer))
+                    )
                 }
                 CRYPTO_WALLET_EVENT_FEE_BASIS_UPDATED -> WalletEvent.FeeBasisUpdated(
                         feeBasis = TransferFeeBasis(checkNotNull(event.u.feeBasisUpdated.basis), false)
                 )
-                CRYPTO_WALLET_EVENT_FEE_BASIS_ESTIMATED -> {
-                    /* TODO: handle fee basis estimated callback
-                    val feeBasis = TransferFeeBasis(checkNotNull(event.u.feeBasisUpdated.basis), false)
-                    val wallet = checkNotNull(manager.getWallet(cw))
-                    system.announceWalletEvent(manager, wallet, WalletEvent.FeeBasisEstimated(feeBasis))
-                     */
-                    return@memScoped
-                }
+                CRYPTO_WALLET_EVENT_FEE_BASIS_ESTIMATED -> WalletEvent.FeeBasisEstimated(
+                        feeBasis = TransferFeeBasis(checkNotNull(event.u.feeBasisUpdated.basis), false)
+                )
             }
 
             println("CWM: $eventString")
             system.announceWalletEvent(manager, wallet, walletEvent)
         }
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         println("Error handling wallet event")
         e.printStackTrace()
     }

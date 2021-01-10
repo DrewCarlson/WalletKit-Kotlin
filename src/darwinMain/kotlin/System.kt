@@ -11,6 +11,7 @@ import io.ktor.client.*
 import kotlinx.atomicfu.atomic
 import kotlinx.cinterop.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Default
 import platform.Foundation.NSFileManager
 import kotlin.native.concurrent.TransferMode
 import kotlin.native.concurrent.Worker
@@ -219,6 +220,17 @@ actual class System(
 
         val BRCryptoClientContext.system
             get() = checkNotNull(activeSystem.value)//checkNotNull(SYSTEMS_ACTIVE[this])
+
+        /**
+         * Swift compatible [System.Companion.create].
+         */
+        fun create(
+                listener: SystemListener,
+                account: Account,
+                isMainnet: Boolean,
+                storagePath: String,
+                query: BdbService
+        ): System = create(listener, account, isMainnet, storagePath, query, Default)
 
         actual fun create(
                 listener: SystemListener,

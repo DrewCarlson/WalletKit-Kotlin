@@ -1,9 +1,10 @@
 package drewcarlson.walletkit
 
 import brcrypto.*
-import io.ktor.utils.io.core.toByteArray
+import io.ktor.utils.io.core.*
 import kotlinx.cinterop.*
 import kotlinx.io.core.Closeable
+import platform.Foundation.NSData
 import platform.posix.size_tVar
 
 
@@ -71,23 +72,28 @@ actual class Account(
     }
 
     actual companion object {
+        fun createFromPhrase(phrase: NSData, timestamp: Long, uids: String): Account? {
+            return cryptoAccountCreate(
+                    checkNotNull(phrase.bytes).reinterpret(),
+                    timestamp.toULong(),
+                    uids.toByteArray().toCValues()
+            )?.let { Account(it, false) }
+        }
+
         actual fun createFromPhrase(phrase: ByteArray, timestamp: Long, uids: String): Account? {
-            val cryptoAccount = cryptoAccountCreate(
+            return cryptoAccountCreate(
                     phrase.toCValues(),
                     timestamp.toULong(),
                     uids.toByteArray().toCValues()
-            ) ?: return null
-            return Account(cryptoAccount, false)
+            )?.let { Account(it, false) }
         }
 
         actual fun createFromSerialization(serialization: ByteArray, uids: String): Account? {
-            val cryptoAccount = cryptoAccountCreateFromSerialization(
+            return cryptoAccountCreateFromSerialization(
                     serialization.asUByteArray().toCValues(),
                     serialization.size.toULong(),
                     uids
-            ) ?: return null
-
-            return Account(cryptoAccount, false)
+            )?.let { Account(it, false) }
         }
 
         actual fun generatePhrase(words: List<String>): ByteArray? = memScoped {

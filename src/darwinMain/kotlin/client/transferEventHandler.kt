@@ -30,7 +30,7 @@ internal fun transferEventHandler(
             val manager = checkNotNull(system.getWalletManager(cwm))
             val wallet = checkNotNull(manager.getWallet(cw))
             val transfer = checkNotNull(wallet.transferByCoreOrCreate(ct))
-            val event = eventCval.ptr.reinterpret<BRCryptoTransferEvent>().pointed
+            val event = eventCval.ptr.pointed
             println("CWM: ${cryptoTransferEventTypeString(event.type)?.toKStringFromUtf8()}")
 
             val transferEvent = when (event.type) {
