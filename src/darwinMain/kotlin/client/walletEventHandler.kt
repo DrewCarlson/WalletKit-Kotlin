@@ -2,12 +2,8 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import brcrypto.BRCryptoWalletEventType.*
-import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_CREATED
-import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_DELETED
 import drewcarlson.walletkit.System.Companion.system
-import kotlinx.cinterop.CValue
-import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.pointed
+import kotlinx.cinterop.*
 
 
 internal fun walletEventHandler(
@@ -29,87 +25,63 @@ internal fun walletEventHandler(
 
             val system = ctx.system
             val manager = checkNotNull(system.getWalletManager(cwm))
-            val event = eventCval.getPointer(this).pointed
+            val wallet = checkNotNull(manager.getWallet(cw))
 
-            when (event.type) {
+            val event = eventCval.ptr.pointed
+            val eventString = cryptoWalletEventTypeString(event.type)?.toKStringFromUtf8()
+
+            val walletEvent = when (event.type) {
                 CRYPTO_WALLET_EVENT_BALANCE_UPDATED -> {
-                    val wallet = checkNotNull(manager.getWallet(cw))
                     val balance = Amount(event.u.balanceUpdated.amount!!, false)
-                    system.announceWalletEvent(manager, wallet, WalletEvent.BalanceUpdated(balance))
+                    WalletEvent.BalanceUpdated(balance)
                 }
-                CRYPTO_WALLET_EVENT_CREATED -> {
-                    val wallet = checkNotNull(manager.getWallet(cw))
-                    system.announceWalletEvent(manager, wallet, WalletEvent.Created)
-                }
-                CRYPTO_WALLET_EVENT_CHANGED -> {
-                    val wallet = checkNotNull(manager.getWallet(cw))
-                    val oldState = when (event.u.state.oldState) {
-                        CRYPTO_WALLET_STATE_CREATED -> WalletState.CREATED
-                        CRYPTO_WALLET_STATE_DELETED -> WalletState.DELETED
-                    }
-                    val newState = when (event.u.state.oldState) {
-                        CRYPTO_WALLET_STATE_CREATED -> WalletState.CREATED
-                        CRYPTO_WALLET_STATE_DELETED -> WalletState.DELETED
-                    }
-                    system.announceWalletEvent(manager, wallet, WalletEvent.Change(oldState, newState))
-                }
-                CRYPTO_WALLET_EVENT_DELETED -> {
-                    val wallet = checkNotNull(manager.getWallet(cw))
-                    system.announceWalletEvent(manager, wallet, WalletEvent.Deleted)
-                }
+                CRYPTO_WALLET_EVENT_CREATED -> WalletEvent.Created
+                CRYPTO_WALLET_EVENT_CHANGED -> WalletEvent.Change(
+                        oldState = event.u.state.oldState.asApiState(),
+                        newState = event.u.state.newState.asApiState()
+                )
+                CRYPTO_WALLET_EVENT_DELETED -> WalletEvent.Deleted
                 CRYPTO_WALLET_EVENT_TRANSFER_ADDED -> {
                     val coreTransfer = checkNotNull(event.u.transfer.value)
-                    memScoped {
-                        defer { cryptoTransferGive(coreTransfer) }
-                        val wallet = checkNotNull(manager.getWallet(cw))
-                        val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
+                    defer { cryptoTransferGive(coreTransfer) }
 
-                        system.announceWalletEvent(manager, wallet, WalletEvent.TransferAdded(transfer))
-                    }
+                    WalletEvent.TransferAdded(
+                            transfer = checkNotNull(wallet.getTransfer(coreTransfer))
+                    )
                 }
                 CRYPTO_WALLET_EVENT_TRANSFER_CHANGED -> {
                     val coreTransfer = checkNotNull(event.u.transfer.value)
-                    memScoped {
-                        defer { cryptoTransferGive(coreTransfer) }
-                        val wallet = checkNotNull(manager.getWallet(cw))
-                        val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
-
-                        system.announceWalletEvent(manager, wallet, WalletEvent.TransferChanged(transfer))
-                    }
+                    defer { cryptoTransferGive(coreTransfer) }
+                    val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
+                    WalletEvent.TransferChanged(transfer)
                 }
                 CRYPTO_WALLET_EVENT_TRANSFER_SUBMITTED -> {
                     val coreTransfer = checkNotNull(event.u.transfer.value)
-                    memScoped {
-                        defer { cryptoTransferGive(coreTransfer) }
-                        val wallet = checkNotNull(manager.getWallet(cw))
-                        val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
-
-                        system.announceWalletEvent(manager, wallet, WalletEvent.TransferSubmitted(transfer))
-                    }
+                    defer { cryptoTransferGive(coreTransfer) }
+                    val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
+                    WalletEvent.TransferSubmitted(transfer)
                 }
                 CRYPTO_WALLET_EVENT_TRANSFER_DELETED -> {
                     val coreTransfer = checkNotNull(event.u.transfer.value)
-                    memScoped {
-                        defer { cryptoTransferGive(coreTransfer) }
-                        val wallet = checkNotNull(manager.getWallet(cw))
-                        val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
-
-                        system.announceWalletEvent(manager, wallet, WalletEvent.TransferDeleted(transfer))
-                    }
+                    defer { cryptoTransferGive(coreTransfer) }
+                    val transfer = checkNotNull(wallet.getTransfer(coreTransfer))
+                    WalletEvent.TransferDeleted(transfer)
                 }
-                CRYPTO_WALLET_EVENT_FEE_BASIS_UPDATED -> {
-                    val feeBasis = TransferFeeBasis(checkNotNull(event.u.feeBasisUpdated.basis), false)
-                    val wallet = checkNotNull(manager.getWallet(cw))
-                    system.announceWalletEvent(manager, wallet, WalletEvent.FeeBasisUpdated(feeBasis))
-                }
+                CRYPTO_WALLET_EVENT_FEE_BASIS_UPDATED -> WalletEvent.FeeBasisUpdated(
+                        feeBasis = TransferFeeBasis(checkNotNull(event.u.feeBasisUpdated.basis), false)
+                )
                 CRYPTO_WALLET_EVENT_FEE_BASIS_ESTIMATED -> {
                     /* TODO: handle fee basis estimated callback
                     val feeBasis = TransferFeeBasis(checkNotNull(event.u.feeBasisUpdated.basis), false)
                     val wallet = checkNotNull(manager.getWallet(cw))
                     system.announceWalletEvent(manager, wallet, WalletEvent.FeeBasisEstimated(feeBasis))
                      */
+                    return@memScoped
                 }
             }
+
+            println("CWM: $eventString")
+            system.announceWalletEvent(manager, wallet, walletEvent)
         }
     } catch (e: Exception) {
         println("Error handling wallet event")

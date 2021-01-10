@@ -37,9 +37,19 @@ kotlin {
     jvm {
         withJava()
     }
+    iosX64 {
+        binaries {
+            framework {
+                baseName = "DemoWalletKotlin"
+                export(rootProject)
+                isStatic = true
+                linkerOpts.addAll(listOf("-framework", "Security"))
+            }
+        }
+    }
 
     targets.forEach { target ->
-        target.compilations.onEach { compilation ->
+        target.compilations.forEach { compilation ->
             compilation.compileKotlinTask.dependsOn(installTestConfig)
         }
     }
@@ -48,7 +58,7 @@ kotlin {
         val commonMain by getting {
             kotlin.srcDir(genSrcFile)
             dependencies {
-                implementation(rootProject)
+                api(rootProject)
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")
                 implementation("drewcarlson.coingecko:coingecko:$COINGECKO_VERSION")
             }
@@ -56,10 +66,15 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(rootProject)
                 implementation(compose.desktop.currentOs)
                 //implementation(compose.materialIconsExtended)
                 implementation("io.ktor:ktor-client-okhttp:$KTOR_VERSION")
+            }
+        }
+
+        val iosX64Main by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
             }
         }
     }

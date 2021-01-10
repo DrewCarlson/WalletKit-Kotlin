@@ -25,6 +25,7 @@ plugins {
 
 allprojects {
     repositories {
+        maven { setUrl("https://dl.bintray.com/drewcarlson/Blockset-Kotlin") }
         mavenCentral()
         google()
         jcenter()
@@ -97,17 +98,16 @@ val publicApiHeaders = (file("$corePath/include").listFiles() ?: emptyArray())
 val privateApiHeaders = (file("$corePath/src/crypto").listFiles() ?: emptyArray())
     .filter { it.name.endsWith(".h") }
 
-
-val mavenUrl: String by ext
-val mavenSnapshotUrl: String by ext
-
 System.getenv("GITHUB_REF")?.let { ref ->
     if (ref.startsWith("refs/tags/")) {
         version = ref.substringAfterLast("refs/tags/")
     }
 }
 
-configure<PublishingExtension> {
+val mavenUrl: String by ext
+val mavenSnapshotUrl: String by ext
+
+publishing {
     repositories {
         maven {
             url = if (version.toString().endsWith("SNAPSHOT")) {
@@ -181,7 +181,9 @@ kotlin {
                     "-include-binary", "$coreStaticPath/libcorecrypto.a",
                     "-include-binary", "$sqliteStaticPath/libsqlite3.a",
                     "-include-binary", "$ed25519StaticPath/libed25519.a",
-                    "-include-binary", "$blake2StaticPath/libblake2.a"
+                    "-include-binary", "$blake2StaticPath/libblake2.a",
+                    //"-memory-model", "experimental",
+                    "-Xallocator=mimalloc"
                 )
             }
             val BRCrypto by cinterops.creating {
@@ -205,7 +207,7 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION")
+                api("drewcarlson.blockset:blockset:$BLOCKSET_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$SERIALIZATION_VERSION")
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")

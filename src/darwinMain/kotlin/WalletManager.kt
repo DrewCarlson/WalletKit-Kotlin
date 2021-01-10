@@ -6,7 +6,6 @@ import brcrypto.BRCryptoWalletManagerDisconnectReasonType.*
 import brcrypto.BRCryptoWalletManagerStateType.*
 import drewcarlson.walletkit.WalletManagerState.*
 import drewcarlson.walletkit.WalletManagerSyncDepth.*
-import drewcarlson.walletkit.api.BdbService
 import drewcarlson.walletkit.common.Key
 import kotlinx.cinterop.*
 import platform.posix.size_tVar

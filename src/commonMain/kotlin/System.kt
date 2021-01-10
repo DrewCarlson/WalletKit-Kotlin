@@ -1,11 +1,7 @@
 package drewcarlson.walletkit
 
-import drewcarlson.walletkit.api.BdbService
-import drewcarlson.walletkit.common.Key
-import drewcarlson.walletkit.migration.BlockBlob
-import drewcarlson.walletkit.migration.PeerBlob
-import drewcarlson.walletkit.migration.TransactionBlob
-import drewcarlson.walletkit.model.BdbCurrency
+import drewcarlson.blockset.BdbService
+import drewcarlson.blockset.model.BdbCurrency
 import kotlin.jvm.JvmOverloads
 
 
@@ -113,14 +109,6 @@ expect class System {
      */
     public fun setNetworkReachable(isNetworkReachable: Boolean)
 
-    /**
-     * If migration is required, return the currency code; otherwise, return nil.
-     *
-     * Note: it is not an error not to migrate.
-     */
-    public fun migrateRequired(network: Network): Boolean
-
-
     //public fun accountIsInitialized(account: Account, nework: Network): Boolean
 
     //public fun accountInitialize(account: Account, network: Network, create: Boolean, handler: CompletionHandler<ByteArray, AccountInitializationError>)
@@ -128,23 +116,6 @@ expect class System {
     //fun accountInitializeUsingData(account: Account, network: Network, data: ByteArray): ByteArray?
 
     //fun accountInitializeUsingHedera(account: Account?, network: Network?, hedera: HederaAccount): ByteArray?
-
-    /**
-     * Migrate the storage for a network given transaction, block and peer blobs.
-     *
-     * Support for persistent storage migration to allow prior App versions to migrate their SQLite
-     * database representations of BTC/BTC transations, blocks and peers into 'Generic Crypto' - where
-     * these entities are persistently
-     *
-     * The provided blobs must be consistent with `network`.  For exmaple, if `network` represents BTC or BCH
-     * then the blobs must be of type [TransactionBlob.Btc]; otherwise a MigrateError is thrown.
-     */
-    public fun migrateStorage(
-            network: Network,
-            transactionBlobs: List<TransactionBlob>,
-            blockBlobs: List<BlockBlob>,
-            peerBlobs: List<PeerBlob>
-    )
 
     companion object {
         /**
@@ -186,29 +157,6 @@ expect class System {
                 type: String,
                 decimals: UInt
         ): BdbCurrency?
-
-        /**
-         * Re-encrypt ciphertext blobs that were encrypted using the BRCoreKey::encryptNative routine.
-         *
-         * The ciphertext will be decrypted using the previous decryption routine. The plaintext from that
-         * operation will be encrypted using the current [Cipher.encrypt] routine with a
-         * [Cipher.createForChaCha20Poly1305] cipher. That updated ciphertext
-         * is then returned and should be used to immediately overwrite the old ciphertext blob so that
-         * it can be properly decrypted using the [Cipher.decrypt] routine going forward.
-         *
-         * @param key The cipher key
-         * @param nonce12 The 12 byte nonce data
-         * @param authenticatedData The authenticated data
-         * @param ciphertext The ciphertext to update the encryption on
-         *
-         * @return The updated ciphertext, if decryption and re-encryption succeeds; absent otherwise.
-         */
-        public fun migrateBRCoreKeyCiphertext(
-                key: Key,
-                nonce12: ByteArray,
-                authenticatedData: ByteArray,
-                ciphertext: ByteArray
-        ): ByteArray?
 
         /**
          * Cease use of `system` and remove (aka 'wipe') its persistent storage.

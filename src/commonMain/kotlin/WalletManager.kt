@@ -1,6 +1,5 @@
 package drewcarlson.walletkit
 
-import drewcarlson.walletkit.api.BdbService
 import drewcarlson.walletkit.common.Key
 
 /**

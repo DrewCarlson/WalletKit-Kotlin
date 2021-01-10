@@ -2,8 +2,8 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import brcrypto.BRCryptoTransferStateType.*
+import drewcarlson.blockset.model.BdbTransaction
 import drewcarlson.walletkit.System.Companion.system
-import drewcarlson.walletkit.model.BdbTransaction
 import kotlinx.cinterop.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,11 +11,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import platform.Foundation.NSISO8601DateFormatter
 import platform.Foundation.timeIntervalSince1970
-import kotlin.native.concurrent.Worker
 
 @SharedImmutable
-val worker = Worker.start(name = "CryptoClientWorker")
-private val scope = CoroutineScope(Dispatchers.Main)
+private val scope = CoroutineScope(Dispatchers.Default)
+
 internal fun createCryptoClient(
     c: BRCryptoClientContext
 ) = nativeHeap.alloc<BRCryptoClient> {

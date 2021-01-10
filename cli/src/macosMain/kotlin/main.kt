@@ -1,8 +1,7 @@
 package cli
 
 import co.touchlab.stately.freeze
-import drewcarlson.walletkit.api.BdbService
-import drewcarlson.walletkit.api.DarwinBdbService
+import drewcarlson.blockset.BdbService
 import kotlinx.cinterop.autoreleasepool
 import platform.Foundation.*
 import kotlin.system.exitProcess
@@ -13,7 +12,7 @@ fun main(args: Array<String>): Unit = autoreleasepool {
         error.printStackTrace()
         exitProcess(-1)
     }.freeze())
-    //Platform.isMemoryLeakCheckerActive = false
+
     val bdbToken = checkNotNull(
         NSProcessInfo.processInfo
             .environment["BDB_CLIENT_TOKEN"]
@@ -23,7 +22,7 @@ fun main(args: Array<String>): Unit = autoreleasepool {
 }
 
 actual fun createBdbService(bdbToken: String): BdbService =
-    DarwinBdbService.createForTest(bdbToken)
+     BdbService.createForTest(bdbToken)
 
 actual fun quit(): Nothing = exitProcess(0)
 

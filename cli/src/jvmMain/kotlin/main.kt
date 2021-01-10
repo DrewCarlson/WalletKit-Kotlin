@@ -1,6 +1,6 @@
 package cli
 
-import drewcarlson.walletkit.api.BdbService
+import drewcarlson.blockset.BdbService
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.*
@@ -18,7 +18,7 @@ fun main(args: Array<String>): Unit = runBlocking {
 }
 
 actual fun createBdbService(bdbToken: String): BdbService =
-    BdbService.create(bdbToken)
+    BdbService.createForTest(bdbToken)
 
 actual fun quit(): Nothing = exitProcess(0)
 

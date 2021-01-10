@@ -4,7 +4,7 @@ import cli.commands.Balance
 import cli.commands.Config
 import cli.commands.Receive
 import cli.commands.Send
-import drewcarlson.walletkit.api.BdbService
+import drewcarlson.blockset.BdbService
 import kotlinx.cli.ArgParser
 
 private const val PROGRAM_NAME = "walletkit"

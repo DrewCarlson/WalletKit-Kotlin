@@ -3,9 +3,7 @@ package drewcarlson.walletkit
 import brcrypto.*
 import brcrypto.BRCryptoTransferEventType.*
 import drewcarlson.walletkit.System.Companion.system
-import kotlinx.cinterop.CValue
-import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.pointed
+import kotlinx.cinterop.*
 
 
 internal fun transferEventHandler(
@@ -22,32 +20,28 @@ internal fun transferEventHandler(
             checkNotNull(cwm)
             checkNotNull(cw)
             checkNotNull(ct)
-
-            val system = ctx.system
-            val manager = checkNotNull(system.getWalletManager(cwm))
-            val wallet = checkNotNull(manager.getWallet(cw))
-            val transfer = checkNotNull(wallet.transferByCoreOrCreate(ct))
-            val event = eventCval.getPointer(this).pointed
-
-            when (event.type) {
-                CRYPTO_TRANSFER_EVENT_CREATED -> {
-                    system.announceTransferEvent(manager, wallet, transfer, TransferEvent.Created)
-                }
-                CRYPTO_TRANSFER_EVENT_CHANGED -> {
-                    val oldState = event.u.state.old.toTransferState()
-                    val newState = event.u.state.new.toTransferState()
-                    system.announceTransferEvent(manager, wallet, transfer, TransferEvent.Changed(oldState, newState))
-                }
-                CRYPTO_TRANSFER_EVENT_DELETED -> {
-                    system.announceTransferEvent(manager, wallet, transfer, TransferEvent.Deleted)
-                }
-            }
-
             defer {
                 cryptoTransferGive(ct)
                 cryptoWalletGive(cw)
                 cryptoWalletManagerGive(cwm)
             }
+
+            val system = ctx.system
+            val manager = checkNotNull(system.getWalletManager(cwm))
+            val wallet = checkNotNull(manager.getWallet(cw))
+            val transfer = checkNotNull(wallet.transferByCoreOrCreate(ct))
+            val event = eventCval.ptr.reinterpret<BRCryptoTransferEvent>().pointed
+            println("CWM: ${cryptoTransferEventTypeString(event.type)?.toKStringFromUtf8()}")
+
+            val transferEvent = when (event.type) {
+                CRYPTO_TRANSFER_EVENT_CREATED -> TransferEvent.Created
+                CRYPTO_TRANSFER_EVENT_DELETED -> TransferEvent.Deleted
+                CRYPTO_TRANSFER_EVENT_CHANGED -> TransferEvent.Changed(
+                        oldState = event.u.state.old.toTransferState(),
+                        newState = event.u.state.new.toTransferState()
+                )
+            }
+            system.announceTransferEvent(manager, wallet, transfer, transferEvent)
         }
     } catch (e: Exception) {
         println("Error handling transfer event")

@@ -1,6 +1,7 @@
 package drewcarlson.walletkit
 
-import drewcarlson.walletkit.model.BdbCurrency
+import drewcarlson.blockset.model.BdbCurrency
+
 
 internal object Blockchains {
 

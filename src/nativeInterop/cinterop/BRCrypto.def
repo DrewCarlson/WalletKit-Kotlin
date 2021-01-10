@@ -1,2 +1,5 @@
 noStringConversion = cryptoWalletManagerSubmit cryptoAccountCreate cryptoAccountValidatePaperKey cryptoKeyEncodePrivate cryptoKeyEncodePublic
 headers = crypto/BRCryptoBaseP.h
+
+---
+

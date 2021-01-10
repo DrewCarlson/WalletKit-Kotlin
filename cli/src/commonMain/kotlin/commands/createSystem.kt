@@ -5,10 +5,8 @@ import cli.deleteData
 import cli.quit
 import cli.storagePath
 import drewcarlson.walletkit.*
-import drewcarlson.walletkit.api.BdbService
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch

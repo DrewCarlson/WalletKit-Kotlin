@@ -4,12 +4,8 @@ import brcrypto.*
 import co.touchlab.stately.collections.IsoMutableList
 import co.touchlab.stately.collections.IsoMutableMap
 import co.touchlab.stately.collections.IsoMutableSet
-import drewcarlson.walletkit.api.BdbService
-import drewcarlson.walletkit.common.Key
-import drewcarlson.walletkit.migration.BlockBlob
-import drewcarlson.walletkit.migration.PeerBlob
-import drewcarlson.walletkit.migration.TransactionBlob
-import drewcarlson.walletkit.model.BdbCurrency
+import drewcarlson.blockset.BdbService
+import drewcarlson.blockset.model.BdbCurrency
 import io.ktor.client.*
 import kotlinx.atomicfu.atomic
 import kotlinx.cinterop.*
@@ -21,7 +17,7 @@ import kotlin.native.concurrent.freeze
 
 actual class System(
         private val callbackCoordinator: SystemCallbackCoordinator,
-        val listener: SystemListener,
+        private val listener: SystemListener,
         actual val account: Account,
         internal actual val isMainnet: Boolean,
         actual val storagePath: String,
@@ -32,7 +28,7 @@ actual class System(
 ) {
 
     internal val scope = CoroutineScope(
-            SupervisorJob() + Dispatchers.Main + CoroutineExceptionHandler { _, throwable ->
+            SupervisorJob() + Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
                 println("ERROR: ${throwable.message}")
                 throwable.printStackTrace()
             })
@@ -80,7 +76,7 @@ actual class System(
         require(network.supportsWalletManagerMode(mode))
         require(network.supportsAddressScheme(addressScheme))
 
-        val walletManager = cryptoWalletManagerCreate(
+        val cwm = cryptoWalletManagerCreate(
                 cwmListener.readValue(),
                 cwmClient.readValue(),
                 account.core,
@@ -88,9 +84,9 @@ actual class System(
                 mode.toCore(),
                 addressScheme.toCore(),
                 storagePath
-        )?.let { cwm ->
-            WalletManager(cwm, this, callbackCoordinator, false)
-        } ?: return false
+        ) ?: return false
+
+        val walletManager = WalletManager(cwm, this, callbackCoordinator, false)
 
         currencies
                 .filter(network::hasCurrency)
@@ -160,14 +156,6 @@ actual class System(
         walletManagers.forEach { manager ->
             manager.setNetworkReachable(isNetworkReachable)
         }
-    }
-
-    actual fun migrateRequired(network: Network): Boolean {
-        return network.requiresMigration()
-    }
-
-    actual fun migrateStorage(network: Network, transactionBlobs: List<TransactionBlob>, blockBlobs: List<BlockBlob>, peerBlobs: List<PeerBlob>) {
-        TODO("not implemented")
     }
 
     private val listenerWorker = Worker.start(name = "ListenerWorker").freeze()
@@ -312,15 +300,6 @@ actual class System(
                     initialSupply = "0",
                     totalSupply = "0"
             )
-        }
-
-        actual fun migrateBRCoreKeyCiphertext(
-                key: Key,
-                nonce12: ByteArray,
-                authenticatedData: ByteArray,
-                ciphertext: ByteArray
-        ): ByteArray? {
-            TODO("not implemented")
         }
 
         actual fun wipe(system: System) {

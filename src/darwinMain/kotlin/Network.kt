@@ -49,7 +49,7 @@ actual class Network(
             require(value.isNotEmpty())
             val feeValues = value.map(NetworkFee::core).toCValues()
 
-            cryptoNetworkSetNetworkFees(core, feeValues, feeValues.size.toULong())
+            // TODO: cryptoNetworkSetNetworkFees(core, feeValues, feeValues.size.toULong())
         }
 
     actual val minimumFee: NetworkFee

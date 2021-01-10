@@ -1,8 +1,8 @@
 package drewcarlson.walletkit
 
-import drewcarlson.walletkit.api.BdbService
-import drewcarlson.walletkit.model.BdbBlockchain
-import drewcarlson.walletkit.model.BdbCurrency
+import drewcarlson.blockset.BdbService
+import drewcarlson.blockset.model.BdbBlockchain
+import drewcarlson.blockset.model.BdbCurrency
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.emitAll

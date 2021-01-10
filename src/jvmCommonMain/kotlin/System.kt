@@ -3,9 +3,6 @@ package drewcarlson.walletkit
 import drewcarlson.walletkit.api.BdbService
 import drewcarlson.walletkit.common.Cipher
 import drewcarlson.walletkit.common.Key
-import drewcarlson.walletkit.migration.BlockBlob
-import drewcarlson.walletkit.migration.PeerBlob
-import drewcarlson.walletkit.migration.TransactionBlob
 import drewcarlson.walletkit.model.BdbCurrency
 import com.breadwallet.corenative.crypto.*
 import com.breadwallet.corenative.utility.Cookie
@@ -168,62 +165,6 @@ actual class System internal constructor(
         }
     }
 
-    actual fun migrateRequired(network: Network): Boolean {
-        return network.requiresMigration()
-    }
-
-    actual fun migrateStorage(
-            network: Network,
-            transactionBlobs: List<TransactionBlob>,
-            blockBlobs: List<BlockBlob>,
-            peerBlobs: List<PeerBlob>
-    ) {
-        if (!migrateRequired(network)) {
-            throw MigrateError.Invalid
-        }
-
-        migrateStorageAsBtc(network, transactionBlobs, blockBlobs, peerBlobs)
-    }
-
-    private fun migrateStorageAsBtc(
-            network: Network,
-            transactionBlobs: List<TransactionBlob>,
-            blockBlobs: List<BlockBlob>,
-            peerBlobs: List<PeerBlob>
-    ) {
-        // TODO: Implement WalletMigrator
-        /*val migrator = WalletMigrator.create(network, storagePath) ?: throw MigrateError.Create
-
-        transactionBlobs.forEach { blob ->
-          val btc = blob.btc ?: throw MigrateError.Transaction
-          if (!migrator.handleTransactionAsBtc(
-                  btc.bytes,
-                  btc.blockHeight,
-                  btc.timestamp)) {
-            throw MigrateError.Transaction
-          }
-        }
-        blockBlobs.forEach { blob ->
-          val btc = blob.btc ?: throw MigrateError.Block
-          if (!migrator.handleBlockAsBtc(btc.block, btc.height)) {
-            throw MigrateError.Block
-          }
-        }
-        peerBlobs.forEach { blob ->
-          val btc = blob.btc ?: throw MigrateError.Peer
-          // On a `nil` timestamp, by definition skip out, don't migrate this blob
-          if (btc.timestamp != null) {
-            if (!migrator.handlePeerAsBtc(
-                    btc.address,
-                    btc.port,
-                    btc.services,
-                    btc.timestamp)) {
-              throw MigrateError.Peer
-            }
-          }
-        }*/
-    }
-
     private fun announceSystemEvent(event: SystemEvent) {
         // TODO: Run on executor
         scope.launch {
@@ -368,16 +309,6 @@ actual class System internal constructor(
                     initialSupply = "0",
                     totalSupply = "0"
             )
-        }
-
-        actual fun migrateBRCoreKeyCiphertext(
-                key: Key,
-                nonce12: ByteArray,
-                authenticatedData: ByteArray,
-                ciphertext: ByteArray
-        ): ByteArray? {
-            val cipher = Cipher.createForChaCha20Poly1305(key, nonce12, authenticatedData)
-            return cipher.core.migrateBRCoreKeyCiphertext(ciphertext).orNull()
         }
 
         actual fun wipe(system: System) {

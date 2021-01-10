@@ -1,8 +1,8 @@
 package drewcarlson.walletkit
 
-import drewcarlson.walletkit.api.BdbService
-import drewcarlson.walletkit.model.BdbBlockchain
-import drewcarlson.walletkit.model.BdbCurrency
+import drewcarlson.blockset.BdbService
+import drewcarlson.blockset.model.BdbBlockchain
+import drewcarlson.blockset.model.BdbCurrency
 import kotlinx.coroutines.runBlocking
 
 internal object NetworkDiscovery2 {

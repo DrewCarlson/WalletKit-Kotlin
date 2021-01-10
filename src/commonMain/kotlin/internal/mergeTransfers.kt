@@ -1,7 +1,7 @@
 package drewcarlson.walletkit
 
-import drewcarlson.walletkit.model.BdbTransaction
-import drewcarlson.walletkit.model.BdbTransfer
+import drewcarlson.blockset.model.BdbTransaction
+import drewcarlson.blockset.model.BdbTransfer
 
 internal fun mergeTransfers(transaction: BdbTransaction, addresses: List<String>): List<Pair<BdbTransfer, String?>> {
     // Only consider transfers w/ `address`
