@@ -323,7 +323,6 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.dokkaHtml.configure {
-    outputDirectory.set(buildDir.resolve("dokka"))
 }
 
 tasks.withType<org.jetbrains.dokka.gradle.DokkaTask> {
