@@ -1,5 +1,6 @@
 package demo
 
+import drewcarlson.blockset.BdbService
 import drewcarlson.walletkit.Account
 import drewcarlson.walletkit.AddressScheme
 import drewcarlson.walletkit.Network
@@ -13,7 +14,6 @@ import drewcarlson.walletkit.WalletManager
 import drewcarlson.walletkit.WalletManagerEvent
 import drewcarlson.walletkit.WalletManagerMode
 import drewcarlson.walletkit.WalletManagerState
-import drewcarlson.walletkit.api.BdbService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -45,7 +45,7 @@ class DemoApplication {
                 checkNotNull(account),
                 isMainnet = false,
                 storagePath,
-                BdbService.create(BDB_CLIENT_TOKEN)
+                BdbService.createForTest(BDB_CLIENT_TOKEN)
             )
 
             checkNotNull(system).configure(emptyList())
