@@ -322,11 +322,32 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.useIR = true
 }
 
-tasks.dokkaHtml.configure {
+tasks.create("patchDocs") {
+    dependsOn(tasks.dokkaHtml)
+    mustRunAfter(tasks.dokkaHtml)
+    doLast {
+        val outDir = tasks.dokkaHtml.get().outputDirectory.get()
+        val innerDir = File(outDir, project.name)
+        val moduleIndex = File(innerDir, "index.html").readText()
+        val newIndex = File(outDir, "index.html")
+        val packages = (innerDir.listFiles() ?: emptyArray()).toList()
+        val stringReplace = packages.map { file ->
+            { input: String ->
+                input.replace(
+                        "href=\"${file.name}",
+                        "href=\"./${project.name}/${file.name}"
+                )
+            }
+        }
+        val patchedIndex = stringReplace
+                .fold(moduleIndex) { acc, replace -> replace(acc) }
+                .replace("\"../", "\"./")
+        newIndex.writeText(patchedIndex)
+    }
 }
 
 tasks.withType<org.jetbrains.dokka.gradle.DokkaTask> {
-    moduleName.set("WalletKit Kotlin")
+    //moduleName.set("WalletKit Kotlin")
 }
 
 dependencies {

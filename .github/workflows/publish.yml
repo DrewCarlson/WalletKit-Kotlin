@@ -32,7 +32,7 @@ jobs:
       - uses: eskatos/gradle-command-action@v1
         name: Publish (macos)
         with:
-          arguments: clean publish dokkaHtml
+          arguments: clean publish dokkaHtml patchDocs
         if: ${{ !startsWith(matrix.os, 'windows') }}
 #      - name: Publish (windows)
 #        shell: bash
