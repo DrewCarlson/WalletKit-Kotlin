@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>asDouble</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+    <link href="../../../styles/style.css" rel="Stylesheet">
+    <link href="../../../styles/logo-styles.css" rel="Stylesheet">
+    <link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+    <link href="../../../styles/main.css" rel="Stylesheet">
+    <script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/main.js" async="async"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="logo"></div>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div id="leftToggler"><span class="icon-toggler"></span></div>
+        <script type="text/javascript" src="../../../scripts/pages.js"></script>
+        <script type="text/javascript" src="../../../scripts/main.js"></script>
+        <div class="main-content" id="content" pageIds="drewcarlson.walletkit/Amount/asDouble/#drewcarlson.walletkit.CUnit/PointingToDeclaration//1645845457">
+          <div class="navigation-wrapper" id="navigation-wrapper">
+            <div class="breadcrumbs"><a href="../../index.html">walletkit</a>/<a href="../index.html">drewcarlson.walletkit</a>/<a href="index.html">Amount</a>/<a href="as-double.html">asDouble</a></div>
+            <div class="pull-right d-flex">
+              <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":dokkaHtml/commonMain">common</button><button class="platform-tag platform-selector native-like" data-active="" data-filter=":dokkaHtml/iosArm64Main">iosArm64</button><button class="platform-tag platform-selector native-like" data-active="" data-filter=":dokkaHtml/iosX64Main">iosX64</button><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/jvmCommonMain">jvmCommon</button><button class="platform-tag platform-selector native-like" data-active="" data-filter=":dokkaHtml/macosMain">macos</button></div>
+              <div id="searchBar"></div>
+            </div>
+          </div>
+          <div class="cover ">
+            <h1 class="cover"><span>as</span><wbr></wbr><span>Double</span></h1>
+          </div>
+<div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right">
+  <div class="platform-tags ">
+    <div class="platform-tag common-like">common</div>
+  </div>
+</span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="as-double.html">asDouble</a>(<a href="../-c-unit/index.html">CUnit</a> <a href="as-double.html">unit</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<p class="paragraph">Convert <a href="index.html">Amount</a> into <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html">Double</a> using <a href="index.html#%5Bdrewcarlson.walletkit%2FAmount%2Funit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441">unit</a>.</p><ul><li><p class="paragraph">Note: This can introduce inaccuracy as <code>Double</code> precision is less than the possible number of UInt256 decimals (78).  For example, an Amount of 123456789012345678.0 WEI (approx 1.234e17) when converted will have a different double representation:</p></li></ul><div class="sample-container"><code class="" theme="idea"><pre>val a7 = Amount.create(&quot;123456789012345678.0&quot;, unitWei, false)<br>assertEquals(1.2345678901234568e17, a7?.asDouble(unitWei))</pre></code></div><p class="paragraph">(the final three digits of '678' are rounded to '680')</p></div>
+<div class="divergent-group" data-filterable-current=":dokkaHtml/iosArm64Main :dokkaHtml/iosX64Main :dokkaHtml/jvmCommonMain :dokkaHtml/macosMain" data-filterable-set=":dokkaHtml/iosArm64Main :dokkaHtml/iosX64Main :dokkaHtml/jvmCommonMain :dokkaHtml/macosMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted  with-platform-tabs" data-platform-hinted="data-platform-hinted">
+      <div class="platform-bookmarks-row" data-toggle-list="data-toggle-list"><button class="platform-bookmark native-like" data-filterable-current=":dokkaHtml/iosArm64Main" data-filterable-set=":dokkaHtml/iosArm64Main" data-active="" data-toggle=":dokkaHtml/iosArm64Main">iosArm64</button><button class="platform-bookmark native-like" data-filterable-current=":dokkaHtml/iosX64Main" data-filterable-set=":dokkaHtml/iosX64Main" data-toggle=":dokkaHtml/iosX64Main">iosX64</button><button class="platform-bookmark jvm-like" data-filterable-current=":dokkaHtml/jvmCommonMain" data-filterable-set=":dokkaHtml/jvmCommonMain" data-toggle=":dokkaHtml/jvmCommonMain">jvmCommon</button><button class="platform-bookmark native-like" data-filterable-current=":dokkaHtml/macosMain" data-filterable-set=":dokkaHtml/macosMain" data-toggle=":dokkaHtml/macosMain">macos</button></div>
+<div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/iosArm64Main"><div class="symbol monospace block">final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="as-double.html">asDouble</a>(<a href="../-c-unit/index.html">CUnit</a> <a href="as-double.html">unit</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div><div class="content sourceset-depenent-content" data-togglable=":dokkaHtml/iosX64Main"><div class="symbol monospace block">final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="as-double.html">asDouble</a>(<a href="../-c-unit/index.html">CUnit</a> <a href="as-double.html">unit</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div><div class="content sourceset-depenent-content" data-togglable=":dokkaHtml/jvmCommonMain"><div class="symbol monospace block">final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="as-double.html">asDouble</a>(<a href="../-c-unit/index.html">CUnit</a> <a href="as-double.html">unit</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div><div class="content sourceset-depenent-content" data-togglable=":dokkaHtml/macosMain"><div class="symbol monospace block">final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="as-double.html">asDouble</a>(<a href="../-c-unit/index.html">CUnit</a> <a href="as-double.html">unit</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div>    </div>
+  </div>
+</div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2020 Copyright</span><span class="pull-right"><span>Sponsored and developed by dokka</span><a href="https://github.com/Kotlin/dokka"><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  </body>
+</html>
+

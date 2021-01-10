@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>estimateLimitMinimum</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+    <link href="../../../styles/style.css" rel="Stylesheet">
+    <link href="../../../styles/logo-styles.css" rel="Stylesheet">
+    <link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+    <link href="../../../styles/main.css" rel="Stylesheet">
+    <script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/main.js" async="async"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="logo"></div>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div id="leftToggler"><span class="icon-toggler"></span></div>
+        <script type="text/javascript" src="../../../scripts/pages.js"></script>
+        <script type="text/javascript" src="../../../scripts/main.js"></script>
+        <div class="main-content" id="content" pageIds="drewcarlson.walletkit/Wallet/estimateLimitMinimum/#drewcarlson.walletkit.Address#drewcarlson.walletkit.NetworkFee/PointingToDeclaration//1645845457">
+          <div class="navigation-wrapper" id="navigation-wrapper">
+            <div class="breadcrumbs"><a href="../../index.html">walletkit</a>/<a href="../index.html">drewcarlson.walletkit</a>/<a href="index.html">Wallet</a>/<a href="estimate-limit-minimum.html">estimateLimitMinimum</a></div>
+            <div class="pull-right d-flex">
+              <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":dokkaHtml/commonMain">common</button><button class="platform-tag platform-selector native-like" data-active="" data-filter=":dokkaHtml/iosArm64Main">iosArm64</button><button class="platform-tag platform-selector native-like" data-active="" data-filter=":dokkaHtml/iosX64Main">iosX64</button><button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":dokkaHtml/jvmCommonMain">jvmCommon</button><button class="platform-tag platform-selector native-like" data-active="" data-filter=":dokkaHtml/macosMain">macos</button></div>
+              <div id="searchBar"></div>
+            </div>
+          </div>
+          <div class="cover ">
+            <h1 class="cover"><span>estimate</span><wbr></wbr><span>Limit</span><wbr></wbr><span>Minimum</span></h1>
+          </div>
+<div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right">
+  <div class="platform-tags ">
+    <div class="platform-tag common-like">common</div>
+  </div>
+</span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="../-amount/index.html">Amount</a> <a href="estimate-limit-minimum.html">estimateLimitMinimum</a>(<a href="../-address/index.html">Address</a> <a href="estimate-limit-minimum.html">target</a>, <a href="../-network-fee/index.html">NetworkFee</a> <a href="estimate-limit-minimum.html">fee</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<p class="paragraph">Estimate the minimum amount that can be transfered from Wallet.</p><p class="paragraph">This value does not include the fee, however, a fee estimate has been performed. Generally the minimum amount in zero; however, some currencies have minimum values, below which miners will reject.  In those cases the minimum amount is above zero.</p><p class="paragraph">In cases where <code>balance &lt; amount + fee</code> then LimitEstimationInsufficientFundsError is returned.  The LimitEstimationInsufficientFundsError check respects the wallet from which fees are extracted.</p><p class="paragraph">This is an synchronous function that returns immediately but will call <code>completion</code> once the maximum has been determined.</p><p class="paragraph">The returned Amount is always in the wallet's currency.</p><h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">target</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the target address</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">fee</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the network fees</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">completion</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the handler for the results</p></div></div></div></div></div></div></div></div></div></div></div>
+<div class="divergent-group" data-filterable-current=":dokkaHtml/iosArm64Main" data-filterable-set=":dokkaHtml/iosArm64Main"><div class="with-platform-tags"><span class="pull-right">
+  <div class="platform-tags ">
+    <div class="platform-tag native-like">iosArm64</div>
+  </div>
+</span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/iosArm64Main"><div class="symbol monospace block">final <a href="../-amount/index.html">Amount</a> <a href="estimate-limit-minimum.html">estimateLimitMinimum</a>(<a href="../-address/index.html">Address</a> <a href="estimate-limit-minimum.html">target</a>, <a href="../-network-fee/index.html">NetworkFee</a> <a href="estimate-limit-minimum.html">fee</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/iosArm64Main"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":dokkaHtml/iosArm64Main" data-filterable-set=":dokkaHtml/iosArm64Main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">target</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the target address</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/iosArm64Main" data-filterable-set=":dokkaHtml/iosArm64Main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">fee</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the network fees</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/iosArm64Main" data-filterable-set=":dokkaHtml/iosArm64Main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">completion</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the handler for the results</p></div></div></div></div></div></div></div></div></div></div></div>
+<div class="divergent-group" data-filterable-current=":dokkaHtml/iosX64Main" data-filterable-set=":dokkaHtml/iosX64Main"><div class="with-platform-tags"><span class="pull-right">
+  <div class="platform-tags ">
+    <div class="platform-tag native-like">iosX64</div>
+  </div>
+</span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/iosX64Main"><div class="symbol monospace block">final <a href="../-amount/index.html">Amount</a> <a href="estimate-limit-minimum.html">estimateLimitMinimum</a>(<a href="../-address/index.html">Address</a> <a href="estimate-limit-minimum.html">target</a>, <a href="../-network-fee/index.html">NetworkFee</a> <a href="estimate-limit-minimum.html">fee</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/iosX64Main"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":dokkaHtml/iosX64Main" data-filterable-set=":dokkaHtml/iosX64Main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">target</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the target address</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/iosX64Main" data-filterable-set=":dokkaHtml/iosX64Main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">fee</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the network fees</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/iosX64Main" data-filterable-set=":dokkaHtml/iosX64Main"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">completion</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the handler for the results</p></div></div></div></div></div></div></div></div></div></div></div>
+<div class="divergent-group" data-filterable-current=":dokkaHtml/jvmCommonMain" data-filterable-set=":dokkaHtml/jvmCommonMain"><div class="with-platform-tags"><span class="pull-right">
+  <div class="platform-tags ">
+    <div class="platform-tag jvm-like">jvmCommon</div>
+  </div>
+</span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmCommonMain"><div class="symbol monospace block">final <a href="../-amount/index.html">Amount</a> <a href="estimate-limit-minimum.html">estimateLimitMinimum</a>(<a href="../-address/index.html">Address</a> <a href="estimate-limit-minimum.html">target</a>, <a href="../-network-fee/index.html">NetworkFee</a> <a href="estimate-limit-minimum.html">fee</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/jvmCommonMain"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":dokkaHtml/jvmCommonMain" data-filterable-set=":dokkaHtml/jvmCommonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">target</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the target address</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/jvmCommonMain" data-filterable-set=":dokkaHtml/jvmCommonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">fee</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the network fees</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/jvmCommonMain" data-filterable-set=":dokkaHtml/jvmCommonMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">completion</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the handler for the results</p></div></div></div></div></div></div></div></div></div></div></div>
+<div class="divergent-group" data-filterable-current=":dokkaHtml/macosMain" data-filterable-set=":dokkaHtml/macosMain"><div class="with-platform-tags"><span class="pull-right">
+  <div class="platform-tags ">
+    <div class="platform-tag native-like">macos</div>
+  </div>
+</span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/macosMain"><div class="symbol monospace block">final <a href="../-amount/index.html">Amount</a> <a href="estimate-limit-minimum.html">estimateLimitMinimum</a>(<a href="../-address/index.html">Address</a> <a href="estimate-limit-minimum.html">target</a>, <a href="../-network-fee/index.html">NetworkFee</a> <a href="estimate-limit-minimum.html">fee</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<h2 class="">Parameters</h2><div data-togglable="Parameters"><div class="platform-hinted WithExtraAttributes" data-platform-hinted="data-platform-hinted" data-togglable="Parameters"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/macosMain"><div data-togglable="Parameters"><div class="table" data-togglable="Parameters"><div class="table-row" data-filterable-current=":dokkaHtml/macosMain" data-filterable-set=":dokkaHtml/macosMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">target</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the target address</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/macosMain" data-filterable-set=":dokkaHtml/macosMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">fee</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the network fees</p></div></div></div></div></div><div class="table-row" data-filterable-current=":dokkaHtml/macosMain" data-filterable-set=":dokkaHtml/macosMain"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex">completion</span></div><div><div class="title"><div data-togglable="Parameters"><p class="paragraph">the handler for the results</p></div></div></div></div></div></div></div></div></div></div></div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2020 Copyright</span><span class="pull-right"><span>Sponsored and developed by dokka</span><a href="https://github.com/Kotlin/dokka"><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,363 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>CurrencyPair</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+    <link href="../../../styles/style.css" rel="Stylesheet">
+    <link href="../../../styles/logo-styles.css" rel="Stylesheet">
+    <link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+    <link href="../../../styles/main.css" rel="Stylesheet">
+    <script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/main.js" async="async"></script>
+  </head>
+  <body>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="logo"></div>
+        <div id="paneSearch"></div>
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div id="leftToggler"><span class="icon-toggler"></span></div>
+        <script type="text/javascript" src="../../../scripts/pages.js"></script>
+        <script type="text/javascript" src="../../../scripts/main.js"></script>
+        <div class="main-content" id="content" pageIds="drewcarlson.walletkit/CurrencyPair///PointingToDeclaration//62975441">
+          <div class="navigation-wrapper" id="navigation-wrapper">
+            <div class="breadcrumbs"><a href="../../index.html">walletkit</a>/<a href="../index.html">drewcarlson.walletkit</a>/<a href="index.html">CurrencyPair</a></div>
+            <div class="pull-right d-flex">
+              <div class="filter-section" id="filter-section"><button class="platform-tag platform-selector common-like" data-active="" data-filter=":dokkaHtml/commonMain">common</button></div>
+              <div id="searchBar"></div>
+            </div>
+          </div>
+          <div class="cover ">
+            <h1 class="cover"><span>Currency</span><wbr></wbr><span>Pair</span></h1>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace">public final class <a href="index.html">CurrencyPair</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">&quot;A currency pair is the quotation of the relative value of a currency unit against the unit of another currency in the foreign exchange market.</p><p class="paragraph">The currency that is used as the reference is called the counter currency, quote currency or currency and the currency that is quoted in relation is called the base currency or transaction currency.</p><p class="paragraph">&quot;The quotation EUR/USD 1.2500 means that one euro is exchanged for 1.2500 US dollars. Here, EUR is the base currency and USD is the quote currency(counter currency).&quot;</p><p class="paragraph">Ref: <a href="https://en.wikipedia.org/wiki/Currency_pair">https://en.wikipedia.org/wiki/Currency_pair</a></p><p class="paragraph">Thus BTC/USD=1000 means that one BTC is changed for $1,000.  Here, BTC is the base currency and USD is the quote currency.  You would create such an exchange with:</p><div class="sample-container"><code class="" theme="idea"><pre>    let BTC_USD_Pair = CurrencyPair (baseUnit:  Bitcoin.Units.BTC,
+                                     quoteUnit: Fiat.USD.Dollar,
+                                     exchangeRate: 1000.0)</pre></code></div><p class="paragraph">and then use it to find the value of 2 BTC with:</p><div class="sample-container"><code class="" theme="idea"><pre>    BTC_USD_Pair.exchange (asBase: Amount (value: 2.0, unit: Bitcoin.Units.BTC))</pre></code></div><p class="paragraph">which would return: $2,000  (as Amount of 2000.0 in Fiat.USD.Dollar)</p></div></div>
+          </div>
+          <div class="tabbedcontent">
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Constructors">Constructors</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+            <div class="tabs-section-body">
+              <h2 class="tabbedcontent">Constructors</h2>
+              <div class="table" data-togglable="Constructors"><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FCurrencyPair%2F%23drewcarlson.walletkit.CUnit%23drewcarlson.walletkit.CUnit%23kotlin.Double%2FPointingToDeclaration%2F%5D%2FConstructors%2F62975441" anchor-label="CurrencyPair" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FCurrencyPair%2F%23drewcarlson.walletkit.CUnit%23drewcarlson.walletkit.CUnit%23kotlin.Double%2FPointingToDeclaration%2F%5D%2FConstructors%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue TabbedContent">
+                    <div class=""><span class="inline-flex"><a href="-currency-pair.html">CurrencyPair</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FCurrencyPair%2F%23drewcarlson.walletkit.CUnit%23drewcarlson.walletkit.CUnit%23kotlin.Double%2FPointingToDeclaration%2F%5D%2FConstructors%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block"><a href="index.html">CurrencyPair</a> <a href="-currency-pair.html">CurrencyPair</a>(<a href="../-c-unit/index.html">CUnit</a> <a href="-currency-pair.html">baseUnit</a>, <a href="../-c-unit/index.html">CUnit</a> <a href="-currency-pair.html">quoteUnit</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="-currency-pair.html">exchangeRate</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Functions</h2>
+              <div class="table" data-togglable="Functions"><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent1%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="component1" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent1%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="component1.html">component1</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent1%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="../-c-unit/index.html">CUnit</a> <a href="component1.html">component1</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent2%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="component2" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent2%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="component2.html">component2</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent2%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="../-c-unit/index.html">CUnit</a> <a href="component2.html">component2</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent3%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="component3" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent3%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="component3.html">component3</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcomponent3%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="component3.html">component3</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcopy%2F%23drewcarlson.walletkit.CUnit%23drewcarlson.walletkit.CUnit%23kotlin.Double%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="copy" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcopy%2F%23drewcarlson.walletkit.CUnit%23drewcarlson.walletkit.CUnit%23kotlin.Double%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="copy.html">copy</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2Fcopy%2F%23drewcarlson.walletkit.CUnit%23drewcarlson.walletkit.CUnit%23kotlin.Double%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="index.html">CurrencyPair</a> <a href="copy.html">copy</a>(<a href="../-c-unit/index.html">CUnit</a> <a href="copy.html">baseUnit</a>, <a href="../-c-unit/index.html">CUnit</a> <a href="copy.html">quoteUnit</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="copy.html">exchangeRate</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="equals" id="%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="../../drewcarlson.walletkit.model/-brd-json-rpc-response/index.html#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441">equals</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html">Boolean</a> <a href="../../drewcarlson.walletkit.model/-brd-json-rpc-response/index.html#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441">equals</a>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html">Object</a> <a href="../../drewcarlson.walletkit.model/-brd-json-rpc-response/index.html#%5Bkotlin%2FAny%2Fequals%2F%23kotlin.Any%3F%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441">other</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsBase%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="exchangeAsBase" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsBase%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="exchange-as-base.html">exchangeAsBase</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsBase%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="../-amount/index.html">Amount</a> <a href="exchange-as-base.html">exchangeAsBase</a>(<a href="../-amount/index.html">Amount</a> <a href="exchange-as-base.html">amountAsBase</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsBase%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="exchangeAsBase" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsBase%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a><div class="brief "><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsBase%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="exchangeAsBase" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsBase%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>Apply <code>self</code> CurrencyPair to convert <code>asBase</code> (in <code>baseCurrency</code>) to <code>quoteCurrency</code>.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsQuote%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="exchangeAsQuote" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsQuote%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="exchange-as-quote.html">exchangeAsQuote</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsQuote%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="../-amount/index.html">Amount</a> <a href="exchange-as-quote.html">exchangeAsQuote</a>(<a href="../-amount/index.html">Amount</a> <a href="exchange-as-quote.html">amountAsQuote</a>)<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsQuote%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="exchangeAsQuote" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsQuote%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a><div class="brief "><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsQuote%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="exchangeAsQuote" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeAsQuote%2F%23drewcarlson.walletkit.Amount%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>Apply <code>self</code> CurrencyPair to convert <code>asQuote</code> (in <code>quoteCurrency</code>) to <code>baseCurrency</code>.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-baseUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getBaseUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-baseUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="get-base-unit.html">getBaseUnit</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-baseUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="../-c-unit/index.html">CUnit</a> <a href="get-base-unit.html">getBaseUnit</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-baseUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getBaseUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-baseUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a><div class="brief "><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-baseUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getBaseUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-baseUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>In EUR/USD=1.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-exchangeRate%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getExchangeRate" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-exchangeRate%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="get-exchange-rate.html">getExchangeRate</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-exchangeRate%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="get-exchange-rate.html">getExchangeRate</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-exchangeRate%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getExchangeRate" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-exchangeRate%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a><div class="brief "><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-exchangeRate%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getExchangeRate" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-exchangeRate%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>In EUR/USD=1.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-quoteUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getQuoteUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-quoteUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="get-quote-unit.html">getQuoteUnit</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-quoteUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block">final <a href="../-c-unit/index.html">CUnit</a> <a href="get-quote-unit.html">getQuoteUnit</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-quoteUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getQuoteUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-quoteUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a><div class="brief "><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-quoteUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="getQuoteUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2F%3Cget-quoteUnit%3E%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>In EUR/USD=1.</div></div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="hashCode" id="%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="../../drewcarlson.walletkit.model/-brd-json-rpc-response/index.html#%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441">hashCode</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html">Integer</a> <a href="../../drewcarlson.walletkit.model/-brd-json-rpc-response/index.html#%5Bkotlin%2FAny%2FhashCode%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441">hashCode</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" anchor-label="toString" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="to-string.html">toString</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FtoString%2F%23%2FPointingToDeclaration%2F%5D%2FFunctions%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title"><div class="divergent-group" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain"><div class="with-platform-tags"><span class="pull-right"></span></div>
+
+  <div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><div class="symbol monospace block"><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html">String</a> <a href="to-string.html">toString</a>()<span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+  </div>
+</div>
+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Properties</h2>
+              <div class="table" data-togglable="Properties"><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="baseUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="index.html#%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441">baseUnit</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="baseUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a><div class="symbol monospace block">private final <a href="../-c-unit/index.html">CUnit</a> <a href="index.html#%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441">baseUnit</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="baseUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FbaseUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>In EUR/USD=1.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="exchangeRate" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="index.html#%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441">exchangeRate</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="exchangeRate" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a><div class="symbol monospace block">private final <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html">Double</a> <a href="index.html#%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441">exchangeRate</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="exchangeRate" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FexchangeRate%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>In EUR/USD=1.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="quoteUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>
+                <div class="table-row" data-filterable-current=":dokkaHtml/commonMain" data-filterable-set=":dokkaHtml/commonMain">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex"><a href="index.html#%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441">quoteUnit</a><span class="anchor-wrapper"><span class="anchor-icon" pointing-to="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="platform-tags ">
+                        <div class="platform-tag common-like">common</div>
+                      </div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":dokkaHtml/commonMain"><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="quoteUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a><div class="symbol monospace block">private final <a href="../-c-unit/index.html">CUnit</a> <a href="index.html#%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441">quoteUnit</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" anchor-label="quoteUnit" id="%5Bdrewcarlson.walletkit%2FCurrencyPair%2FquoteUnit%2F%23%2FPointingToDeclaration%2F%5D%2FProperties%2F62975441" data-filterable-set=":dokkaHtml/commonMain"></a>In EUR/USD=1.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content"></a></span><span>© 2020 Copyright</span><span class="pull-right"><span>Sponsored and developed by dokka</span><a href="https://github.com/Kotlin/dokka"><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  </body>
+</html>
+
