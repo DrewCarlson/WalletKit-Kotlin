@@ -19,7 +19,6 @@ plugins {
     kotlin("multiplatform") version KOTLIN_VERSION
     kotlin("plugin.serialization") version KOTLIN_VERSION
     id("org.jetbrains.dokka") version DOKKA_VERSION
-    `cpp-library`
     `maven-publish`
 }
 
