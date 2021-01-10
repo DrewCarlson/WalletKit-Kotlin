@@ -280,7 +280,6 @@ kotlin {
         //   that restriction is removed.
         val darwinDependenciesMain by creating {
             dependsOn(commonMain)
-            kotlin.srcDirs("src/darwinMain")
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$SERIALIZATION_VERSION")
@@ -293,6 +292,7 @@ kotlin {
 
         val iosX64Main by getting {
             dependsOn(darwinDependenciesMain)
+            kotlin.srcDirs("src/darwinMain")
             dependencies {
                 implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
             }
@@ -300,6 +300,7 @@ kotlin {
 
         val iosArm64Main by getting {
             dependsOn(darwinDependenciesMain)
+            kotlin.srcDirs("src/darwinMain")
             dependencies {
                 implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
             }
@@ -307,6 +308,7 @@ kotlin {
 
         val macosMain by getting {
             dependsOn(darwinDependenciesMain)
+            kotlin.srcDirs("src/darwinMain")
             dependencies {
                 implementation("io.ktor:ktor-client-curl:$KTOR_VERSION")
             }
