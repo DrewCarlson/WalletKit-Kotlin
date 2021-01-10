@@ -131,7 +131,11 @@ kotlin {
     }
 
     // TODO: Add other native targets
-    val nativeTargets = listOf(macosX64("macos"), iosX64(), iosArm64())
+    val nativeTargets = listOf(
+            macosX64("macos"),
+            iosX64(),
+            iosArm64()
+    )
 
     // TODO: Adapt native configuration to support windows, linux, etc
     configure(nativeTargets) {
@@ -275,6 +279,8 @@ kotlin {
         //   this should be renamed to darwinMain and consumed by darwin targets when
         //   that restriction is removed.
         val darwinDependenciesMain by creating {
+            dependsOn(commonMain)
+            kotlin.srcDirs("src/darwinMain")
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$SERIALIZATION_VERSION")
@@ -285,9 +291,15 @@ kotlin {
             }
         }
 
-        val iosMain by getting {
+        val iosX64Main by getting {
             dependsOn(darwinDependenciesMain)
-            kotlin.srcDirs("src/darwinMain")
+            dependencies {
+                implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
+            }
+        }
+
+        val iosArm64Main by getting {
+            dependsOn(darwinDependenciesMain)
             dependencies {
                 implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
             }
@@ -295,7 +307,9 @@ kotlin {
 
         val macosMain by getting {
             dependsOn(darwinDependenciesMain)
-            kotlin.srcDirs("src/darwinMain")
+            dependencies {
+                implementation("io.ktor:ktor-client-curl:$KTOR_VERSION")
+            }
         }
     }
 }
