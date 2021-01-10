@@ -322,12 +322,14 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.useIR = true
 }
 
-/*dokka {
-    outputFormat = "html"
-    outputDirectory = "$buildDir/dokka"
+tasks.dokkaHtml.configure {
+    outputDirectory.set(buildDir.resolve("dokka"))
+}
 
-    multiplatform {
-        jvm {}
-        macos {}
-    }
-}*/
+tasks.withType<org.jetbrains.dokka.gradle.DokkaTask> {
+    moduleName.set("WalletKit Kotlin")
+}
+
+dependencies {
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:$DOKKA_VERSION")
+}
