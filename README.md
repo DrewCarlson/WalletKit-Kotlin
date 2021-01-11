@@ -31,7 +31,7 @@ Run with `./gradlew :demo-wallet:run`
 
 ### iOS
 
-This iOS client uses Swift UI.
+The iOS client uses Swift UI.
 Open the [ios-demo](demo-wallet/ios-demo) xcode project and click Run.
 
 The `demo-wallet` gradle module produces `DemoWalletKotlin.framework` for use in the xcode project.
@@ -41,8 +41,7 @@ The xcode project build process builds the kotlin framework automatically.
 ## Usage
 
 A free Blockset token is required to use this library or run tests/demos, [learn more](https://docs.blockset.com/getting-started/authentication).
-
-(For Demo/Tests) Once obtained, add it to your environment with `export BDB_CLIENT_TOKEN="..."` before running any gradle commands.
+For demo/tests: add the token to your environment with `export BDB_CLIENT_TOKEN="..."` before running any gradle commands.
 
 Here is a minimal example of System creation in platform-independent Kotlin.
 ```kotlin
@@ -68,7 +67,7 @@ val system = System.create(
     checkNotNull(account),
     isMainnet,
     storagePath,
-    BdbToken.createForTest(bdbToken)
+    BdbService.createForTest(bdbToken)
 )
 
 system.configure(emptyList())
