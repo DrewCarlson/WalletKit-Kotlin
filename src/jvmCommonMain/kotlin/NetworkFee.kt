@@ -3,10 +3,9 @@ package drewcarlson.walletkit
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoNetworkFee
 import com.google.common.primitives.UnsignedLong
-import kotlinx.io.core.Closeable
 import java.util.*
 
-actual class NetworkFee(
+public actual class NetworkFee(
         internal val core: BRCryptoNetworkFee
 ) : Closeable {
 
@@ -25,7 +24,7 @@ actual class NetworkFee(
             )
     )
 
-    actual val timeIntervalInMilliseconds: ULong =
+    public actual val timeIntervalInMilliseconds: ULong =
             core.confirmationTimeInMilliseconds.toLong().toULong()
     internal actual val pricePerCostFactor: Amount =
             Amount(core.pricePerCostFactor)

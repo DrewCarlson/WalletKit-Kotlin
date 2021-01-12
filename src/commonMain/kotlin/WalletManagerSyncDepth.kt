@@ -1,12 +1,12 @@
 package drewcarlson.walletkit
 
-enum class WalletManagerSyncDepth {
+public enum class WalletManagerSyncDepth {
     FROM_LAST_CONFIRMED_SEND,
     FROM_LAST_TRUSTED_BLOCK,
     FROM_CREATION;
 
-    companion object {
-        fun fromSerialization(serialization: UInt): WalletManagerSyncDepth {
+    public companion object {
+        public fun fromSerialization(serialization: UInt): WalletManagerSyncDepth {
             return when (serialization) {
                 0xa0u -> FROM_LAST_CONFIRMED_SEND
                 0xb0u -> FROM_LAST_TRUSTED_BLOCK
@@ -16,7 +16,7 @@ enum class WalletManagerSyncDepth {
         }
     }
 
-    fun toSerialization(): UInt {
+    public fun toSerialization(): UInt {
         return when (this) {
             FROM_LAST_CONFIRMED_SEND -> 0xa0u
             FROM_LAST_TRUSTED_BLOCK -> 0xb0u
@@ -24,7 +24,7 @@ enum class WalletManagerSyncDepth {
         }
     }
 
-    fun getShallowerValue(): WalletManagerSyncDepth? {
+    public fun getShallowerValue(): WalletManagerSyncDepth? {
         return when (this) {
             FROM_CREATION -> FROM_LAST_TRUSTED_BLOCK
             FROM_LAST_TRUSTED_BLOCK -> FROM_LAST_CONFIRMED_SEND
@@ -32,7 +32,7 @@ enum class WalletManagerSyncDepth {
         }
     }
 
-    fun getDeeperValue(): WalletManagerSyncDepth? {
+    public fun getDeeperValue(): WalletManagerSyncDepth? {
         return when (this) {
             FROM_LAST_CONFIRMED_SEND -> FROM_LAST_TRUSTED_BLOCK
             FROM_LAST_TRUSTED_BLOCK -> FROM_CREATION

@@ -1,9 +1,7 @@
 package drewcarlson.walletkit
 
-import kotlinx.io.core.Closeable
-
 /** A currency is a medium for exchange. */
-expect class Currency : Closeable {
+public expect class Currency : Closeable {
 
     /** 'A Unique Identifier */
     public val uids: String
@@ -23,8 +21,8 @@ expect class Currency : Closeable {
     override fun equals(other: Any?): Boolean
     override fun hashCode(): Int
 
-    companion object {
-        fun create(
+    public companion object {
+        public fun create(
                 uids: String,
                 name: String,
                 code: String,
@@ -35,10 +33,10 @@ expect class Currency : Closeable {
 }
 
 /** Used to map Currency -> Built-In-Blockchain-Network */
-const val CURRENCY_CODE_AS_BTC = "btc"
+public const val CURRENCY_CODE_AS_BTC: String = "btc"
 
 /** Used to map Currency -> Built-In-Blockchain-Network */
-const val CURRENCY_CODE_AS_BCH = "bch"
+public const val CURRENCY_CODE_AS_BCH: String = "bch"
 
 /** Used to map Currency -> Built-In-Blockchain-Network */
-const val CURRENCY_CODE_AS_ETH = "eth"
+public const val CURRENCY_CODE_AS_ETH: String = "eth"

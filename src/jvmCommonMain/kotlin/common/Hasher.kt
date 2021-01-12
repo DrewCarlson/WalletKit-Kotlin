@@ -2,25 +2,27 @@ package drewcarlson.walletkit.common
 
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoHasher
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-actual class Hasher internal constructor(
-        internal val core: BRCryptoHasher
+public actual class Hasher internal constructor(
+        core: BRCryptoHasher?
 ) : Closeable {
+
+    internal val core: BRCryptoHasher = checkNotNull(core)
 
     init {
         ReferenceCleaner.register(core, ::close)
     }
 
-    actual fun hash(data: ByteArray): ByteArray? =
+    public actual fun hash(data: ByteArray): ByteArray? =
             core.hash(data).orNull()
 
     actual override fun close() {
         core.give()
     }
 
-    actual companion object {
-        actual fun createForAlgorithm(algorithm: HashAlgorithm): Hasher =
+    public actual companion object {
+        public actual fun createForAlgorithm(algorithm: HashAlgorithm): Hasher =
                 when (algorithm) {
                     HashAlgorithm.SHA1 -> BRCryptoHasher.createSha1()
                     HashAlgorithm.SHA224 -> BRCryptoHasher.createSha224()
@@ -33,6 +35,6 @@ actual class Hasher internal constructor(
                     HashAlgorithm.HASH160 -> BRCryptoHasher.createHash160()
                     HashAlgorithm.KECCAK256 -> BRCryptoHasher.createKeccak256()
                     HashAlgorithm.MD5 -> BRCryptoHasher.createMd5()
-                }.orNull().let { coreHasher -> Hasher(checkNotNull(coreHasher)) }
+                }.orNull().run(::Hasher)
     }
 }

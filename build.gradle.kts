@@ -205,6 +205,7 @@ kotlin {
                 useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
                 useExperimentalAnnotation("kotlin.RequiresOptIn")
                 progressiveMode = true
+                explicitApi()
             }
         }
 

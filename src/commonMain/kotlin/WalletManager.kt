@@ -13,7 +13,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * At least conceptually, a WalletManager is an 'Active Object' (whereas Transfer and Wallet are
  * 'Passive Objects'
  */
-expect class WalletManager {
+public expect class WalletManager {
 
     /** The owning system */
     public val system: System

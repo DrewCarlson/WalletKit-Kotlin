@@ -3,29 +3,29 @@ package drewcarlson.walletkit
 /**
  * A WalletManager Event represents a asynchronous announcement of a manager's state change.
  */
-sealed class WalletManagerEvent {
-    object Created : WalletManagerEvent()
-    object Deleted : WalletManagerEvent()
-    data class Changed(
+public sealed class WalletManagerEvent {
+    public object Created : WalletManagerEvent()
+    public object Deleted : WalletManagerEvent()
+    public data class Changed(
             val oldState: WalletManagerState,
             val newState: WalletManagerState
     ) : WalletManagerEvent()
 
-    class WalletAdded(val wallet: Wallet) : WalletManagerEvent()
-    class WalletChanged(val wallet: Wallet) : WalletManagerEvent()
-    class WalletDeleted(val wallet: Wallet) : WalletManagerEvent()
+    public data class WalletAdded(val wallet: Wallet) : WalletManagerEvent()
+    public data class WalletChanged(val wallet: Wallet) : WalletManagerEvent()
+    public data class WalletDeleted(val wallet: Wallet) : WalletManagerEvent()
 
-    object SyncStarted : WalletManagerEvent()
-    data class SyncProgress(
+    public object SyncStarted : WalletManagerEvent()
+    public data class SyncProgress(
             val timestamp: Long?,
             val percentComplete: Float
     ) : WalletManagerEvent()
 
-    data class SyncStopped(
+    public data class SyncStopped(
             val reason: SyncStoppedReason
     ) : WalletManagerEvent()
 
-    data class SyncRecommended(
+    public data class SyncRecommended(
             val depth: WalletManagerSyncDepth
     ) : WalletManagerEvent()
 
@@ -36,7 +36,7 @@ sealed class WalletManagerEvent {
      * block height. Displays or caches of that confirmation count should be updated when this
      * event occurs.
      */
-    data class BlockUpdated(
+    public data class BlockUpdated(
             val height: ULong
     ) : WalletManagerEvent()
 }

@@ -1,40 +1,40 @@
 package drewcarlson.walletkit
 
-sealed class WalletEvent {
+public sealed class WalletEvent {
 
-    object Created : WalletEvent()
-    object Deleted : WalletEvent()
+    public object Created : WalletEvent()
+    public object Deleted : WalletEvent()
 
-    data class FeeBasisUpdated(
+    public data class FeeBasisUpdated(
             val feeBasis: TransferFeeBasis
     ) : WalletEvent()
 
-    data class FeeBasisEstimated(
+    public data class FeeBasisEstimated(
             val feeBasis: TransferFeeBasis
     ) : WalletEvent()
 
-    data class Change(
+    public data class Change(
             val oldState: WalletState,
             val newState: WalletState
     ) : WalletEvent()
 
-    data class BalanceUpdated(
+    public data class BalanceUpdated(
             val balance: Amount
     ) : WalletEvent()
 
-    data class TransferAdded(
+    public data class TransferAdded(
             val transfer: Transfer
     ) : WalletEvent()
 
-    data class TransferChanged(
+    public data class TransferChanged(
             val transfer: Transfer
     ) : WalletEvent()
 
-    data class TransferDeleted(
+    public data class TransferDeleted(
             val transfer: Transfer
     ) : WalletEvent()
 
-    data class TransferSubmitted(
+    public data class TransferSubmitted(
             val transfer: Transfer
     ) : WalletEvent()
 }

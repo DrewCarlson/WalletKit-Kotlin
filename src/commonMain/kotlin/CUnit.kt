@@ -1,7 +1,5 @@
 package drewcarlson.walletkit
 
-import kotlinx.io.core.Closeable
-
 /**
  * A unit of measure for a currency.
  *
@@ -13,7 +11,7 @@ import kotlinx.io.core.Closeable
  * ane WEI for Bitcoin and Ethereum, respectively.  There can be multiple 'derivedUnits' - which
  * are derived by scaling off of a baseUnit.  For example, BTC and ETHER respectively.
  */
-expect class CUnit : Closeable {
+public expect class CUnit : Closeable {
 
     public val currency: Currency
 
@@ -30,7 +28,7 @@ expect class CUnit : Closeable {
     override fun equals(other: Any?): Boolean
     override fun hashCode(): Int
 
-    companion object {
+    public companion object {
         internal fun create(
                 currency: Currency,
                 uids: String,

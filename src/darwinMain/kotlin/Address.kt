@@ -2,9 +2,8 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
-import kotlinx.io.core.Closeable
 
-actual class Address(
+public actual class Address(
         core: BRCryptoAddress,
         take: Boolean
 ) : Closeable {
@@ -25,8 +24,8 @@ actual class Address(
         cryptoAddressGive(core)
     }
 
-    actual companion object {
-        actual fun create(string: String, network: Network): Address? {
+    public actual companion object {
+        public actual fun create(string: String, network: Network): Address? {
             val core = cryptoAddressCreateFromString(network.core, string)
             return if (core != null) {
                 Address(core, false)

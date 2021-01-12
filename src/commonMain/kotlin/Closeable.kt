@@ -1,5 +1,5 @@
-package kotlinx.io.core
+package drewcarlson.walletkit
 
-interface Closeable {
-    fun close()
+public interface Closeable {
+    public fun close()
 }

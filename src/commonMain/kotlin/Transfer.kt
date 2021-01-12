@@ -11,7 +11,7 @@ package drewcarlson.walletkit
  * A Transfer is Equatable but not Hashable; Hashable would naturally be implemented in terms of
  * the TransferHash however that hash isn't available until after a transfer is signed.
  */
-expect class Transfer {
+public expect class Transfer {
 
     /** The owning wallet */
     public val wallet: Wallet
@@ -68,8 +68,8 @@ expect class Transfer {
      * Get the number of confirmations of transfer at the current network height.
      *
      * Since this value is calculated based on the associated network's height, it is recommended that a developer
-     * refreshes any cached result in response to [WalletManagerBlockUpdatedEvent] events on the owning
-     * WalletManager, in addition to further [TransferChangedEvent] events on this Transfer.
+     * refreshes any cached result in response to [WalletManagerEvent.BlockUpdated] events on the owning
+     * WalletManager, in addition to further [TransferEvent.Changed] events on this Transfer.
      *
      * If the transfer has not been confirmed or if the network's height is less than the confirmation height,
      * `absent` is returned.

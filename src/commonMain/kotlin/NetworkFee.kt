@@ -1,7 +1,5 @@
 package drewcarlson.walletkit
 
-import kotlinx.io.core.Closeable
-
 /**
  * A Network Fee represents the 'amount per cost factor' paid to mine a transfer.
  *
@@ -15,7 +13,7 @@ import kotlinx.io.core.Closeable
  * A NetworkFee is Equatable on the underlying Core representation.  It is natural to compare
  * NetworkFee based on timeIntervalInMilliseconds.
  */
-expect class NetworkFee : Closeable {
+public expect class NetworkFee : Closeable {
 
     /**
      * Initialize based on the timeInternal and pricePerCostFactor.  Used by

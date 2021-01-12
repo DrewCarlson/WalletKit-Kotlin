@@ -1,17 +1,17 @@
 package drewcarlson.walletkit
 
-sealed class SyncStoppedReason {
+public sealed class SyncStoppedReason {
 
-    object COMPLETE : SyncStoppedReason()
-    object REQUESTED : SyncStoppedReason()
-    object UNKNOWN : SyncStoppedReason()
+    public object COMPLETE : SyncStoppedReason()
+    public object REQUESTED : SyncStoppedReason()
+    public object UNKNOWN : SyncStoppedReason()
 
-    data class POSIX(
+    public data class POSIX(
             val errNum: Int,
             val errMessage: String?
     ) : SyncStoppedReason()
 
-    override fun toString() = when (this) {
+    override fun toString(): String = when (this) {
         REQUESTED -> "Requested"
         UNKNOWN -> "Unknown"
         is POSIX -> "Posix ($errNum: $errMessage)"

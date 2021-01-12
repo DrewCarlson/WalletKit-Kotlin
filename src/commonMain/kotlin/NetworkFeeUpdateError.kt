@@ -1,6 +1,6 @@
 package drewcarlson.walletkit
 
-sealed class NetworkFeeUpdateError : Exception() {
+public sealed class NetworkFeeUpdateError : Exception() {
 
-    object FeesUnavailable : NetworkFeeUpdateError()
+    public object FeesUnavailable : NetworkFeeUpdateError()
 }

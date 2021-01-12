@@ -2,9 +2,8 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
-import kotlinx.io.core.Closeable
 
-actual class NetworkPeer(
+public actual class NetworkPeer(
         core: BRCryptoPeer,
         take: Boolean = false
 ) : Closeable {
@@ -27,16 +26,17 @@ actual class NetworkPeer(
             ))
     )
 
-    actual val network: Network =
-            Network(checkNotNull(cryptoPeerGetNetwork(core)), false)
+    public actual val network: Network
+        get() = Network(checkNotNull(cryptoPeerGetNetwork(core)), false)
 
-    actual val address: String =
-            checkNotNull(cryptoPeerGetAddress(core)).toKStringFromUtf8()
+    public actual val address: String
+        get() = checkNotNull(cryptoPeerGetAddress(core)).toKStringFromUtf8()
 
-    actual val port: UShort = cryptoPeerGetPort(core)
+    public actual val port: UShort
+        get() = cryptoPeerGetPort(core)
 
-    actual val publicKey: String? =
-            cryptoPeerGetPublicKey(core)?.toKStringFromUtf8()
+    public actual val publicKey: String?
+        get() = cryptoPeerGetPublicKey(core)?.toKStringFromUtf8()
 
     actual override fun hashCode(): Int = core.hashCode()
     actual override fun equals(other: Any?): Boolean =

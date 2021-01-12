@@ -1,5 +1,5 @@
 package drewcarlson.walletkit
 
-expect class Secret
+public expect class Secret
 
-expect fun createSecret(data: ByteArray): Secret
+internal expect fun createSecret(data: ByteArray): Secret

@@ -2,9 +2,8 @@ package drewcarlson.walletkit
 
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoCurrency
-import kotlinx.io.core.Closeable
 
-actual class Currency internal constructor(
+public actual class Currency internal constructor(
         internal val core: BRCryptoCurrency
 ) : Closeable {
 
@@ -12,24 +11,24 @@ actual class Currency internal constructor(
         ReferenceCleaner.register(core, ::close)
     }
 
-    /** 'A Unique Identifier */
-    actual val uids: String
+    /** A Unique Identifier */
+    public actual val uids: String
         get() = core.uids
 
     /** The code; e.g. BTC */
-    actual val code: String
+    public actual val code: String
         get() = core.code
 
     /** The name; e.g. Bitcoin */
-    actual val name: String
+    public actual val name: String
         get() = core.name
 
     /** The type: */
-    actual val type: String
+    public actual val type: String
         get() = core.type
 
     /** The issuer, if present.  This is generally an ERC20 address. */
-    actual val issuer: String?
+    public actual val issuer: String?
         get() = core.issuer
 
     actual override fun equals(other: Any?): Boolean =
@@ -41,8 +40,8 @@ actual class Currency internal constructor(
         core.give()
     }
 
-    actual companion object {
-        actual fun create(
+    public actual companion object {
+        public actual fun create(
                 uids: String,
                 name: String,
                 code: String,

@@ -1,9 +1,8 @@
 package drewcarlson.walletkit
 
 import brcrypto.*
-import kotlinx.io.core.Closeable
 
-actual class NetworkFee(
+public actual class NetworkFee(
         core: BRCryptoNetworkFee,
         take: Boolean
 ) : Closeable {
@@ -24,7 +23,7 @@ actual class NetworkFee(
             if (take) checkNotNull(cryptoNetworkFeeTake(core))
             else core
 
-    actual val timeIntervalInMilliseconds: ULong =
+    public actual val timeIntervalInMilliseconds: ULong =
             cryptoNetworkFeeGetConfirmationTimeInMilliseconds(core)
     internal actual val pricePerCostFactor: Amount =
             Amount(checkNotNull(cryptoNetworkFeeGetPricePerCostFactor(core)), false)

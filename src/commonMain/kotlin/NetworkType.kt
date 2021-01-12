@@ -1,21 +1,21 @@
 package drewcarlson.walletkit
 
-sealed class NetworkType {
-    object BTC : NetworkType()
-    object BCH : NetworkType()
-    object ETH : NetworkType()
+public sealed class NetworkType {
+    public object BTC : NetworkType()
+    public object BCH : NetworkType()
+    public object ETH : NetworkType()
     //object XRP : NetworkType()
     //object HBAR : NetworkType()
 
-    fun toCoreInt(): Int =
+    public fun toCoreInt(): Int =
             when (this) {
                 BTC -> 0
                 BCH -> 1
                 ETH -> 2
             }
 
-    companion object {
-        fun fromCoreInt(coreInt: Int): NetworkType =
+    public companion object {
+        public fun fromCoreInt(coreInt: Int): NetworkType =
                 when (coreInt) {
                     0 -> BTC
                     1 -> BCH

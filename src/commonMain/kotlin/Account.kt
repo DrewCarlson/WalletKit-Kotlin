@@ -1,8 +1,6 @@
 package drewcarlson.walletkit
 
-import kotlinx.io.core.Closeable
-
-expect class Account : Closeable {
+public expect class Account : Closeable {
 
     /**
      * A 'globally unique' ID String for account.
@@ -30,7 +28,7 @@ expect class Account : Closeable {
 
     override fun close()
 
-    companion object {
+    public companion object {
         /**
          * Recover an account from a BIP-39 'paper key'
          *

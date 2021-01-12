@@ -3,9 +3,8 @@ package drewcarlson.walletkit
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoUnit
 import com.google.common.primitives.UnsignedInteger
-import kotlinx.io.core.Closeable
 
-actual class CUnit internal constructor(
+public actual class CUnit internal constructor(
         internal val core: BRCryptoUnit
 ) : Closeable {
 
@@ -13,23 +12,23 @@ actual class CUnit internal constructor(
         ReferenceCleaner.register(core, ::close)
     }
 
-    actual val currency: Currency
+    public actual val currency: Currency
         get() = Currency(core.currency)
     internal actual val uids: String
         get() = core.uids
-    actual val name: String
+    public actual val name: String
         get() = core.name
-    actual val symbol: String
+    public actual val symbol: String
         get() = core.symbol
-    actual val base: CUnit
+    public actual val base: CUnit
         get() = CUnit(core.baseUnit)
-    actual val decimals: UInt
+    public actual val decimals: UInt
         get() = core.decimals.toByte().toUInt()
 
-    actual fun isCompatible(unit: CUnit): Boolean =
+    public actual fun isCompatible(unit: CUnit): Boolean =
             core.isCompatible(unit.core)
 
-    actual fun hasCurrency(currency: Currency): Boolean =
+    public actual fun hasCurrency(currency: Currency): Boolean =
             core.hasCurrency(currency.core)
 
     actual override fun equals(other: Any?): Boolean =
@@ -41,7 +40,7 @@ actual class CUnit internal constructor(
         core.give()
     }
 
-    actual companion object {
+    public actual companion object {
         internal actual fun create(
                 currency: Currency,
                 uids: String,

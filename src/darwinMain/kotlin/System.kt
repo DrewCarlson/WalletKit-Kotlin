@@ -17,12 +17,12 @@ import kotlin.native.concurrent.TransferMode
 import kotlin.native.concurrent.Worker
 import kotlin.native.concurrent.freeze
 
-actual class System(
+public actual class System(
         private val dispatcher: CoroutineDispatcher,
         private val listener: SystemListener,
-        actual val account: Account,
+        public actual val account: Account,
         internal actual val isMainnet: Boolean,
-        actual val storagePath: String,
+        public actual val storagePath: String,
         internal actual val query: BdbService,
         private val context: BRCryptoClientContext,
         private val cwmListener: BRCryptoCWMListener,
@@ -39,20 +39,20 @@ actual class System(
     private val _walletManagers = IsoMutableSet<WalletManager>()
     private val _networks = IsoMutableSet<Network>()
 
-    actual val networks: List<Network>
+    public actual val networks: List<Network>
         get() = _networks.toList()
 
-    actual val walletManagers: List<WalletManager>
+    public actual val walletManagers: List<WalletManager>
         get() = _walletManagers.toList()
 
-    actual val wallets: List<Wallet>
+    public actual val wallets: List<Wallet>
         get() = walletManagers.flatMap(WalletManager::wallets)
 
     init {
         // TODO: announceSystemEvent(SystemEvent.Created)
     }
 
-    actual fun configure(appCurrencies: List<BdbCurrency>) {
+    public actual fun configure(appCurrencies: List<BdbCurrency>) {
         //val query = query
         val isMainnet = isMainnet
         val _networks = _networks
@@ -69,7 +69,7 @@ actual class System(
         announceSystemEvent(SystemEvent.DiscoveredNetworks(networks))
     }
 
-    actual fun createWalletManager(
+    public actual fun createWalletManager(
             network: Network,
             mode: WalletManagerMode,
             addressScheme: AddressScheme,
@@ -100,27 +100,27 @@ actual class System(
         return true
     }
 
-    actual fun wipe(network: Network) {
+    public actual fun wipe(network: Network) {
         if (walletManagers.none { it.network == network }) {
             cryptoWalletManagerWipe(network.core, storagePath)
         }
     }
 
-    actual fun connectAll() {
+    public actual fun connectAll() {
         walletManagers.forEach { manager ->
             manager.connect(null)
         }
     }
 
-    actual fun disconnectAll() {
+    public actual fun disconnectAll() {
         walletManagers.forEach(WalletManager::disconnect)
     }
 
-    actual fun subscribe(subscriptionToken: String) {
+    public actual fun subscribe(subscriptionToken: String) {
         TODO("Not implemented")
     }
 
-    actual suspend fun updateNetworkFees(): List<Network> {
+    public actual suspend fun updateNetworkFees(): List<Network> {
         scope.launch {
             val blockchains = try {
                 runBlocking { query.getBlockchains(isMainnet).embedded.blockchains }
@@ -154,7 +154,7 @@ actual class System(
         return emptyList()
     }
 
-    actual fun setNetworkReachable(isNetworkReachable: Boolean) {
+    public actual fun setNetworkReachable(isNetworkReachable: Boolean) {
         this.isNetworkReachable.value = isNetworkReachable
         walletManagers.forEach { manager ->
             manager.setNetworkReachable(isNetworkReachable)
@@ -208,7 +208,7 @@ actual class System(
         return walletManager
     }
 
-    actual companion object {
+    public actual companion object {
 
         private val SYSTEM_IDS = atomic(0)
 
@@ -218,13 +218,13 @@ actual class System(
         private val SYSTEMS_INACTIVE = IsoMutableList<System>()
         private val activeSystem = atomic<System?>(null)
 
-        val BRCryptoClientContext.system
+        internal val BRCryptoClientContext.system
             get() = checkNotNull(activeSystem.value)//checkNotNull(SYSTEMS_ACTIVE[this])
 
         /**
          * Swift compatible [System.Companion.create].
          */
-        fun create(
+        public fun create(
                 listener: SystemListener,
                 account: Account,
                 isMainnet: Boolean,
@@ -232,7 +232,7 @@ actual class System(
                 query: BdbService
         ): System = create(listener, account, isMainnet, storagePath, query, Default)
 
-        actual fun create(
+        public actual fun create(
                 listener: SystemListener,
                 account: Account,
                 isMainnet: Boolean,
@@ -266,7 +266,7 @@ actual class System(
             return system
         }
 
-        actual fun asBdbCurrency(
+        public actual fun asBdbCurrency(
                 uids: String,
                 name: String,
                 code: String,
@@ -298,11 +298,11 @@ actual class System(
             )
         }
 
-        actual fun wipe(system: System) {
+        public actual fun wipe(system: System) {
             //TODO("not implemented")
         }
 
-        actual fun wipeAll(storagePath: String, exemptSystems: List<System>) {
+        public actual fun wipeAll(storagePath: String, exemptSystems: List<System>) {
             //TODO("not implemented")
         }
 

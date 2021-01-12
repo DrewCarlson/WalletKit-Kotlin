@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers.Default
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.jvm.JvmOverloads
 
-expect class System {
+public expect class System {
 
     internal val query: BdbService
 
@@ -118,7 +118,7 @@ expect class System {
 
     //fun accountInitializeUsingHedera(account: Account?, network: Network?, hedera: HederaAccount): ByteArray?
 
-    companion object {
+    public companion object {
         /**
          * Create a new system.
          *

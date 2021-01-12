@@ -3,12 +3,11 @@ package drewcarlson.walletkit
 import brcrypto.*
 import io.ktor.utils.io.core.*
 import kotlinx.cinterop.*
-import kotlinx.io.core.Closeable
 import platform.Foundation.NSData
 import platform.posix.size_tVar
 
 
-actual class Account(
+public actual class Account(
         core: BRCryptoAccount,
         take: Boolean
 ) : Closeable {
@@ -17,16 +16,16 @@ actual class Account(
             if (take) checkNotNull(cryptoAccountTake(core))
             else core
 
-    actual val uids: String
+    public actual val uids: String
         get() = checkNotNull(cryptoAccountGetUids(core)).toKStringFromUtf8()
 
-    actual val timestamp: Long
+    public actual val timestamp: Long
         get() = cryptoAccountGetTimestamp(core).toLong()
 
-    actual val filesystemIdentifier: String
+    public actual val filesystemIdentifier: String
         get() = checkNotNull(cryptoAccountGetFileSystemIdentifier(core)).toKStringFromUtf8()
 
-    actual val serialize: ByteArray
+    public actual val serialize: ByteArray
         get() = memScoped {
             val byteCount = alloc<size_tVar>()
             val coreBytes = checkNotNull(cryptoAccountSerialize(core, byteCount.ptr))
@@ -35,7 +34,7 @@ actual class Account(
             }
         }
 
-    actual fun validate(serialization: ByteArray): Boolean {
+    public actual fun validate(serialization: ByteArray): Boolean {
         val ubytes = serialization.asUByteArray().toCValues()
         return CRYPTO_TRUE == cryptoAccountValidateSerialization(
                 core,
@@ -44,14 +43,14 @@ actual class Account(
         )
     }
 
-    actual fun isInitialized(network: Network): Boolean {
+    public actual fun isInitialized(network: Network): Boolean {
         return CRYPTO_TRUE == cryptoAccountIsInitialized(
                 core,
                 network.core
         )
     }
 
-    actual fun getInitializationData(network: Network): ByteArray = memScoped {
+    public actual fun getInitializationData(network: Network): ByteArray = memScoped {
         val length = alloc<ULongVar>()
         checkNotNull(
                 cryptoAccountGetInitializationData(
@@ -62,7 +61,7 @@ actual class Account(
         ).readBytes(length.value.toInt())
     }
 
-    actual fun initialize(network: Network, data: ByteArray) = memScoped {
+    public actual fun initialize(network: Network, data: ByteArray): Unit = memScoped {
         val cData = data.asUByteArray().toCValues()
         cryptoAccountInitialize(core, network.core, cData, data.size.toULong())
     }
@@ -71,8 +70,8 @@ actual class Account(
         cryptoAccountGive(core)
     }
 
-    actual companion object {
-        fun createFromPhrase(phrase: NSData, timestamp: Long, uids: String): Account? {
+    public actual companion object {
+        public fun createFromPhrase(phrase: NSData, timestamp: Long, uids: String): Account? {
             return cryptoAccountCreate(
                     checkNotNull(phrase.bytes).reinterpret(),
                     timestamp.toULong(),
@@ -80,7 +79,7 @@ actual class Account(
             )?.let { Account(it, false) }
         }
 
-        actual fun createFromPhrase(phrase: ByteArray, timestamp: Long, uids: String): Account? {
+        public actual fun createFromPhrase(phrase: ByteArray, timestamp: Long, uids: String): Account? {
             return cryptoAccountCreate(
                     phrase.toCValues(),
                     timestamp.toULong(),
@@ -88,7 +87,7 @@ actual class Account(
             )?.let { Account(it, false) }
         }
 
-        actual fun createFromSerialization(serialization: ByteArray, uids: String): Account? {
+        public actual fun createFromSerialization(serialization: ByteArray, uids: String): Account? {
             return cryptoAccountCreateFromSerialization(
                     serialization.asUByteArray().toCValues(),
                     serialization.size.toULong(),
@@ -96,7 +95,7 @@ actual class Account(
             )?.let { Account(it, false) }
         }
 
-        actual fun generatePhrase(words: List<String>): ByteArray? = memScoped {
+        public actual fun generatePhrase(words: List<String>): ByteArray? = memScoped {
             require(CRYPTO_TRUE == cryptoAccountValidateWordsList(words.size.toULong()))
 
             val wordsArray = words.toCStringArray(this)
@@ -104,7 +103,7 @@ actual class Account(
             paperKey?.toKStringFromUtf8()?.toByteArray()
         }
 
-        actual fun validatePhrase(phrase: ByteArray, words: List<String>): Boolean = memScoped {
+        public actual fun validatePhrase(phrase: ByteArray, words: List<String>): Boolean = memScoped {
             require(CRYPTO_TRUE == cryptoAccountValidateWordsList(words.size.toULong()))
 
             val wordsArray = words.toCStringArray(this)

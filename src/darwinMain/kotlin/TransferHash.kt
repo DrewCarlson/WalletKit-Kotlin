@@ -2,9 +2,8 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
-import kotlinx.io.core.Closeable
 
-actual class TransferHash(
+public actual class TransferHash(
         core: BRCryptoHash,
         take: Boolean
 ) : Closeable {

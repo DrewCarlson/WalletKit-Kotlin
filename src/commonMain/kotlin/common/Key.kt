@@ -1,15 +1,16 @@
 package drewcarlson.walletkit.common
 
 import drewcarlson.walletkit.Secret
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-expect class Key : Closeable {
+public expect class Key : Closeable {
 
     /**
      * Initialize based on `secret` to produce a private+public key pair
      *
      * @param secret the secret
      */
+    @Suppress("ConvertSecondaryConstructorToPrimary")
     internal constructor(secret: Secret)
 
     public val hasSecret: Boolean
@@ -33,7 +34,7 @@ expect class Key : Closeable {
 
     internal fun privateKeyMatch(that: Key): Boolean
 
-    companion object {
+    public companion object {
         @Suppress("VARIABLE_IN_SINGLETON_WITHOUT_THREAD_LOCAL")
         public var wordList: List<String>?
 

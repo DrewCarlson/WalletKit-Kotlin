@@ -2,14 +2,13 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.*
-import kotlinx.io.core.Closeable
 import platform.posix.size_tVar
 
 
-fun Boolean.toCryptoBoolean(): UInt =
+internal fun Boolean.toCryptoBoolean(): UInt =
         if (this) CRYPTO_TRUE else CRYPTO_FALSE
 
-actual class Network(
+public actual class Network(
         core: BRCryptoNetwork,
         take: Boolean
 ) : Closeable {
@@ -21,22 +20,22 @@ actual class Network(
     internal actual val uids: String =
             checkNotNull(cryptoNetworkGetUids(core)).toKStringFromUtf8()
 
-    actual val name: String =
+    public actual val name: String =
             checkNotNull(cryptoNetworkGetName(core)).toKStringFromUtf8()
 
-    actual val type: NetworkType
+    public actual val type: NetworkType
         get() = NetworkType.fromCoreInt(cryptoNetworkGetCanonicalType(core).value.toInt())
 
-    actual val isMainnet: Boolean =
+    public actual val isMainnet: Boolean =
             CRYPTO_TRUE == cryptoNetworkIsMainnet(core)
 
-    actual var height: ULong
+    public actual var height: ULong
         get() = cryptoNetworkGetHeight(core)
         internal set(value) {
             cryptoNetworkSetHeight(core, value)
         }
 
-    actual var fees: List<NetworkFee>
+    public actual var fees: List<NetworkFee>
         get() = memScoped {
             val count = alloc<BRCryptoCountVar>()
             val cryptoFees = checkNotNull(cryptoNetworkGetNetworkFees(core, count.ptr))
@@ -52,49 +51,49 @@ actual class Network(
             // TODO: cryptoNetworkSetNetworkFees(core, feeValues, feeValues.size.toULong())
         }
 
-    actual val minimumFee: NetworkFee
+    public actual val minimumFee: NetworkFee
         get() = checkNotNull(fees.maxByOrNull(NetworkFee::timeIntervalInMilliseconds))
 
-    actual val confirmationsUntilFinal: UInt
+    public actual val confirmationsUntilFinal: UInt
         get() = cryptoNetworkGetConfirmationsUntilFinal(core)
 
-    actual fun createPeer(address: String, port: UShort, publicKey: String?): NetworkPeer? =
+    public actual fun createPeer(address: String, port: UShort, publicKey: String?): NetworkPeer? =
             runCatching { NetworkPeer(this, address, port, publicKey) }.getOrNull()
 
-    actual val currency: Currency by lazy {
+    public actual val currency: Currency by lazy {
         Currency(checkNotNull(cryptoNetworkGetCurrency(core)), false)
     }
 
-    actual val currencies: Set<Currency> by lazy {
+    public actual val currencies: Set<Currency> by lazy {
         List(cryptoNetworkGetCurrencyCount(core).toInt()) { i ->
             Currency(cryptoNetworkGetCurrencyAt(core, i.toULong())!!, false)
         }.toSet()
     }
 
-    actual fun currencyByCode(code: String): Currency? {
+    public actual fun currencyByCode(code: String): Currency? {
         val coreCurrency = cryptoNetworkGetCurrencyForCode(core, code) ?: return null
         return Currency(coreCurrency, false)
     }
 
-    actual fun currencyByIssuer(issuer: String): Currency? {
+    public actual fun currencyByIssuer(issuer: String): Currency? {
         val coreCurrency = cryptoNetworkGetCurrencyForIssuer(core, issuer) ?: return null
         return Currency(coreCurrency, false)
     }
 
-    actual fun hasCurrency(currency: Currency): Boolean =
+    public actual fun hasCurrency(currency: Currency): Boolean =
             CRYPTO_TRUE == cryptoNetworkHasCurrency(core, currency.core)
 
-    actual fun baseUnitFor(currency: Currency): CUnit? {
+    public actual fun baseUnitFor(currency: Currency): CUnit? {
         if (!hasCurrency(currency)) return null
         return CUnit(checkNotNull(cryptoNetworkGetUnitAsBase(core, currency.core)), false)
     }
 
-    actual fun defaultUnitFor(currency: Currency): CUnit? {
+    public actual fun defaultUnitFor(currency: Currency): CUnit? {
         if (!hasCurrency(currency)) return null
         return CUnit(checkNotNull(cryptoNetworkGetUnitAsDefault(core, currency.core)), false)
     }
 
-    actual fun unitsFor(currency: Currency): Set<CUnit>? {
+    public actual fun unitsFor(currency: Currency): Set<CUnit>? {
         if (!hasCurrency(currency)) return null
         val networkCount = cryptoNetworkGetUnitCount(core, currency.core)
         return List(networkCount.toInt()) { i ->
@@ -102,18 +101,18 @@ actual class Network(
         }.toSet()
     }
 
-    actual fun hasUnitFor(currency: Currency, unit: CUnit): Boolean? =
+    public actual fun hasUnitFor(currency: Currency, unit: CUnit): Boolean? =
             unitsFor(currency)?.contains(unit)
 
-    actual fun addressFor(string: String): Address? {
+    public actual fun addressFor(string: String): Address? {
         val cryptoAddress = cryptoAddressCreateFromString(core, string) ?: return null
         return Address(cryptoAddress, false)
     }
 
-    actual val defaultAddressScheme: AddressScheme
+    public actual val defaultAddressScheme: AddressScheme
         get() = AddressScheme.fromCoreInt(cryptoNetworkGetDefaultAddressScheme(core).value)
 
-    actual val supportedAddressSchemes: List<AddressScheme>
+    public actual val supportedAddressSchemes: List<AddressScheme>
         get() = memScoped {
             val count = alloc<BRCryptoCountVar>()
             val coreSchemes = checkNotNull(cryptoNetworkGetSupportedAddressSchemes(core, count.ptr))
@@ -122,7 +121,7 @@ actual class Network(
             }
         }
 
-    actual val supportedWalletManagerModes: List<WalletManagerMode>
+    public actual val supportedWalletManagerModes: List<WalletManagerMode>
         get() = memScoped {
             val count = alloc<BRCryptoCountVar>()
             val coreModes = checkNotNull(cryptoNetworkGetSupportedSyncModes(core, count.ptr))
@@ -131,18 +130,18 @@ actual class Network(
             }
         }
 
-    actual val defaultWalletManagerMode: WalletManagerMode
+    public actual val defaultWalletManagerMode: WalletManagerMode
         get() = WalletManagerMode.fromCoreInt(cryptoNetworkGetDefaultSyncMode(core).value)
 
-    actual fun supportsWalletManagerMode(mode: WalletManagerMode): Boolean {
+    public actual fun supportsWalletManagerMode(mode: WalletManagerMode): Boolean {
         return CRYPTO_TRUE == cryptoNetworkSupportsSyncMode(core, mode.toCore())
     }
 
-    actual fun supportsAddressScheme(addressScheme: AddressScheme): Boolean {
+    public actual fun supportsAddressScheme(addressScheme: AddressScheme): Boolean {
         return CRYPTO_TRUE == cryptoNetworkSupportsAddressScheme(core, addressScheme.toCore())
     }
 
-    actual fun addCurrency(currency: Currency, baseUnit: CUnit, defaultUnit: CUnit) {
+    public actual fun addCurrency(currency: Currency, baseUnit: CUnit, defaultUnit: CUnit) {
         require(baseUnit.hasCurrency(currency))
         require(defaultUnit.hasCurrency(currency))
         if (!hasCurrency(currency)) {
@@ -150,7 +149,7 @@ actual class Network(
         }
     }
 
-    actual fun addUnitFor(currency: Currency, unit: CUnit) {
+    public actual fun addUnitFor(currency: Currency, unit: CUnit) {
         require(unit.hasCurrency(currency))
         require(hasCurrency(currency))
         if (hasUnitFor(currency, unit) != true) {
@@ -158,7 +157,7 @@ actual class Network(
         }
     }
 
-    actual fun requiresMigration(): Boolean {
+    public actual fun requiresMigration(): Boolean {
         return CRYPTO_TRUE == cryptoNetworkRequiresMigration(core)
     }
 
@@ -171,7 +170,7 @@ actual class Network(
         cryptoNetworkGive(core)
     }
 
-    actual companion object {
+    public actual companion object {
 
         internal actual fun installBuiltins(): List<Network> = memScoped {
             val networkCount = alloc<size_tVar>()
@@ -181,7 +180,7 @@ actual class Network(
             }
         }
 
-        actual fun findBuiltin(uids: String): Network? {
+        public actual fun findBuiltin(uids: String): Network? {
             val core = cryptoNetworkFindBuiltin(uids) ?: return null
             return Network(core, false)
         }

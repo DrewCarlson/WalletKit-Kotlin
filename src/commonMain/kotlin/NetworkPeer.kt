@@ -1,7 +1,5 @@
 package drewcarlson.walletkit
 
-import kotlinx.io.core.Closeable
-
 /**
  * A NetworkPeer is a Peer on a Network.
  *
@@ -9,7 +7,7 @@ import kotlinx.io.core.Closeable
  * to connect to for network synchronization.  Normally the P2P protocol
  * dynamically discovers peers and thus NetworkPeer is not commonly used.
  */
-expect class NetworkPeer : Closeable {
+public expect class NetworkPeer : Closeable {
 
     internal constructor(
             network: Network,

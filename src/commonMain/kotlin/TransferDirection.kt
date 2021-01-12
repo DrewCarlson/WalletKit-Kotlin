@@ -1,9 +1,9 @@
 package drewcarlson.walletkit
 
-enum class TransferDirection {
+public enum class TransferDirection {
     SENT, RECEIVED, RECOVERED;
 
-    override fun toString() = when (this) {
+    override fun toString(): String = when (this) {
         RECOVERED -> "Recovered"
         SENT -> "Sent"
         RECEIVED -> "Received"

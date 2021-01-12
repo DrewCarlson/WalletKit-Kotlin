@@ -1,36 +1,37 @@
 package drewcarlson.walletkit
 
-open class DefaultSystemListener : SystemListener
+public open class DefaultSystemListener : SystemListener
 
-interface SystemListener : WalletManagerListener, WalletListener, TransferListener, NetworkListener {
-    fun handleSystemEvent(system: System, event: SystemEvent) = Unit
-    override fun handleManagerEvent(system: System, manager: WalletManager, event: WalletManagerEvent) = Unit
-    override fun handleNetworkEvent(system: System, network: Network, event: NetworkEvent) = Unit
-    override fun handleTransferEvent(
-        system: System,
-        manager: WalletManager,
-        wallet: Wallet,
-        transfer: Transfer,
-        event: TransferEvent
-    ) = Unit
+public interface SystemListener : WalletManagerListener, WalletListener, TransferListener, NetworkListener {
 
-    override fun handleWalletEvent(system: System, manager: WalletManager, wallet: Wallet, event: WalletEvent) = Unit
+    public fun handleSystemEvent(system: System, event: SystemEvent) {
+    }
+
+    override fun handleManagerEvent(system: System, manager: WalletManager, event: WalletManagerEvent) {
+    }
+
+    override fun handleNetworkEvent(system: System, network: Network, event: NetworkEvent) {
+    }
+
+    override fun handleTransferEvent(system: System, manager: WalletManager, wallet: Wallet, transfer: Transfer, event: TransferEvent) {
+    }
+
+    override fun handleWalletEvent(system: System, manager: WalletManager, wallet: Wallet, event: WalletEvent) {
+    }
 }
 
-fun interface WalletManagerListener {
-    fun handleManagerEvent(system: System, manager: WalletManager, event: WalletManagerEvent)
+public fun interface WalletManagerListener {
+    public fun handleManagerEvent(system: System, manager: WalletManager, event: WalletManagerEvent)
 }
 
-fun interface WalletListener {
-    fun handleWalletEvent(system: System, manager: WalletManager, wallet: Wallet, event: WalletEvent)
+public fun interface WalletListener {
+    public fun handleWalletEvent(system: System, manager: WalletManager, wallet: Wallet, event: WalletEvent)
 }
 
-
-fun interface TransferListener {
-    fun handleTransferEvent(system: System, manager: WalletManager, wallet: Wallet, transfer: Transfer, event: TransferEvent)
+public fun interface TransferListener {
+    public fun handleTransferEvent(system: System, manager: WalletManager, wallet: Wallet, transfer: Transfer, event: TransferEvent)
 }
 
-
-fun interface NetworkListener {
-    fun handleNetworkEvent(system: System, network: Network, event: NetworkEvent)
+public fun interface NetworkListener {
+    public fun handleNetworkEvent(system: System, network: Network, event: NetworkEvent)
 }

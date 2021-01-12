@@ -1,13 +1,13 @@
 package drewcarlson.walletkit
 
-sealed class WalletSweeperError : Exception() {
+public sealed class WalletSweeperError : Exception() {
 
-    class InsufficientFunds : WalletSweeperError()
-    class InvalidKey : WalletSweeperError()
-    class InvalidSourceWallet : WalletSweeperError()
-    class NoTransfersFound : WalletSweeperError()
-    class QueryError : WalletSweeperError()
-    class UnableToSweep : WalletSweeperError()
-    class UnsupportedCurrency : WalletSweeperError()
-    class Unexpected(override val message: String) : WalletSweeperError()
+    public object InsufficientFunds : WalletSweeperError()
+    public object InvalidKey : WalletSweeperError()
+    public object InvalidSourceWallet : WalletSweeperError()
+    public object NoTransfersFound : WalletSweeperError()
+    public object QueryError : WalletSweeperError()
+    public object UnableToSweep : WalletSweeperError()
+    public object UnsupportedCurrency : WalletSweeperError()
+    public data class Unexpected(override val message: String) : WalletSweeperError()
 }

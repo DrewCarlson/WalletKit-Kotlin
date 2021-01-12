@@ -5,86 +5,86 @@ import com.breadwallet.corenative.crypto.*
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
-actual class WalletManager(
+public actual class WalletManager(
         internal val core: BRCryptoWalletManager,
-        actual val system: System,
+        public actual val system: System,
         private val scope: CoroutineScope
 ) {
 
-    actual val account: Account = Account(core.account)
+    public actual val account: Account = Account(core.account)
 
-    actual val network: Network = Network(core.network)
+    public actual val network: Network = Network(core.network)
 
     internal actual val unit: CUnit =
             checkNotNull(network.defaultUnitFor(network.currency))
 
-    actual var mode: WalletManagerMode
+    public actual var mode: WalletManagerMode
         get() = WalletManagerMode.fromCoreInt(core.mode.toCore().toUInt())
         set(value) {
             require(network.supportsWalletManagerMode(value))
             core.mode = BRCryptoSyncMode.fromCore(value.core.toInt())
         }
 
-    actual val path: String = core.path
+    public actual val path: String = core.path
 
-    actual val state: WalletManagerState
+    public actual val state: WalletManagerState
         get() = core.state.asApiState()
 
     internal actual val height: ULong
         get() = network.height
 
-    actual val primaryWallet: Wallet by lazy {
+    public actual val primaryWallet: Wallet by lazy {
         Wallet(core.wallet, this, scope)
     }
 
-    actual val wallets: List<Wallet> by lazy {
+    public actual val wallets: List<Wallet> by lazy {
         core.wallets.map { Wallet(it, this, scope) }
     }
 
-    actual val currency: Currency = network.currency
+    public actual val currency: Currency = network.currency
 
-    actual val name: String = currency.code
+    public actual val name: String = currency.code
 
-    actual val baseUnit: CUnit = checkNotNull(network.baseUnitFor(network.currency))
+    public actual val baseUnit: CUnit = checkNotNull(network.baseUnitFor(network.currency))
 
-    actual val defaultUnit: CUnit = checkNotNull(network.defaultUnitFor(network.currency))
+    public actual val defaultUnit: CUnit = checkNotNull(network.defaultUnitFor(network.currency))
 
-    actual val isActive: Boolean
+    public actual val isActive: Boolean
         get() = when (state) {
             WalletManagerState.CONNECTED,
             WalletManagerState.SYNCING -> true
             else -> false
         }
 
-    actual val defaultNetworkFee: NetworkFee = network.minimumFee
+    public actual val defaultNetworkFee: NetworkFee = network.minimumFee
 
-    actual var addressScheme: AddressScheme
+    public actual var addressScheme: AddressScheme
         get() = AddressScheme.fromCoreInt(core.addressScheme.toCore().toUInt())
         set(value) {
             core.addressScheme = BRCryptoAddressScheme.fromCore(value.core.toInt())
         }
 
-    actual fun connect(peer: NetworkPeer?) {
+    public actual fun connect(peer: NetworkPeer?) {
         core.connect(peer?.core)
     }
 
-    actual fun disconnect() {
+    public actual fun disconnect() {
         core.disconnect()
     }
 
-    actual fun sync() {
+    public actual fun sync() {
         core.sync()
     }
 
-    actual fun stop() {
+    public actual fun stop() {
         core.stop()
     }
 
-    actual fun syncToDepth(depth: WalletManagerSyncDepth) {
+    public actual fun syncToDepth(depth: WalletManagerSyncDepth) {
         core.syncToDepth(BRCryptoSyncDepth.fromCore(depth.toSerialization().toInt()))
     }
 
-    actual fun submit(transfer: Transfer, phraseUtf8: ByteArray) {
+    public actual fun submit(transfer: Transfer, phraseUtf8: ByteArray) {
         core.submit(primaryWallet.core, transfer.core, phraseUtf8)
     }
 
@@ -92,13 +92,13 @@ actual class WalletManager(
         core.setNetworkReachable(isNetworkReachable)
     }
 
-    actual fun registerWalletFor(currency: Currency): Wallet? {
+    public actual fun registerWalletFor(currency: Currency): Wallet? {
         return core.registerWallet(currency.core)?.orNull()?.let { coreWallet ->
             Wallet(coreWallet, this, scope)
         }
     }
 
-    actual suspend fun createSweeper(wallet: Wallet, key: Key): WalletSweeper {
+    public actual suspend fun createSweeper(wallet: Wallet, key: Key): WalletSweeper {
         TODO("not implemented")
     }
 

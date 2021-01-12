@@ -26,16 +26,16 @@ package drewcarlson.walletkit
  *
  * which would return: $2,000  (as Amount of 2000.0 in Fiat.USD.Dollar)
  */
-data class CurrencyPair(
+public data class CurrencyPair(
         /** In EUR/USD=1.2500, the `baseCurrency` is EUR. */
-        public val baseUnit: CUnit,
+        val baseUnit: CUnit,
         /** In EUR/USD=1.250, the `quoteCurrency` is USD. */
-        public val quoteUnit: CUnit,
+        val quoteUnit: CUnit,
         /**
          * In EUR/USD=1.2500, the `exchangeRate` is 1.2500 which represents
          * the number of USD that one EUR can be exchanged for.
          */
-        public val exchangeRate: Double
+        val exchangeRate: Double
 ) {
 
     /**

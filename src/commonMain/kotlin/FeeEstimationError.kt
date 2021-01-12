@@ -1,15 +1,15 @@
 package drewcarlson.walletkit
 
-sealed class FeeEstimationError : Exception() {
+public sealed class FeeEstimationError : Exception() {
 
-    class InsufficientFunds : FeeEstimationError()
-    class ServiceFailure : FeeEstimationError()
-    class ServiceUnavailable : FeeEstimationError()
+    public object InsufficientFunds : FeeEstimationError()
+    public object ServiceFailure : FeeEstimationError()
+    public object ServiceUnavailable : FeeEstimationError()
 
-    fun toLimitEstimationError(): LimitEstimationError =
+    public fun toLimitEstimationError(): LimitEstimationError =
             when (this) {
-                is InsufficientFunds -> LimitEstimationError.InsufficientFunds()
-                is ServiceFailure -> LimitEstimationError.ServiceFailure()
-                is ServiceUnavailable -> LimitEstimationError.ServiceUnavailable()
+                is InsufficientFunds -> LimitEstimationError.InsufficientFunds
+                is ServiceFailure -> LimitEstimationError.ServiceFailure
+                is ServiceUnavailable -> LimitEstimationError.ServiceUnavailable
             }
 }

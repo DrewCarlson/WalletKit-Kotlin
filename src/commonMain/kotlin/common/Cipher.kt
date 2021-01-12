@@ -1,15 +1,15 @@
 package drewcarlson.walletkit.common
 
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-expect class Cipher : Closeable {
+public expect class Cipher : Closeable {
 
     public fun encrypt(data: ByteArray): ByteArray?
     public fun decrypt(data: ByteArray): ByteArray?
 
     override fun close()
 
-    companion object {
+    public companion object {
         public fun createForAesEcb(key: ByteArray): Cipher
 
         public fun createForChaCha20Poly1305(key: Key, nonce12: ByteArray, ad: ByteArray): Cipher
