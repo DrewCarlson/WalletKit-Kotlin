@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package drewcarlson.walletkit.client
 
 import drewcarlson.walletkit.System.Companion.system
 import com.breadwallet.corenative.crypto.BRCryptoClient
@@ -7,13 +7,9 @@ import com.breadwallet.corenative.crypto.BRCryptoTransferStateType.*
 import com.breadwallet.corenative.support.BRConstants.BLOCK_HEIGHT_UNBOUND
 import com.breadwallet.corenative.utility.Cookie
 import com.google.common.primitives.UnsignedLong
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import drewcarlson.walletkit.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
-
-private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
 internal fun cryptoClient(c: Cookie) = BRCryptoClient(
     c,
@@ -55,8 +51,8 @@ private val funcGetNonceETH = GetNonceCallbackETH { context, manager, callbackSt
 }
 
 private val funcGetBlockNumber = GetBlockNumberCallback { cookie, coreManager, callbackState ->
-    scope.launch {
-        val system = checkNotNull(cookie.system)
+    val system = checkNotNull(cookie.system)
+    system.scope.launch {
         val manager = checkNotNull(system.getWalletManager(coreManager))
         try {
             val blockchain = system.query.getBlockchain(manager.network.uids)
@@ -75,8 +71,8 @@ private val funcGetBlockNumber = GetBlockNumberCallback { cookie, coreManager, c
 
 private val funcGetTransactions =
     GetTransactionsCallback { cookie, coreManager, callbackState, addrs, currency, begBlockNumber, endBlockNumber ->
-        scope.launch {
-            val system = checkNotNull(cookie.system)
+        val system = checkNotNull(cookie.system)
+        system.scope.launch {
             val manager = checkNotNull(system.getWalletManager(coreManager))
             runCatching {
                 val transactions = addrs.chunked(50).flatMap { chunk ->
@@ -113,8 +109,8 @@ private val funcGetTransactions =
                 error.printStackTrace()
                 manager.core.announceGetTransactionsComplete(callbackState, false)
             }
+            coreManager.give()
         }
-        coreManager.give()
     }
 
 private val funcGetTransfers =

@@ -1,27 +1,26 @@
-package drewcarlson.walletkit
+package drewcarlson.walletkit.client
 
 import drewcarlson.walletkit.System.Companion.system
 import com.breadwallet.corenative.crypto.BRCryptoCWMListener
 import com.breadwallet.corenative.crypto.BRCryptoWalletManagerEventType.*
 import com.google.common.primitives.UnsignedLong
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import drewcarlson.walletkit.WalletManagerEvent
+import drewcarlson.walletkit.WalletManagerSyncDepth
+import drewcarlson.walletkit.asApiReason
+import drewcarlson.walletkit.asApiState
 import kotlinx.coroutines.launch
-
-private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
 internal val WalletManagerEventCallback =
         BRCryptoCWMListener.WalletManagerEventCallback { context, coreWalletManager, event ->
-            scope.launch {
+            val system = context.system
+            if (system == null) {
+                //Log.log(Level.SEVERE, "WalletManagerChanged: missed system");
+                coreWalletManager.give()
+                return@WalletManagerEventCallback
+            }
+            system.scope.launch {
                 // Log.log(Level.FINE, "WalletManagerEventCallback")
 
-                val system = context.system
-                if (system == null) {
-                    //Log.log(Level.SEVERE, "WalletManagerChanged: missed system");
-                    coreWalletManager.give()
-                    return@launch
-                }
                 try {
                     when (event.type()) {
                         CRYPTO_WALLET_MANAGER_EVENT_CREATED -> {

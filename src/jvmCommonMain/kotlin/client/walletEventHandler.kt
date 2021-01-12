@@ -1,29 +1,20 @@
-package drewcarlson.walletkit
+package drewcarlson.walletkit.client
 
 import drewcarlson.walletkit.System.Companion.system
 import com.breadwallet.corenative.crypto.BRCryptoCWMListener
 import com.breadwallet.corenative.crypto.BRCryptoWalletEventType.*
-import com.breadwallet.corenative.crypto.BRCryptoWalletState
 import com.breadwallet.corenative.crypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_CREATED
 import com.breadwallet.corenative.crypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_DELETED
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import drewcarlson.walletkit.Amount
+import drewcarlson.walletkit.WalletEvent
+import drewcarlson.walletkit.WalletState
 import kotlinx.coroutines.launch
-
-private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
 internal val WalletEventCallback =
         BRCryptoCWMListener.WalletEventCallback { context, coreWalletManager, coreWallet, event ->
-            scope.launch {
-                fun give() {
-                    coreWallet.give()
-                    coreWalletManager.give()
-                }
-
+            val system = checkNotNull(context.system)
+            system.scope.launch {
                 try {
-                    val system = checkNotNull(context.system)
-
                     when (checkNotNull(event.type())) {
                         CRYPTO_WALLET_EVENT_CREATED -> {
                             val walletManager = checkNotNull(system.getWalletManager(coreWalletManager))
@@ -104,7 +95,8 @@ internal val WalletEventCallback =
                         }
                     }
                 } finally {
-                    give()
+                    coreWallet.give()
+                    coreWalletManager.give()
                 }
             }
         }

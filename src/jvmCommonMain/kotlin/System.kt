@@ -4,6 +4,10 @@ import com.breadwallet.corenative.crypto.*
 import com.breadwallet.corenative.utility.Cookie
 import drewcarlson.blockset.BdbService
 import drewcarlson.blockset.model.BdbCurrency
+import drewcarlson.walletkit.client.TransferEventCallback
+import drewcarlson.walletkit.client.WalletEventCallback
+import drewcarlson.walletkit.client.WalletManagerEventCallback
+import drewcarlson.walletkit.client.cryptoClient
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList

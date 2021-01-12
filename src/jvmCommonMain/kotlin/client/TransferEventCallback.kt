@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package drewcarlson.walletkit.client
 
 import com.breadwallet.corenative.crypto.BRCryptoCWMListener
 import com.breadwallet.corenative.crypto.BRCryptoTransferEventType
