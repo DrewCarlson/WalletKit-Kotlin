@@ -24,7 +24,6 @@ plugins {
 
 allprojects {
     repositories {
-        maven { setUrl("https://dl.bintray.com/drewcarlson/Blockset-Kotlin") }
         mavenCentral()
         google()
         jcenter()
