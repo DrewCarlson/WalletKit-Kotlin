@@ -2,9 +2,8 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
-import kotlinx.io.core.Closeable
 
-actual class Currency internal constructor(
+public actual class Currency internal constructor(
         core: BRCryptoCurrency,
         take: Boolean
 ) : Closeable {
@@ -13,15 +12,15 @@ actual class Currency internal constructor(
         checkNotNull(cryptoCurrencyTake(core))
     } else core
 
-    actual val uids: String
+    public actual val uids: String
         get() = checkNotNull(cryptoCurrencyGetUids(core)).toKStringFromUtf8()
-    actual val code: String
+    public actual val code: String
         get() = checkNotNull(cryptoCurrencyGetCode(core)).toKStringFromUtf8()
-    actual val name: String
+    public actual val name: String
         get() = checkNotNull(cryptoCurrencyGetName(core)).toKStringFromUtf8()
-    actual val type: String
+    public actual val type: String
         get() = checkNotNull(cryptoCurrencyGetType(core)).toKStringFromUtf8()
-    actual val issuer: String?
+    public actual val issuer: String?
         get() = cryptoCurrencyGetIssuer(core)?.toKStringFromUtf8()
 
     actual override fun equals(other: Any?): Boolean {
@@ -34,14 +33,14 @@ actual class Currency internal constructor(
         cryptoCurrencyGive(core)
     }
 
-    actual companion object {
-        actual fun create(
+    public actual companion object {
+        public actual fun create(
                 uids: String,
                 name: String,
                 code: String,
                 type: String,
                 issuer: String?
-        ) = Currency(
+        ): Currency = Currency(
                 core = checkNotNull(cryptoCurrencyCreate(
                         uids, name, code, type, issuer
                 )),

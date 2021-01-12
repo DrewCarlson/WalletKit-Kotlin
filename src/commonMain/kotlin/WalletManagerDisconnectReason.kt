@@ -1,16 +1,16 @@
 package drewcarlson.walletkit
 
-sealed class WalletManagerDisconnectReason {
+public sealed class WalletManagerDisconnectReason {
 
-    object REQUESTED : WalletManagerDisconnectReason()
-    object UNKNOWN : WalletManagerDisconnectReason()
+    public object REQUESTED : WalletManagerDisconnectReason()
+    public object UNKNOWN : WalletManagerDisconnectReason()
 
-    data class POSIX(
+    public data class POSIX(
             val errNum: Int,
             val errMessage: String?
     ) : WalletManagerDisconnectReason()
 
-    override fun toString() = when (this) {
+    public override fun toString(): String = when (this) {
         REQUESTED -> "Requested"
         UNKNOWN -> "Unknown"
         is POSIX -> "Posix ($errNum: $errMessage)"

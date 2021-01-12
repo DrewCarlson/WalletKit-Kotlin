@@ -2,9 +2,8 @@ package drewcarlson.walletkit
 
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoAddress
-import kotlinx.io.core.Closeable
 
-actual class Address internal constructor(
+public actual class Address internal constructor(
         internal val core: BRCryptoAddress
 ) : Closeable {
 
@@ -22,8 +21,8 @@ actual class Address internal constructor(
         core.give()
     }
 
-    actual companion object {
-        actual fun create(string: String, network: Network): Address? {
+    public actual companion object {
+        public actual fun create(string: String, network: Network): Address? {
             return BRCryptoAddress.create(string, network.core)
                     ?.orNull()
                     ?.run(::Address)

@@ -3,7 +3,7 @@ package drewcarlson.walletkit.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BrdJsonRpcResponse(
+internal data class BrdJsonRpcResponse(
         val jsonrpc: String,
         val id: Int,
         val message: String? = null,

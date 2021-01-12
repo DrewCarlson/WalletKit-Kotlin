@@ -1,15 +1,20 @@
 package drewcarlson.walletkit.common
 
 import brcrypto.*
+import brcrypto.BRCryptoSignerType.*
+import drewcarlson.walletkit.Closeable
+import drewcarlson.walletkit.common.SignerAlgorithm.*
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.usePinned
-import kotlinx.io.core.Closeable
 
-actual class Signer internal constructor(
-        internal val core: BRCryptoSigner
+public actual class Signer internal constructor(
+        core: BRCryptoSigner?
 ) : Closeable {
-    actual fun sign(digest: ByteArray, key: Key): ByteArray? {
+
+    internal val core: BRCryptoSigner = requireNotNull(core)
+
+    public actual fun sign(digest: ByteArray, key: Key): ByteArray? {
         val privKey = key.core
         val digestBytes = digest.asUByteArray().toCValues()
         val digestLength = digestBytes.size.toULong()
@@ -27,7 +32,7 @@ actual class Signer internal constructor(
         } else null
     }
 
-    actual fun recover(digest: ByteArray, signature: ByteArray): Key? {
+    public actual fun recover(digest: ByteArray, signature: ByteArray): Key? {
         val digestBytes = digest.asUByteArray().toCValues()
         val digestLength = digest.size.toULong()
         require(digestBytes.size == 32)
@@ -42,13 +47,13 @@ actual class Signer internal constructor(
         cryptoSignerGive(core)
     }
 
-    actual companion object {
-        actual fun createForAlgorithm(algorithm: SignerAlgorithm): Signer =
+    public actual companion object {
+        public actual fun createForAlgorithm(algorithm: SignerAlgorithm): Signer =
                 when (algorithm) {
-                    SignerAlgorithm.BASIC_DER -> BRCryptoSignerType.CRYPTO_SIGNER_BASIC_DER
-                    SignerAlgorithm.BASIC_JOSE -> BRCryptoSignerType.CRYPTO_SIGNER_BASIC_JOSE
-                    SignerAlgorithm.COMPACT -> BRCryptoSignerType.CRYPTO_SIGNER_COMPACT
+                    BASIC_DER -> CRYPTO_SIGNER_BASIC_DER
+                    BASIC_JOSE -> CRYPTO_SIGNER_BASIC_JOSE
+                    COMPACT -> CRYPTO_SIGNER_COMPACT
                 }.run(::cryptoSignerCreate)
-                        .let { coreSigner -> Signer(checkNotNull(coreSigner)) }
+                        .run(::Signer)
     }
 }

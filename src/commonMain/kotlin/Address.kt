@@ -1,11 +1,9 @@
 package drewcarlson.walletkit
 
-import kotlinx.io.core.Closeable
-
 /**
  * An Address for transferring an amount.
  */
-expect class Address : Closeable {
+public expect class Address : Closeable {
 
     override fun close()
 
@@ -13,7 +11,7 @@ expect class Address : Closeable {
     override fun hashCode(): Int
     override fun toString(): String
 
-    companion object {
+    public companion object {
         /**
          * Create an Address from [string] and [network].
          *

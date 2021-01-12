@@ -3,7 +3,7 @@ package drewcarlson.walletkit
 import com.breadwallet.corenative.crypto.BRCryptoCWMListener
 import com.breadwallet.corenative.crypto.BRCryptoTransferEventType
 
-val TransferEventCallback =
+internal val TransferEventCallback =
         BRCryptoCWMListener.TransferEventCallback { context, coreWalletManager, coreWallet, coreTransfer, event ->
             when (event.type()) {
                 BRCryptoTransferEventType.CRYPTO_TRANSFER_EVENT_CREATED -> {

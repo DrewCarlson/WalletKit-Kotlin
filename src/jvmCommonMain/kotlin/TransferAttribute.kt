@@ -2,17 +2,17 @@ package drewcarlson.walletkit
 
 import com.breadwallet.corenative.crypto.BRCryptoTransferAttribute
 
-actual class TransferAttribute(
+public actual class TransferAttribute(
         internal val core: BRCryptoTransferAttribute
 ) {
 
-    actual val key: String
+    public actual val key: String
         get() = core.key
 
-    actual val isRequired: Boolean
+    public actual val isRequired: Boolean
         get() = core.isRequired
 
-    actual var value: String?
+    public actual var value: String?
         get() = core.value.orNull()
         set(value) {
             core.setValue(value)

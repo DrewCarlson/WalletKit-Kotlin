@@ -2,9 +2,8 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
-import kotlinx.io.core.Closeable
 
-actual class CUnit internal constructor(
+public actual class CUnit internal constructor(
         core: BRCryptoUnit,
         take: Boolean
 ) : Closeable {
@@ -13,24 +12,24 @@ actual class CUnit internal constructor(
         checkNotNull(cryptoUnitTake(core))
     } else core
 
-    actual val currency: Currency
+    public actual val currency: Currency
         get() = Currency(checkNotNull(cryptoUnitGetCurrency(core)), false)
     internal actual val uids: String
         get() = checkNotNull(cryptoUnitGetUids(core)).toKStringFromUtf8()
-    actual val name: String
+    public actual val name: String
         get() = checkNotNull(cryptoUnitGetName(core)).toKStringFromUtf8()
-    actual val symbol: String
+    public actual val symbol: String
         get() = checkNotNull(cryptoUnitGetSymbol(core)).toKStringFromUtf8()
-    actual val base: CUnit
+    public actual val base: CUnit
         get() = CUnit(checkNotNull(cryptoUnitGetBaseUnit(core)), false)
-    actual val decimals: UInt
+    public actual val decimals: UInt
         get() = cryptoUnitGetBaseDecimalOffset(core).toUInt()
 
-    actual fun isCompatible(unit: CUnit): Boolean {
+    public actual fun isCompatible(unit: CUnit): Boolean {
         return CRYPTO_TRUE == cryptoUnitIsCompatible(core, unit.core)
     }
 
-    actual fun hasCurrency(currency: Currency): Boolean {
+    public actual fun hasCurrency(currency: Currency): Boolean {
         return CRYPTO_TRUE == cryptoUnitHasCurrency(core, currency.core)
     }
 
@@ -44,7 +43,7 @@ actual class CUnit internal constructor(
         cryptoUnitGive(core)
     }
 
-    actual companion object {
+    public actual companion object {
         internal actual fun create(
                 currency: Currency,
                 uids: String,

@@ -1,7 +1,5 @@
 package drewcarlson.walletkit
 
-import kotlinx.io.core.Closeable
-
 /**
  * A Blockchain Network.
  *
@@ -9,7 +7,7 @@ import kotlinx.io.core.Closeable
  * Specifically {BTC, BCH, ETH, ...} x {Mainnet, Testnet, ...}.  Thus there will be
  * networks of [BTC-Mainnet, BTC-Testnet, ..., ETH-Mainnet, ETH-Testnet, ETH-Rinkeby, ...]
  */
-expect class Network : Closeable {
+public expect class Network : Closeable {
 
     /** A unique-identifier-string */
     internal val uids: String
@@ -103,13 +101,13 @@ expect class Network : Closeable {
     override fun toString(): String
     override fun close()
 
-    companion object {
+    public companion object {
         internal fun installBuiltins(): List<Network>
-        fun findBuiltin(uids: String): Network?
+        public fun findBuiltin(uids: String): Network?
     }
 }
 
-data class NetworkAssociation(
+public data class NetworkAssociation(
         val baseUnit: CUnit,
         val defaultUnit: CUnit,
         val units: Set<CUnit>

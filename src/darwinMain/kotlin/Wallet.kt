@@ -6,10 +6,10 @@ import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_DELETED
 import kotlinx.cinterop.*
 import kotlinx.coroutines.CoroutineScope
 
-actual class Wallet internal constructor(
+public actual class Wallet internal constructor(
         core: BRCryptoWallet,
-        actual val manager: WalletManager,
-        internal actual val scope: CoroutineScope,
+        public actual val manager: WalletManager,
+        public actual val scope: CoroutineScope,
         take: Boolean
 ) {
 
@@ -17,19 +17,19 @@ actual class Wallet internal constructor(
             if (take) checkNotNull(cryptoWalletTake(core))
             else core
 
-    actual val system: System
+    public actual val system: System
         get() = manager.system
 
-    actual val unit: CUnit
+    public actual val unit: CUnit
         get() = CUnit(checkNotNull(cryptoWalletGetUnit(core)), false)
 
-    actual val unitForFee: CUnit
+    public actual val unitForFee: CUnit
         get() = CUnit(checkNotNull(cryptoWalletGetUnitForFee(core)), false)
 
-    actual val balance: Amount
+    public actual val balance: Amount
         get() = Amount(checkNotNull(cryptoWalletGetBalance(core)), false)
 
-    actual val transfers: List<Transfer> by lazy {
+    public actual val transfers: List<Transfer> by lazy {
         memScoped {
             val count = alloc<ULongVar>()
             val coreTransfers = cryptoWalletGetTransfers(core, count.ptr)?.also { pointer ->
@@ -42,30 +42,30 @@ actual class Wallet internal constructor(
         }
     }
 
-    actual fun getTransferByHash(hash: TransferHash?): Transfer? =
+    public actual fun getTransferByHash(hash: TransferHash?): Transfer? =
             transfers.singleOrNull { it.hash == hash }
 
-    actual val target: Address
+    public actual val target: Address
         get() = getTargetForScheme(manager.addressScheme)
 
-    actual fun getTargetForScheme(scheme: AddressScheme): Address {
+    public actual fun getTargetForScheme(scheme: AddressScheme): Address {
         val coreAddress = checkNotNull(cryptoWalletGetAddress(core, scheme.toCore()))
         return Address(coreAddress, false)
     }
 
-    actual val currency: Currency
+    public actual val currency: Currency
         get() = Currency(checkNotNull(cryptoWalletGetCurrency(core)), false)
 
-    actual val name: String
+    public actual val name: String
         get() = unit.currency.code
 
-    actual val state: WalletState
+    public actual val state: WalletState
         get() = when (cryptoWalletGetState(core)) {
             CRYPTO_WALLET_STATE_CREATED -> WalletState.CREATED
             CRYPTO_WALLET_STATE_DELETED -> WalletState.DELETED
         }
 
-    actual fun hasAddress(address: Address): Boolean {
+    public actual fun hasAddress(address: Address): Boolean {
         return CRYPTO_TRUE == cryptoWalletHasAddress(core, address.core)
     }
 
@@ -77,7 +77,7 @@ actual class Wallet internal constructor(
         return TransferFeeBasis(coreFeeBasis ?: return null, false)
     }
 
-    actual fun createTransfer(
+    public actual fun createTransfer(
             target: Address,
             amount: Amount,
             estimatedFeeBasis: TransferFeeBasis,
@@ -99,7 +99,7 @@ actual class Wallet internal constructor(
         return transferBy(core) ?: Transfer(core, this, true)
     }
 
-    actual suspend fun estimateFee(
+    public actual suspend fun estimateFee(
             target: Address,
             amount: Amount,
             fee: NetworkFee,
@@ -113,11 +113,11 @@ actual class Wallet internal constructor(
         TODO("Not implemented")
     }
 
-    actual suspend fun estimateLimitMaximum(target: Address, fee: NetworkFee): Amount {
+    public actual suspend fun estimateLimitMaximum(target: Address, fee: NetworkFee): Amount {
         TODO()
     }
 
-    actual suspend fun estimateLimitMinimum(target: Address, fee: NetworkFee): Amount {
+    public actual suspend fun estimateLimitMinimum(target: Address, fee: NetworkFee): Amount {
         TODO()
     }
 

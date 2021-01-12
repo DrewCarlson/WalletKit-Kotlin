@@ -1,12 +1,12 @@
 package drewcarlson.walletkit
 
-sealed class LimitEstimationError : Exception() {
+public sealed class LimitEstimationError : Exception() {
 
-    class InsufficientFunds : LimitEstimationError()
-    class ServiceFailure : LimitEstimationError()
-    class ServiceUnavailable : LimitEstimationError()
+    public object InsufficientFunds : LimitEstimationError()
+    public object ServiceFailure : LimitEstimationError()
+    public object ServiceUnavailable : LimitEstimationError()
 
-    fun from(error: FeeEstimationError): LimitEstimationError {
+    public fun from(error: FeeEstimationError): LimitEstimationError {
         return error.toLimitEstimationError()
     }
 }

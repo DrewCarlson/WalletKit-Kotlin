@@ -1,9 +1,9 @@
 package drewcarlson.walletkit
 
 
-expect class TransferAttribute {
+public expect class TransferAttribute {
 
-    val key: String
-    val isRequired: Boolean
-    var value: String?
+    public val key: String
+    public val isRequired: Boolean
+    public var value: String?
 }

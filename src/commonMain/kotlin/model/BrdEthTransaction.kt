@@ -4,14 +4,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BrdEthTransactions(
+internal data class BrdEthTransactions(
         val status: String,
         val message: String,
         val result: List<BrdEthTransaction>
 )
 
 @Serializable
-data class BrdEthTransaction(
+internal data class BrdEthTransaction(
         val hash: String,
         @SerialName("from")
         val sourceAddr: String,

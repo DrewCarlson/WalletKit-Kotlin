@@ -3,7 +3,7 @@ package drewcarlson.walletkit
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoFeeBasis
 
-actual class TransferFeeBasis internal constructor(
+public actual class TransferFeeBasis internal constructor(
         internal val core: BRCryptoFeeBasis
 ) {
 
@@ -11,19 +11,19 @@ actual class TransferFeeBasis internal constructor(
         ReferenceCleaner.register(core, core::give)
     }
 
-    actual val unit: CUnit
+    public actual val unit: CUnit
         get() = CUnit(core.pricePerCostFactorUnit)
 
-    actual val currency: Currency
+    public actual val currency: Currency
         get() = unit.currency
 
-    actual val pricePerCostFactor: Amount
+    public actual val pricePerCostFactor: Amount
         get() = Amount(core.pricePerCostFactor)
 
-    actual val costFactor: Double
+    public actual val costFactor: Double
         get() = core.costFactor
 
-    actual val fee: Amount
+    public actual val fee: Amount
         get() = Amount(checkNotNull(core.fee.orNull()))
 
     actual override fun equals(other: Any?): Boolean =

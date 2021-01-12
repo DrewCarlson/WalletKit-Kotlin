@@ -1,8 +1,11 @@
 package drewcarlson.walletkit
 
-interface WalletSweeper {
-    val balance: Amount?
+import kotlin.coroutines.cancellation.CancellationException
 
-    fun estimate(fee: NetworkFee, completion: CompletionHandler<TransferFeeBasis?, FeeEstimationError?>)
-    fun submit(feeBasis: TransferFeeBasis): Transfer?
+public interface WalletSweeper {
+    public val balance: Amount?
+
+    @Throws(FeeEstimationError::class, CancellationException::class)
+    public suspend fun estimate(fee: NetworkFee): TransferFeeBasis
+    public fun submit(feeBasis: TransferFeeBasis): Transfer?
 }

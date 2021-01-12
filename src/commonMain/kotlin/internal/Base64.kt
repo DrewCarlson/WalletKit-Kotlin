@@ -17,21 +17,21 @@ private val BASE64_INVERSE_ALPHABET = IntArray(256) {
 /**
  * Encode [String] in base64 format and UTF-8 character encoding.
  */
-fun String.encodeBase64(): String = buildPacket {
+internal fun String.encodeBase64(): String = buildPacket {
     writeText(this@encodeBase64)
 }.encodeBase64()
 
 /**
  * Encode [ByteArray] in base64 format
  */
-fun ByteArray.encodeBase64(): String = buildPacket {
+internal fun ByteArray.encodeBase64(): String = buildPacket {
     writeFully(this@encodeBase64)
 }.encodeBase64()
 
 /**
  * Encode [ByteReadPacket] in base64 format
  */
-fun ByteReadPacket.encodeBase64(): String = buildString {
+internal fun ByteReadPacket.encodeBase64(): String = buildString {
     val data = ByteArray(3)
     while (remaining > 0) {
         val read = readAvailable(data)
@@ -54,19 +54,19 @@ fun ByteReadPacket.encodeBase64(): String = buildString {
 /**
  * Decode [String] from base64 format encoded in UTF-8.
  */
-fun String.decodeBase64String(): String = String(decodeBase64Bytes(), charset = Charsets.UTF_8)
+internal fun String.decodeBase64String(): String = String(decodeBase64Bytes(), charset = Charsets.UTF_8)
 
 /**
  * Decode [String] from base64 format
  */
-fun String.decodeBase64Bytes(): ByteArray = buildPacket {
+internal fun String.decodeBase64Bytes(): ByteArray = buildPacket {
     writeText(dropLastWhile { it == BASE64_PAD })
 }.decodeBase64Bytes().readBytes()
 
 /**
  * Decode [ByteReadPacket] from base64 format
  */
-fun ByteReadPacket.decodeBase64Bytes(): Input = buildPacket {
+internal fun ByteReadPacket.decodeBase64Bytes(): Input = buildPacket {
     val data = ByteArray(4)
 
     while (remaining > 0) {

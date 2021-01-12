@@ -3,9 +3,7 @@ package drewcarlson.walletkit
 import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.cancellation.CancellationException
 
-typealias SystemCallbackCoordinator = String
-
-expect class Wallet {
+public expect class Wallet {
 
     /** The owning manager */
     public val manager: WalletManager
@@ -13,7 +11,7 @@ expect class Wallet {
     /** The owning system */
     public val system: System
 
-    internal val scope: CoroutineScope
+    public val scope: CoroutineScope
 
     /** The unit for display of the wallet's balance */
     public val unit: CUnit

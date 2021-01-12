@@ -3,9 +3,9 @@ package drewcarlson.walletkit.common
 import drewcarlson.walletkit.Secret
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoKey
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-actual class Key internal constructor(
+public actual class Key internal constructor(
         internal val core: BRCryptoKey
 ) : Closeable {
 
@@ -21,19 +21,19 @@ actual class Key internal constructor(
             )
     )
 
-    actual val hasSecret: Boolean
+    public actual val hasSecret: Boolean
         get() = core.hasSecret()
 
-    actual val encodeAsPrivate: ByteArray
+    public actual val encodeAsPrivate: ByteArray
         get() = checkNotNull(core.encodeAsPrivate())
 
-    actual val encodeAsPublic: ByteArray
+    public actual val encodeAsPublic: ByteArray
         get() = checkNotNull(core.encodeAsPublic())
 
-    actual val secret: Secret
+    public actual val secret: Secret
         get() = Secret(core.secret)
 
-    actual fun publicKeyMatch(that: Key): Boolean =
+    public actual fun publicKeyMatch(that: Key): Boolean =
             core.publicKeyMatch(that.core)
 
     internal actual fun privateKeyMatch(that: Key): Boolean =
@@ -43,45 +43,45 @@ actual class Key internal constructor(
         core.give()
     }
 
-    actual companion object {
-        actual var wordList: List<String>? = null
+    public actual companion object {
+        public actual var wordList: List<String>? = null
             @Synchronized get
             @Synchronized set
 
-        actual fun isProtectedPrivateKey(privateKey: String): Boolean =
+        public actual fun isProtectedPrivateKey(privateKey: String): Boolean =
                 BRCryptoKey.isProtectedPrivateKeyString(privateKey.toByteArray())
 
-        actual fun createFromPhrase(phrase: String, words: List<String>?): Key? =
+        public actual fun createFromPhrase(phrase: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
                 else BRCryptoKey.createFromPhrase(phrase.toByteArray(), words)
                         .orNull()
                         ?.run(::Key)
 
-        actual fun createFromProtectedPrivateKey(privateKey: String, passphrase: String): Key? =
+        public actual fun createFromProtectedPrivateKey(privateKey: String, passphrase: String): Key? =
                 BRCryptoKey.createFromPrivateKeyString(privateKey.toByteArray(), passphrase.toByteArray())
                         .orNull()
                         ?.run(::Key)
 
-        actual fun createFromPrivateKey(privateKey: String): Key? =
+        public actual fun createFromPrivateKey(privateKey: String): Key? =
                 BRCryptoKey.createFromPrivateKeyString(privateKey.toByteArray())
                         .orNull()
                         ?.run(::Key)
 
-        actual fun createFromPublicKey(string: String): Key? =
+        public actual fun createFromPublicKey(string: String): Key? =
                 BRCryptoKey.createFromPublicKeyString(string.toByteArray())
                         .orNull()
                         ?.run(::Key)
 
-        actual fun createForPigeonFromKey(key: Key, nonce: ByteArray): Key? =
+        public actual fun createForPigeonFromKey(key: Key, nonce: ByteArray): Key? =
                 BRCryptoKey.createForPigeon(key.core, nonce).orNull()?.run(::Key)
 
-        actual fun createForBIP32ApiAuth(phrase: String, words: List<String>?): Key? =
+        public actual fun createForBIP32ApiAuth(phrase: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
                 else BRCryptoKey.createForBIP32ApiAuth(phrase.toByteArray(), words)
                         .orNull()
                         ?.run(::Key)
 
-        actual fun createForBIP32BitID(phrase: String, index: Int, uri: String, words: List<String>?): Key? =
+        public actual fun createForBIP32BitID(phrase: String, index: Int, uri: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
                 else BRCryptoKey.createForBIP32BitID(phrase.toByteArray(), index, uri, words)
                         .orNull()

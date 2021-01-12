@@ -2,7 +2,7 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 
-actual class TransferFeeBasis internal constructor(
+public actual class TransferFeeBasis internal constructor(
         core: BRCryptoFeeBasis,
         take: Boolean
 ) {
@@ -11,19 +11,19 @@ actual class TransferFeeBasis internal constructor(
             if (take) checkNotNull(cryptoFeeBasisTake(core))
             else core
 
-    actual val unit: CUnit
+    public actual val unit: CUnit
         get() = CUnit(checkNotNull(cryptoFeeBasisGetPricePerCostFactorUnit(core)), false)
 
-    actual val currency: Currency
+    public actual val currency: Currency
         get() = unit.currency
 
-    actual val pricePerCostFactor: Amount
+    public actual val pricePerCostFactor: Amount
         get() = Amount(checkNotNull(cryptoFeeBasisGetPricePerCostFactor(core)), false)
 
-    actual val costFactor: Double
+    public actual val costFactor: Double
         get() = cryptoFeeBasisGetCostFactor(core)
 
-    actual val fee: Amount
+    public actual val fee: Amount
         get() = Amount(checkNotNull(cryptoFeeBasisGetFee(core)), false)
 
     actual override fun equals(other: Any?): Boolean =

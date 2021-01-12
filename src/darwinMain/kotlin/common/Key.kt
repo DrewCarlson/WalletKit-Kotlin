@@ -4,9 +4,9 @@ import brcrypto.*
 import drewcarlson.walletkit.Secret
 import kotlinx.atomicfu.atomic
 import kotlinx.cinterop.*
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-actual class Key internal constructor(
+public actual class Key internal constructor(
         core: BRCryptoKey,
         take: Boolean
 ) : Closeable {
@@ -22,11 +22,11 @@ actual class Key internal constructor(
             false
     )
 
-    actual val hasSecret: Boolean
+    public actual val hasSecret: Boolean
         get() = CRYPTO_TRUE == cryptoKeyHasSecret(core).toUInt()
 
     // TODO: Clean this up
-    actual val encodeAsPrivate: ByteArray
+    public actual val encodeAsPrivate: ByteArray
         get() = memScoped {
             checkNotNull(cryptoKeyEncodePrivate(core)).let { coreBytes ->
                 var count = 0
@@ -39,7 +39,7 @@ actual class Key internal constructor(
             }
         }
 
-    actual val encodeAsPublic: ByteArray
+    public actual val encodeAsPublic: ByteArray
         get() = memScoped {
             checkNotNull(cryptoKeyEncodePublic(core)).let { coreBytes ->
                 var count = 0
@@ -52,12 +52,12 @@ actual class Key internal constructor(
             }
         }
 
-    actual val secret: Secret
+    public actual val secret: Secret
         get() = memScoped {
             cryptoKeyGetSecret(core).getPointer(this).pointed
         }
 
-    actual fun publicKeyMatch(that: Key): Boolean =
+    public actual fun publicKeyMatch(that: Key): Boolean =
             CRYPTO_TRUE == cryptoKeyPublicMatch(core, that.core).toUInt()
 
     internal actual fun privateKeyMatch(that: Key): Boolean =
@@ -67,19 +67,19 @@ actual class Key internal constructor(
         cryptoKeyGive(core)
     }
 
-    actual companion object {
+    public actual companion object {
         private val atomicWordList = atomic<List<String>?>(null)
 
-        actual var wordList: List<String>?
+        public actual var wordList: List<String>?
             get() = atomicWordList.value
             set(value) {
                 atomicWordList.value = value
             }
 
-        actual fun isProtectedPrivateKey(privateKey: String): Boolean =
+        public actual fun isProtectedPrivateKey(privateKey: String): Boolean =
                 CRYPTO_TRUE == cryptoKeyIsProtectedPrivate(privateKey)
 
-        actual fun createFromPhrase(
+        public actual fun createFromPhrase(
                 phrase: String,
                 words: List<String>?
         ): Key? = memScoped {
@@ -89,32 +89,32 @@ actual class Key internal constructor(
             Key(coreKey, false)
         }
 
-        actual fun createFromProtectedPrivateKey(privateKey: String, passphrase: String): Key? =
+        public actual fun createFromProtectedPrivateKey(privateKey: String, passphrase: String): Key? =
                 cryptoKeyCreateFromStringProtectedPrivate(privateKey, passphrase)
                         ?.let { coreKey -> Key(coreKey, false) }
 
-        actual fun createFromPrivateKey(privateKey: String): Key? =
+        public actual fun createFromPrivateKey(privateKey: String): Key? =
                 cryptoKeyCreateFromStringPrivate(privateKey)
                         ?.let { coreKey -> Key(coreKey, false) }
 
-        actual fun createFromPublicKey(string: String): Key? =
+        public actual fun createFromPublicKey(string: String): Key? =
                 cryptoKeyCreateFromStringPublic(string)
                         ?.let { coreKey -> Key(coreKey, false) }
 
-        actual fun createForPigeonFromKey(key: Key, nonce: ByteArray): Key? {
+        public actual fun createForPigeonFromKey(key: Key, nonce: ByteArray): Key? {
             val nonceValue = nonce.asUByteArray().toCValues()
             val coreKey = cryptoKeyCreateForPigeon(key.core, nonceValue, nonce.size.toULong())
             return Key(coreKey ?: return null, false)
         }
 
-        actual fun createForBIP32ApiAuth(phrase: String, words: List<String>?): Key? = memScoped {
+        public actual fun createForBIP32ApiAuth(phrase: String, words: List<String>?): Key? = memScoped {
             words ?: return null
             val wordsArray = words.toCStringArray(this)
             val coreKey = cryptoKeyCreateForBIP32ApiAuth(phrase, wordsArray) ?: return null
             Key(coreKey, false)
         }
 
-        actual fun createForBIP32BitID(
+        public actual fun createForBIP32BitID(
                 phrase: String,
                 index: Int,
                 uri: String,

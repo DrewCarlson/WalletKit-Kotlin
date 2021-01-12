@@ -19,6 +19,7 @@ private val json = Json {
     ignoreUnknownKeys = true
 }
 
+// TODO: Reuse for eth query
 internal class BdbServiceImpl internal constructor(
     httpClient: HttpClient,
     apiBaseURL: String = DEFAULT_API_BASE_URL

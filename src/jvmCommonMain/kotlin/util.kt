@@ -9,7 +9,7 @@ import com.breadwallet.corenative.crypto.BRCryptoWalletManagerStateType.*
 import drewcarlson.walletkit.SyncStoppedReason.*
 
 
-fun BRCryptoSyncStoppedReason.asApiReason(): SyncStoppedReason =
+internal fun BRCryptoSyncStoppedReason.asApiReason(): SyncStoppedReason =
         when (type()) {
             CRYPTO_SYNC_STOPPED_REASON_COMPLETE -> COMPLETE
             CRYPTO_SYNC_STOPPED_REASON_REQUESTED -> REQUESTED
@@ -19,7 +19,7 @@ fun BRCryptoSyncStoppedReason.asApiReason(): SyncStoppedReason =
         }
 
 
-fun BRCryptoWalletManagerDisconnectReason.asApiReason(): WalletManagerDisconnectReason =
+internal fun BRCryptoWalletManagerDisconnectReason.asApiReason(): WalletManagerDisconnectReason =
         when (type()) {
             CRYPTO_WALLET_MANAGER_DISCONNECT_REASON_REQUESTED -> WalletManagerDisconnectReason.REQUESTED
             CRYPTO_WALLET_MANAGER_DISCONNECT_REASON_UNKNOWN -> WalletManagerDisconnectReason.UNKNOWN
@@ -28,7 +28,7 @@ fun BRCryptoWalletManagerDisconnectReason.asApiReason(): WalletManagerDisconnect
             else -> error("unknown disconnect reason")
         }
 
-fun BRCryptoWalletManagerState.asApiState(): WalletManagerState =
+internal fun BRCryptoWalletManagerState.asApiState(): WalletManagerState =
         when (type()) {
             CRYPTO_WALLET_MANAGER_STATE_CREATED -> WalletManagerState.CREATED
             CRYPTO_WALLET_MANAGER_STATE_DISCONNECTED ->

@@ -4,13 +4,13 @@ import brcrypto.*
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.usePinned
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-actual class Cipher internal constructor(
+public actual class Cipher internal constructor(
         internal val core: BRCryptoCipher
 ) : Closeable {
 
-    actual fun encrypt(data: ByteArray): ByteArray? {
+    public actual fun encrypt(data: ByteArray): ByteArray? {
         val inputBytes = data.asUByteArray().toCValues()
         val inputLength = inputBytes.size.toULong()
 
@@ -26,7 +26,7 @@ actual class Cipher internal constructor(
         } else null
     }
 
-    actual fun decrypt(data: ByteArray): ByteArray? {
+    public actual fun decrypt(data: ByteArray): ByteArray? {
         val inputBytes = data.asUByteArray().toCValues()
         val inputLength = inputBytes.size.toULong()
 
@@ -46,15 +46,15 @@ actual class Cipher internal constructor(
         cryptoCipherGive(core)
     }
 
-    actual companion object {
-        actual fun createForAesEcb(key: ByteArray): Cipher {
+    public actual companion object {
+        public actual fun createForAesEcb(key: ByteArray): Cipher {
             val keyBytes = key.asUByteArray().toCValues()
             val keyLength = keyBytes.size.toULong()
             val coreCipher = cryptoCipherCreateForAESECB(keyBytes, keyLength)
             return Cipher(checkNotNull(coreCipher))
         }
 
-        actual fun createForChaCha20Poly1305(key: Key, nonce12: ByteArray, ad: ByteArray): Cipher {
+        public actual fun createForChaCha20Poly1305(key: Key, nonce12: ByteArray, ad: ByteArray): Cipher {
             val nonceBytes = nonce12.asUByteArray().toCValues()
             val nonceLength = nonceBytes.size.toULong()
             val dataBytes = ad.asUByteArray().toCValues()
@@ -63,7 +63,7 @@ actual class Cipher internal constructor(
             return Cipher(checkNotNull(coreCipher))
         }
 
-        actual fun createForPigeon(privKey: Key, pubKey: Key, nonce12: ByteArray): Cipher {
+        public actual fun createForPigeon(privKey: Key, pubKey: Key, nonce12: ByteArray): Cipher {
             val nonceBytes = nonce12.asUByteArray().toCValues()
             val nonceLength = nonceBytes.size.toULong()
             val coreCipher = cryptoCipherCreateForPigeon(privKey.core, pubKey.core, nonceBytes, nonceLength)

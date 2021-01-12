@@ -4,51 +4,51 @@ import com.breadwallet.corenative.crypto.*
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
-actual class Wallet internal constructor(
+public actual class Wallet internal constructor(
         internal val core: BRCryptoWallet,
-        actual val manager: WalletManager,
-        actual val scope: CoroutineScope
+        public actual val manager: WalletManager,
+        public actual val scope: CoroutineScope
 ) {
 
-    actual val system: System
+    public actual val system: System
         get() = manager.system
 
-    actual val unit: CUnit
+    public actual val unit: CUnit
         get() = CUnit(core.unit)
 
-    actual val unitForFee: CUnit
+    public actual val unitForFee: CUnit
         get() = CUnit(core.unitForFee)
 
-    actual val balance: Amount
+    public actual val balance: Amount
         get() = core.balance.run(::Amount)
 
-    actual val transfers: List<Transfer>
+    public actual val transfers: List<Transfer>
         get() = core.transfers.map { Transfer(it, this) }
 
-    actual val target: Address
+    public actual val target: Address
         get() = getTargetForScheme(manager.addressScheme)
 
-    actual val currency: Currency
+    public actual val currency: Currency
         get() = Currency(core.currency)
 
-    actual val name: String
+    public actual val name: String
         get() = unit.currency.name
 
-    actual val state: WalletState
+    public actual val state: WalletState
         get() = when (core.state) {
             BRCryptoWalletState.CRYPTO_WALLET_STATE_CREATED -> WalletState.CREATED
             BRCryptoWalletState.CRYPTO_WALLET_STATE_DELETED -> WalletState.DELETED
             else -> error("Invalid core state (${core.state})")
         }
 
-    actual fun hasAddress(address: Address): Boolean {
+    public actual fun hasAddress(address: Address): Boolean {
         return core.containsAddress(address.core)
     }
 
-    actual fun getTransferByHash(hash: TransferHash?): Transfer? =
+    public actual fun getTransferByHash(hash: TransferHash?): Transfer? =
             transfers.singleOrNull { it.hash == hash }
 
-    actual fun getTargetForScheme(scheme: AddressScheme): Address {
+    public actual fun getTargetForScheme(scheme: AddressScheme): Address {
         val coreInt = manager.addressScheme.core.toInt()
         val coreScheme = BRCryptoAddressScheme.fromCore(coreInt)
         return core.getTargetAddress(coreScheme).run(::Address)
@@ -58,7 +58,7 @@ actual class Wallet internal constructor(
         return core.createTransferFeeBasis(pricePerCostFactor.core, costFactor).orNull()?.run(::TransferFeeBasis)
     }
 
-    actual fun createTransfer(
+    public actual fun createTransfer(
             target: Address,
             amount: Amount,
             estimatedFeeBasis: TransferFeeBasis,
@@ -69,7 +69,7 @@ actual class Wallet internal constructor(
         return Transfer(coreTransfer ?: return null, this)
     }
 
-    actual suspend fun estimateFee(
+    public actual suspend fun estimateFee(
             target: Address,
             amount: Amount,
             fee: NetworkFee,
@@ -79,12 +79,12 @@ actual class Wallet internal constructor(
         TODO("not implemented")
     }
 
-    actual suspend fun estimateLimitMaximum(target: Address, fee: NetworkFee): Amount {
+    public actual suspend fun estimateLimitMaximum(target: Address, fee: NetworkFee): Amount {
         val limitResult = manager.core.estimateLimit(core, true, target.core, fee.core)
         TODO()
     }
 
-    actual suspend fun estimateLimitMinimum(target: Address, fee: NetworkFee): Amount {
+    public actual suspend fun estimateLimitMinimum(target: Address, fee: NetworkFee): Amount {
         val limitResult = manager.core.estimateLimit(core, false, target.core, fee.core)
         TODO()
     }

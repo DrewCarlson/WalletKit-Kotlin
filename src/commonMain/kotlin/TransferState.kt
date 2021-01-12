@@ -1,22 +1,22 @@
 package drewcarlson.walletkit
 
-sealed class TransferState {
+public sealed class TransferState {
 
-    object CREATED : TransferState()
-    object SIGNED : TransferState()
-    object SUBMITTED : TransferState()
-    object PENDING : TransferState()
-    object DELETED : TransferState()
+    public object CREATED : TransferState()
+    public object SIGNED : TransferState()
+    public object SUBMITTED : TransferState()
+    public object PENDING : TransferState()
+    public object DELETED : TransferState()
 
-    data class INCLUDED(
+    public data class INCLUDED(
             public val confirmation: TransferConfirmation
     ) : TransferState()
 
-    data class FAILED(
+    public data class FAILED(
             public val error: TransferSubmitError
     ) : TransferState()
 
-    override fun toString() = when (this) {
+    override fun toString(): String = when (this) {
         CREATED -> "Created"
         SIGNED -> "Signed"
         SUBMITTED -> "Submitted"

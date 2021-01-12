@@ -1,19 +1,19 @@
 package drewcarlson.walletkit.common
 
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-expect class Hasher : Closeable {
+public expect class Hasher : Closeable {
 
     public fun hash(data: ByteArray): ByteArray?
 
     override fun close()
 
-    companion object {
+    public companion object {
         public fun createForAlgorithm(algorithm: HashAlgorithm): Hasher
     }
 }
 
-enum class HashAlgorithm {
+public enum class HashAlgorithm {
     SHA1,
     SHA224,
     SHA256,

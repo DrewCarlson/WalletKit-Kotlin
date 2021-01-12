@@ -2,9 +2,9 @@ package drewcarlson.walletkit.common
 
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoSigner
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-actual class Signer internal constructor(
+public actual class Signer internal constructor(
         internal val core: BRCryptoSigner
 ) : Closeable {
 
@@ -12,18 +12,18 @@ actual class Signer internal constructor(
         ReferenceCleaner.register(core, ::close)
     }
 
-    actual fun sign(digest: ByteArray, key: Key): ByteArray? =
+    public actual fun sign(digest: ByteArray, key: Key): ByteArray? =
             core.sign(digest, key.core).orNull()
 
-    actual fun recover(digest: ByteArray, signature: ByteArray): Key? =
+    public actual fun recover(digest: ByteArray, signature: ByteArray): Key? =
             core.recover(digest, signature).orNull()?.run(::Key)
 
     actual override fun close() {
         core.give()
     }
 
-    actual companion object {
-        actual fun createForAlgorithm(algorithm: SignerAlgorithm): Signer =
+    public actual companion object {
+        public actual fun createForAlgorithm(algorithm: SignerAlgorithm): Signer =
                 when (algorithm) {
                     SignerAlgorithm.COMPACT -> BRCryptoSigner.createCompact().orNull()
                     SignerAlgorithm.BASIC_DER -> BRCryptoSigner.createBasicDer().orNull()

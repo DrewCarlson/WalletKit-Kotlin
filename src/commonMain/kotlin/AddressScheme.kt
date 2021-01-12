@@ -9,7 +9,7 @@ package drewcarlson.walletkit
  * The WalletManager holds an array of AddressSchemes as well as the preferred AddressScheme.
  * The preferred scheme is selected from among the array of schemes.
  */
-enum class AddressScheme(
+public enum class AddressScheme(
         internal val core: UInt,
         private val label: String
 ) {
@@ -19,10 +19,10 @@ enum class AddressScheme(
     ETHDefault(2u, "ETH Default"),
     GENDefault(3u, "GEN Default");
 
-    override fun toString() = label
+    override fun toString(): String = label
 
-    companion object {
-        fun fromCoreInt(core: UInt): AddressScheme = when (core) {
+    public companion object {
+        public fun fromCoreInt(core: UInt): AddressScheme = when (core) {
             0u -> BTCLegacy
             1u -> BTCSegwit
             2u -> ETHDefault

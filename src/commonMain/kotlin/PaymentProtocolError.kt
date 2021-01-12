@@ -1,10 +1,10 @@
 package drewcarlson.walletkit
 
-sealed class PaymentProtocolError : Exception() {
+public sealed class PaymentProtocolError : Exception() {
 
-    object CertificateMissing : PaymentProtocolError()
-    object CertificateNotTrusted : PaymentProtocolError()
-    object RequestExpired : PaymentProtocolError()
-    object SignatureTypeUnsupported : PaymentProtocolError()
-    object SignatureVerificationFailed : PaymentProtocolError()
+    public object CertificateMissing : PaymentProtocolError()
+    public object CertificateNotTrusted : PaymentProtocolError()
+    public object RequestExpired : PaymentProtocolError()
+    public object SignatureTypeUnsupported : PaymentProtocolError()
+    public object SignatureVerificationFailed : PaymentProtocolError()
 }

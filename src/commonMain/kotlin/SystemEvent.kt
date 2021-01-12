@@ -1,18 +1,18 @@
 package drewcarlson.walletkit
 
-sealed class SystemEvent {
+public sealed class SystemEvent {
 
-    object Created : SystemEvent()
+    public object Created : SystemEvent()
 
-    data class DiscoveredNetworks(
+    public data class DiscoveredNetworks(
             val networks: List<Network>
     ) : SystemEvent()
 
-    data class ManagerAdded(
+    public data class ManagerAdded(
             val manager: WalletManager
     ) : SystemEvent()
 
-    data class NetworkAdded(
+    public data class NetworkAdded(
             val network: Network
     ) : SystemEvent()
 }

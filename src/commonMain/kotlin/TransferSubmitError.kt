@@ -1,10 +1,10 @@
 package drewcarlson.walletkit
 
-sealed class TransferSubmitError : Exception() {
+public sealed class TransferSubmitError : Exception() {
 
-    object UNKNOWN : TransferSubmitError()
+    public object UNKNOWN : TransferSubmitError()
 
-    data class POSIX(
+    public data class POSIX(
             val errNum: Int,
             val errMessage: String?
     ) : TransferSubmitError() {

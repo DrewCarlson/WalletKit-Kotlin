@@ -9,7 +9,7 @@ package drewcarlson.walletkit
  * The provided properties allow the App to present detailed information
  * - specifically the 'cost factor' and the 'price per cost factor'.
  */
-expect class TransferFeeBasis {
+public expect class TransferFeeBasis {
 
     /** The unit for both the pricePerCostFactor and fee. */
     public val unit: CUnit

@@ -11,9 +11,9 @@ import kotlinx.cinterop.*
 import kotlinx.coroutines.CoroutineScope
 import platform.posix.size_tVar
 
-actual class WalletManager internal constructor(
+public actual class WalletManager internal constructor(
         core: BRCryptoWalletManager,
-        actual val system: System,
+        public actual val system: System,
         private val scope: CoroutineScope,
         take: Boolean
 ) {
@@ -22,17 +22,17 @@ actual class WalletManager internal constructor(
             if (take) checkNotNull(cryptoWalletManagerTake(core))
             else core
 
-    actual val network: Network
+    public actual val network: Network
 
-    actual val account: Account
+    public actual val account: Account
 
     internal actual val unit: CUnit
 
-    actual val path: String
+    public actual val path: String
 
-    actual val defaultNetworkFee: NetworkFee
+    public actual val defaultNetworkFee: NetworkFee
 
-    actual var addressScheme: AddressScheme
+    public actual var addressScheme: AddressScheme
         get() = AddressScheme.fromCoreInt(cryptoWalletManagerGetAddressScheme(core).value)
         set(value) {
             require(network.supportsAddressScheme(value))
@@ -53,7 +53,7 @@ actual class WalletManager internal constructor(
         defaultNetworkFee = network.minimumFee
     }
 
-    actual var mode: WalletManagerMode
+    public actual var mode: WalletManagerMode
         get() = WalletManagerMode.fromCoreInt(cryptoWalletManagerGetMode(core).value)
         set(value) {
             require(network.supportsWalletManagerMode(value)) {
@@ -62,7 +62,7 @@ actual class WalletManager internal constructor(
             cryptoWalletManagerSetMode(core, value.toCore())
         }
 
-    actual val state: WalletManagerState
+    public actual val state: WalletManagerState
         get() = cryptoWalletManagerGetState(core).useContents {
             when (type) {
                 CRYPTO_WALLET_MANAGER_STATE_CONNECTED -> CONNECTED
@@ -76,12 +76,12 @@ actual class WalletManager internal constructor(
 
     internal actual val height: ULong = network.height
 
-    actual val primaryWallet: Wallet by lazy {
+    public actual val primaryWallet: Wallet by lazy {
         val coreWallet = cryptoWalletManagerGetWallet(core)
         Wallet(checkNotNull(coreWallet), this, scope, false)
     }
 
-    actual val wallets: List<Wallet>
+    public actual val wallets: List<Wallet>
         get() = memScoped {
             val count = alloc<size_tVar>()
             val coreWallets = cryptoWalletManagerGetWallets(core, count.ptr)?.also { pointer ->
@@ -92,43 +92,43 @@ actual class WalletManager internal constructor(
             }
         }
 
-    actual val currency: Currency
+    public actual val currency: Currency
         get() = network.currency
 
-    actual val name: String
+    public actual val name: String
         get() = currency.code
 
-    actual val baseUnit: CUnit
+    public actual val baseUnit: CUnit
         get() = checkNotNull(network.baseUnitFor(network.currency))
 
-    actual val defaultUnit: CUnit
+    public actual val defaultUnit: CUnit
         get() = checkNotNull(network.defaultUnitFor(network.currency))
 
-    actual val isActive: Boolean
+    public actual val isActive: Boolean
         get() = when (state) {
             CONNECTED, SYNCING -> true
             else -> false
         }
 
-    actual fun connect(peer: NetworkPeer?) {
+    public actual fun connect(peer: NetworkPeer?) {
         require(peer == null || peer.network == network)
 
         cryptoWalletManagerConnect(core, peer?.core)
     }
 
-    actual fun disconnect() {
+    public actual fun disconnect() {
         cryptoWalletManagerDisconnect(core)
     }
 
-    actual fun sync() {
+    public actual fun sync() {
         cryptoWalletManagerSync(core)
     }
 
-    actual fun stop() {
+    public actual fun stop() {
         cryptoWalletManagerStop(core)
     }
 
-    actual fun syncToDepth(depth: WalletManagerSyncDepth) {
+    public actual fun syncToDepth(depth: WalletManagerSyncDepth) {
         cryptoWalletManagerSyncToDepth(core, when (depth) {
             FROM_CREATION -> CRYPTO_SYNC_DEPTH_FROM_CREATION
             FROM_LAST_CONFIRMED_SEND -> CRYPTO_SYNC_DEPTH_FROM_LAST_CONFIRMED_SEND
@@ -136,7 +136,7 @@ actual class WalletManager internal constructor(
         })
     }
 
-    actual fun submit(transfer: Transfer, phraseUtf8: ByteArray) {
+    public actual fun submit(transfer: Transfer, phraseUtf8: ByteArray) {
         cryptoWalletManagerSubmit(core, transfer.wallet.core, transfer.core, phraseUtf8.toCValues())
     }
 
@@ -144,11 +144,11 @@ actual class WalletManager internal constructor(
         cryptoWalletManagerSetNetworkReachable(core, isNetworkReachable.toCryptoBoolean())
     }
 
-    actual suspend fun createSweeper(wallet: Wallet, key: Key): WalletSweeper {
+    public actual suspend fun createSweeper(wallet: Wallet, key: Key): WalletSweeper {
         TODO("")
     }
 
-    actual fun registerWalletFor(currency: Currency): Wallet? {
+    public actual fun registerWalletFor(currency: Currency): Wallet? {
         require(network.hasCurrency(currency)) {
             "Currency '${currency.uids}' not found in network '${network.name}'"
         }

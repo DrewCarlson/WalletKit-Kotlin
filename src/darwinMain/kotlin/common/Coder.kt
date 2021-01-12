@@ -5,12 +5,12 @@ import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.usePinned
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-actual class Coder internal constructor(
+public actual class Coder internal constructor(
         internal val core: BRCryptoCoder
 ) : Closeable {
-    actual fun encode(source: ByteArray): String? {
+    public actual fun encode(source: ByteArray): String? {
         val sourceBytes = source.asUByteArray().toCValues()
         val sourceLength = sourceBytes.size.toULong()
         val targetLength = cryptoCoderEncodeLength(core, sourceBytes, sourceLength)
@@ -26,7 +26,7 @@ actual class Coder internal constructor(
         } else null
     }
 
-    actual fun decode(source: String): ByteArray? {
+    public actual fun decode(source: String): ByteArray? {
         val targetLength = cryptoCoderDecodeLength(core, source)
         if (targetLength == 0uL) return null
 
@@ -43,8 +43,8 @@ actual class Coder internal constructor(
         cryptoCoderGive(core)
     }
 
-    actual companion object {
-        actual fun createForAlgorithm(algorithm: CoderAlgorithm): Coder =
+    public actual companion object {
+        public actual fun createForAlgorithm(algorithm: CoderAlgorithm): Coder =
                 when (algorithm) {
                     CoderAlgorithm.HEX -> BRCryptoCoderType.CRYPTO_CODER_HEX
                     CoderAlgorithm.BASE58 -> BRCryptoCoderType.CRYPTO_CODER_BASE58

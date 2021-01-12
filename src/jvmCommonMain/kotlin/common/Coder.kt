@@ -2,9 +2,9 @@ package drewcarlson.walletkit.common
 
 import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoCoder
-import kotlinx.io.core.Closeable
+import drewcarlson.walletkit.Closeable
 
-actual class Coder internal constructor(
+public actual class Coder internal constructor(
         internal val core: BRCryptoCoder
 ) : Closeable {
 
@@ -12,18 +12,18 @@ actual class Coder internal constructor(
         ReferenceCleaner.register(core, ::close)
     }
 
-    actual fun encode(source: ByteArray): String? =
+    public actual fun encode(source: ByteArray): String? =
             core.encode(source).orNull()
 
-    actual fun decode(source: String): ByteArray? =
+    public actual fun decode(source: String): ByteArray? =
             core.decode(source).orNull()
 
     actual override fun close() {
         core.give()
     }
 
-    actual companion object {
-        actual fun createForAlgorithm(algorithm: CoderAlgorithm): Coder =
+    public actual companion object {
+        public actual fun createForAlgorithm(algorithm: CoderAlgorithm): Coder =
                 when (algorithm) {
                     CoderAlgorithm.HEX -> BRCryptoCoder.createHex().orNull()
                     CoderAlgorithm.BASE58 -> BRCryptoCoder.createBase58().orNull()

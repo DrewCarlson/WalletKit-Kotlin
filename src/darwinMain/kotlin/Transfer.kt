@@ -9,9 +9,9 @@ import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKStringFromUtf8
 import kotlinx.cinterop.useContents
 
-actual class Transfer internal constructor(
+public actual class Transfer internal constructor(
         core: BRCryptoTransfer,
-        actual val wallet: Wallet,
+        public actual val wallet: Wallet,
         take: Boolean
 ) {
 
@@ -19,65 +19,65 @@ actual class Transfer internal constructor(
             if (take) checkNotNull(cryptoTransferTake(core))
             else core
 
-    actual val source: Address?
+    public actual val source: Address?
         get() = cryptoTransferGetSourceAddress(core)?.let { coreAddress ->
             Address(coreAddress, false)
         }
 
-    actual val target: Address?
+    public actual val target: Address?
         get() = cryptoTransferGetTargetAddress(core)?.let { coreAddress ->
             Address(coreAddress, false)
         }
 
-    actual val amount: Amount
+    public actual val amount: Amount
         get() = Amount(checkNotNull(cryptoTransferGetAmount(core)), false)
 
-    actual val amountDirected: Amount
+    public actual val amountDirected: Amount
         get() = Amount(checkNotNull(cryptoTransferGetAmountDirected(core)), false)
 
-    actual val fee: Amount
+    public actual val fee: Amount
         get() = checkNotNull(confirmedFeeBasis?.fee ?: estimatedFeeBasis?.fee) {
             "Missed confirmed+estimated feeBasis"
         }
 
-    actual val estimatedFeeBasis: TransferFeeBasis?
+    public actual val estimatedFeeBasis: TransferFeeBasis?
         get() = cryptoTransferGetEstimatedFeeBasis(core)?.let { feeBasis ->
             TransferFeeBasis(feeBasis, false)
         }
 
-    actual val confirmedFeeBasis: TransferFeeBasis?
+    public actual val confirmedFeeBasis: TransferFeeBasis?
         get() = cryptoTransferGetConfirmedFeeBasis(core)?.let { feeBasis ->
             TransferFeeBasis(feeBasis, false)
         }
 
-    actual val direction: TransferDirection
+    public actual val direction: TransferDirection
         get() = when (cryptoTransferGetDirection(core)) {
             CRYPTO_TRANSFER_SENT -> TransferDirection.SENT
             CRYPTO_TRANSFER_RECEIVED -> TransferDirection.RECEIVED
             CRYPTO_TRANSFER_RECOVERED -> TransferDirection.RECOVERED
         }
 
-    actual val hash: TransferHash?
+    public actual val hash: TransferHash?
         get() = cryptoTransferGetHash(core)?.let { coreHash ->
             TransferHash(coreHash, false)
         }
 
     // NOTE: Added for Swift interop to avoid `hash` naming conflict
-    val txHash: TransferHash? get() = hash
+    public val txHash: TransferHash? get() = hash
 
-    actual val unit: CUnit
+    public actual val unit: CUnit
         get() = CUnit(checkNotNull(cryptoTransferGetUnitForAmount(core)), false)
 
-    actual val unitForFee: CUnit
+    public actual val unitForFee: CUnit
         get() = CUnit(checkNotNull(cryptoTransferGetUnitForFee(core)), false)
 
-    actual val confirmation: TransferConfirmation?
+    public actual val confirmation: TransferConfirmation?
         get() = (state as? TransferState.INCLUDED)?.confirmation
 
-    actual val confirmations: ULong?
+    public actual val confirmations: ULong?
         get() = getConfirmationsAt(wallet.manager.network.height)
 
-    actual val state: TransferState
+    public actual val state: TransferState
         get() = cryptoTransferGetState(core).useContents {
             when (type) {
                 CRYPTO_TRANSFER_STATE_CREATED -> TransferState.CREATED
@@ -110,7 +110,7 @@ actual class Transfer internal constructor(
             }
         }
 
-    actual fun getConfirmationsAt(blockHeight: ULong): ULong? {
+    public actual fun getConfirmationsAt(blockHeight: ULong): ULong? {
         return confirmation?.run {
             if (blockHeight >= blockNumber) {
                 1u + blockHeight - blockNumber

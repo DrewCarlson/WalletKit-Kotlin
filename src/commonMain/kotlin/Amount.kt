@@ -1,7 +1,5 @@
 package drewcarlson.walletkit
 
-import kotlinx.io.core.Closeable
-
 
 /**
  * An amount of currency.
@@ -10,8 +8,8 @@ import kotlinx.io.core.Closeable
  * Supports basic arithmetic operations (addition, subtraction, comparison);
  * will assert on !isCompatible for mismatched currency.
  */
-expect class Amount : Comparable<Amount>, Closeable {
-    companion object {
+public expect class Amount : Comparable<Amount>, Closeable {
+    public companion object {
         /** Create [Amount] from [double]. */
         public fun create(double: Double, unit: CUnit): Amount
 

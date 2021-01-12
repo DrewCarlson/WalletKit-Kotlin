@@ -14,12 +14,12 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.ArrayList
 import kotlin.collections.set
 
-actual class System internal constructor(
+public actual class System internal constructor(
         private val dispatcher: CoroutineDispatcher,
         private val listener: SystemListener,
-        actual val account: Account,
+        public actual val account: Account,
         internal actual val isMainnet: Boolean,
-        actual val storagePath: String,
+        public actual val storagePath: String,
         internal actual val query: BdbService,
         private val context: Cookie,
         private val cwmListener: BRCryptoCWMListener,
@@ -35,20 +35,20 @@ actual class System internal constructor(
     private val _walletManagers = hashSetOf<WalletManager>()
     private val _networks = hashSetOf<Network>()
 
-    actual val networks: List<Network>
+    public actual val networks: List<Network>
         get() = _networks.toList()
 
-    actual val walletManagers: List<WalletManager>
+    public actual val walletManagers: List<WalletManager>
         get() = _walletManagers.toList()
 
-    actual val wallets: List<Wallet>
+    public actual val wallets: List<Wallet>
         get() = walletManagers.flatMap(WalletManager::wallets)
 
     init {
         announceSystemEvent(SystemEvent.Created)
     }
 
-    actual fun configure(appCurrencies: List<BdbCurrency>) {
+    public actual fun configure(appCurrencies: List<BdbCurrency>) {
         scope.launch {
             val networks = NetworkDiscovery.discoverNetworks(query, isMainnet, appCurrencies)
                     .onEach { network ->
@@ -63,7 +63,7 @@ actual class System internal constructor(
         }
     }
 
-    actual fun createWalletManager(
+    public actual fun createWalletManager(
             network: Network,
             mode: WalletManagerMode,
             addressScheme: AddressScheme,
@@ -96,7 +96,7 @@ actual class System internal constructor(
         return true
     }
 
-    actual fun wipe(network: Network) {
+    public actual fun wipe(network: Network) {
         val hasManager = walletManagers.any { it.network == network }
 
         if (!hasManager) {
@@ -104,23 +104,23 @@ actual class System internal constructor(
         }
     }
 
-    actual fun connectAll() {
+    public actual fun connectAll() {
         walletManagers.forEach { manager ->
             manager.connect(null)
         }
     }
 
-    actual fun disconnectAll() {
+    public actual fun disconnectAll() {
         walletManagers.forEach { manager ->
             manager.disconnect()
         }
     }
 
-    actual fun subscribe(subscriptionToken: String) {
+    public actual fun subscribe(subscriptionToken: String) {
         TODO("Not implemented")
     }
 
-    actual suspend fun updateNetworkFees(): List<Network> {
+    public actual suspend fun updateNetworkFees(): List<Network> {
         scope.launch {
             val blockchains = try {
                 query.getBlockchains(isMainnet).embedded.blockchains
@@ -157,7 +157,7 @@ actual class System internal constructor(
         return emptyList()
     }
 
-    actual fun setNetworkReachable(isNetworkReachable: Boolean) {
+    public actual fun setNetworkReachable(isNetworkReachable: Boolean) {
         this.isNetworkReachable = isNetworkReachable
         walletManagers.forEach { manager ->
             manager.setNetworkReachable(isNetworkReachable)
@@ -210,9 +210,9 @@ actual class System internal constructor(
         return if (_walletManagers.contains(walletManager)) walletManager else null
     }
 
-    actual companion object {
+    public actual companion object {
 
-        val Cookie.system get() = SYSTEMS_ACTIVE[this]
+        internal val Cookie.system get() = SYSTEMS_ACTIVE[this]
 
         private val SYSTEM_IDS = AtomicInteger(0)
 
@@ -229,7 +229,7 @@ actual class System internal constructor(
                     && storageFile.canWrite())
         }
 
-        actual fun create(
+        public actual fun create(
                 listener: SystemListener,
                 account: Account,
                 isMainnet: Boolean,
@@ -273,7 +273,7 @@ actual class System internal constructor(
             return system
         }
 
-        actual fun asBdbCurrency(
+        public actual fun asBdbCurrency(
                 uids: String,
                 name: String,
                 code: String,
@@ -305,7 +305,7 @@ actual class System internal constructor(
             )
         }
 
-        actual fun wipe(system: System) {
+        public actual fun wipe(system: System) {
             val storagePath = system.storagePath
 
             destroy(system)
@@ -313,7 +313,7 @@ actual class System internal constructor(
             deleteRecursively(storagePath)
         }
 
-        actual fun wipeAll(storagePath: String, exemptSystems: List<System>) {
+        public actual fun wipeAll(storagePath: String, exemptSystems: List<System>) {
             val exemptSystemPath = exemptSystems
                     .map(System::storagePath)
                     .toHashSet()

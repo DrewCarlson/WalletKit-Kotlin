@@ -1,9 +1,9 @@
 package drewcarlson.walletkit
 
 
-data class TransferConfirmation(
-        public val blockNumber: ULong,
-        public val transactionIndex: ULong,
-        public val timestamp: ULong,
-        public val fee: Amount?
+public data class TransferConfirmation(
+        val blockNumber: ULong,
+        val transactionIndex: ULong,
+        val timestamp: ULong,
+        val fee: Amount?
 )
