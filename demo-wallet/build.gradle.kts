@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("org.jetbrains.compose") version "0.3.0-build148"
+    id("org.jetbrains.compose") version "0.3.0-build152"
     application
 }
 

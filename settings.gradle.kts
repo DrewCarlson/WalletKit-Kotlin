@@ -10,7 +10,7 @@ pluginManagement {
 rootProject.name = "walletkit"
 
 include(":cli")
-//include(":demo-wallet")
+include(":demo-wallet")
 /*include(
     ":libs:blake2",
     ":libs:corecrypto",
