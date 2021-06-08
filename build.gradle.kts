@@ -283,19 +283,21 @@ kotlin {
             }
         }
 
-        val iosX64Main by getting {
-            dependsOn(darwinDependenciesMain)
-            kotlin.srcDirs("src/darwinMain")
-            dependencies {
-                implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
+        if (!ideaActive) {
+            val iosX64Main by getting {
+                dependsOn(darwinDependenciesMain)
+                kotlin.srcDirs("src/darwinMain")
+                dependencies {
+                    implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
+                }
             }
-        }
 
-        val iosArm64Main by getting {
-            dependsOn(darwinDependenciesMain)
-            kotlin.srcDirs("src/darwinMain")
-            dependencies {
-                implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
+            val iosArm64Main by getting {
+                dependsOn(darwinDependenciesMain)
+                kotlin.srcDirs("src/darwinMain")
+                dependencies {
+                    implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
+                }
             }
         }
 
