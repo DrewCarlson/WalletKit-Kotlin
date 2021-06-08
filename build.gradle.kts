@@ -1,5 +1,4 @@
 import com.android.build.gradle.LibraryExtension
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     dependencies {
@@ -10,8 +9,6 @@ buildscript {
         mavenCentral()
         jcenter()
         google()
-        maven { setUrl("https://kotlin.bintray.com/kotlinx") }
-        maven { setUrl("https://dl.bintray.com/kotlin/kotlin-eap") }
     }
 }
 
@@ -27,9 +24,6 @@ allprojects {
         mavenCentral()
         google()
         jcenter()
-        maven { setUrl("https://kotlin.bintray.com/kotlinx") }
-        maven { setUrl("https://dl.bintray.com/kotlin/kotlin-eap") }
-        maven { setUrl("https://dl.bintray.com/brd/walletkit-java") }
     }
 }
 
@@ -210,7 +204,7 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                api("drewcarlson.blockset:blockset:$BLOCKSET_VERSION")
+                api("org.drewcarlson:blockset:$BLOCKSET_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$SERIALIZATION_VERSION")
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")
@@ -316,11 +310,6 @@ kotlin {
 }
 
 apply(from = "gradle/native-model.gradle")
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-    kotlinOptions.useIR = true
-}
 
 tasks.create("patchDocs") {
     dependsOn(tasks.dokkaHtml)

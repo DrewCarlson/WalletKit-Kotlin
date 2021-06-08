@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("org.jetbrains.compose") version "0.3.0-build152"
+    id("org.jetbrains.compose") version JB_COMPOSE_VERSION
     application
 }
 
@@ -38,11 +38,16 @@ kotlin {
         withJava()
     }
     iosX64 {
+        compilations.getByName("main") {
+            kotlinOptions {
+                freeCompilerArgs += listOf("-Xallocator=mimalloc")
+            }
+        }
         binaries {
             framework {
                 baseName = "DemoWalletKotlin"
                 export(rootProject)
-                export("drewcarlson.blockset:blockset:$BLOCKSET_VERSION")
+                export("org.drewcarlson:blockset:$BLOCKSET_VERSION")
                 isStatic = true
                 linkerOpts.addAll(listOf("-framework", "Security"))
             }
@@ -60,9 +65,9 @@ kotlin {
             kotlin.srcDir(genSrcFile)
             dependencies {
                 api(rootProject)
-                api("drewcarlson.blockset:blockset:$BLOCKSET_VERSION")
+                api("org.drewcarlson:blockset:$BLOCKSET_VERSION")
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")
-                implementation("drewcarlson.coingecko:coingecko:$COINGECKO_VERSION")
+                implementation("org.drewcarlson:coingecko:$COINGECKO_VERSION")
             }
         }
 
@@ -79,13 +84,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
             }
         }
-    }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        useIR = true
     }
 }
 

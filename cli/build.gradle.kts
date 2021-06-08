@@ -32,6 +32,12 @@ kotlin {
                 linkerOpts.addAll(listOf("-framework", "Security"))
             }
         }
+
+        compilations.getByName("main") {
+            kotlinOptions {
+                freeCompilerArgs += listOf("-Xallocator=mimalloc")
+            }
+        }
     }
 
     sourceSets {
@@ -39,6 +45,7 @@ kotlin {
             languageSettings.apply {
                 useExperimentalAnnotation("kotlinx.cli.ExperimentalCli")
                 useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
+                enableLanguageFeature("InlineClasses")
             }
         }
         val commonMain by getting {

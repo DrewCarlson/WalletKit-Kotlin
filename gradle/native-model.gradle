@@ -146,6 +146,14 @@ model {
                     }
                 }
             }
+            binaries {
+                all {
+                    linker.args.remove("-lc++")
+                }
+                withType(SharedLibraryBinarySpec) {
+                    buildable = false
+                }
+            }
         }
         ed25519(NativeLibrarySpec) {
             if (kotlin.targets.macos.publishable) {
@@ -159,6 +167,11 @@ model {
                         srcDir cppEd25519SrcDir
                         include "*.c"
                     }
+                }
+            }
+            binaries {
+                withType(SharedLibraryBinarySpec) {
+                    buildable = false
                 }
             }
         }
@@ -184,6 +197,9 @@ model {
                 }
                 withType(StaticLibraryBinarySpec) {
                     //buildable = false
+                }
+                withType(SharedLibraryBinarySpec) {
+                    buildable = false
                 }
             }
         }
@@ -211,8 +227,16 @@ model {
                     lib library: "sqlite3", linkage: "static"
                     lib library: "ed25519", linkage: "static"
                     lib library: "blake2", linkage: "static"
+
+                    //linker.withArguments { args ->
+                        linker.args.remove("-lc++")
+                        //linker.args.add("-framework")
+                        //linker.args.add("Security")
+                        linker.args.add("-lresolv")
+                    //}
                 }
                 withType(SharedLibraryBinarySpec) {
+                    buildable = false
                     def os = targetPlatform.operatingSystem.name
                     if (os == "osx" || os == "ios") {
                         linker.args "-framework", "Security"

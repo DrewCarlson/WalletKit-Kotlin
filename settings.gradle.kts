@@ -2,12 +2,11 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        maven { setUrl("https://dl.bintray.com/kotlin/kotlin-eap") }
-        maven { setUrl("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+        maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
-rootProject.name = "walletkit"
+rootProject.name = "WalletKit-Kotlin"
 
 include(":cli")
 include(":demo-wallet")
@@ -18,4 +17,12 @@ include(":demo-wallet")
     ":libs:sqlite3"
 )*/
 
-enableFeaturePreview("GRADLE_METADATA")
+includeBuild("walletkit/WalletKitJava") {
+    dependencySubstitution {
+        substitute(module("com.breadwallet.core:corenative-android"))
+                .with(project(":corenative-android"))
+        substitute(module("com.breadwallet.core:corenative-jre"))
+                .with(project(":corenative-jre"))
+    }
+}
+
