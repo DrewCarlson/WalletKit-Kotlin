@@ -15,7 +15,6 @@ internal fun walletEventHandler(
         cw: BRCryptoWallet?,
         eventCval: CValue<BRCryptoWalletEvent>
 ) {
-    initRuntimeIfNeeded()
     try {
         memScoped {
             checkNotNull(ctx)

@@ -8,18 +8,16 @@ import kotlinx.cinterop.*
 internal fun walletManagerEventHandler(
         ctx: BRCryptoCWMListenerContext?,
         cwm: BRCryptoWalletManager?,
-        eventCval: COpaquePointer /* TODO: Crash when using CValue<BRCryptoWalletManagerEvent> */
+        eventPtr: CValue<BRCryptoWalletManagerEvent>
 ) {
-    initRuntimeIfNeeded()
     try {
         checkNotNull(ctx)
         checkNotNull(cwm)
         memScoped {
             defer { cryptoWalletManagerGive(cwm) }
 
+            val event = eventPtr.ptr.pointed
             val system: System = ctx.system
-            return@memScoped
-            val event = eventCval.reinterpret<BRCryptoWalletManagerEvent>().pointed// TODO: .ptr.pointed
             val walletManager = system.createWalletManager(cwm)
             println("CWM: ${cryptoWalletManagerEventTypeString(event.type)?.toKStringFromUtf8()}")
 

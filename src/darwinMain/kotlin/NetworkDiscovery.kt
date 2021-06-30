@@ -81,8 +81,8 @@ internal object NetworkDiscovery2 {
                         currency.address
                 )
 
-                val baseDenomination = currency.denominations.singleOrNull { it.decimals == 0 }
-                val nonBaseDenomination = currency.denominations.filter { it.decimals != 0 }
+                val baseDenomination = currency.denominations.singleOrNull { it.decimals == 0u }
+                val nonBaseDenomination = currency.denominations.filter { it.decimals != 0u }
 
                 val baseUnit = if (baseDenomination != null) {
                     currencyDenominationToBaseUnit(libCurrency, baseDenomination)

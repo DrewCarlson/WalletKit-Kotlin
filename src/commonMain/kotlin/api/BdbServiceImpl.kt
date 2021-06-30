@@ -17,6 +17,7 @@ private const val DEFAULT_API_BASE_URL = "api.breadwallet.com"
 private val json = Json {
     isLenient = true
     ignoreUnknownKeys = true
+    useAlternativeNames = false
 }
 
 // TODO: Reuse for eth query
@@ -34,7 +35,7 @@ internal class BdbServiceImpl internal constructor(
         defaultRequest {
             host = apiBaseURL
             url.protocol = URLProtocol.HTTPS
-            headers.remove("Authorization")
+            //headers.remove("Authorization")
         }
     }
 

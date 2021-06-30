@@ -55,7 +55,7 @@ internal object NetworkDiscovery {
                 return@forEach
             }
 
-            network.height = blockchain.blockHeight.toULong()
+            network.height = blockchain.blockHeight
 
             val applicationCurrencies = appCurrencies.filter { it.blockchainId == blockchainId }
 
@@ -81,8 +81,8 @@ internal object NetworkDiscovery {
                         currency.address
                 )
 
-                val baseDenomination = currency.denominations.singleOrNull { it.decimals == 0 }
-                val nonBaseDenomination = currency.denominations.filter { it.decimals != 0 }
+                val baseDenomination = currency.denominations.singleOrNull { it.decimals == 0u }
+                val nonBaseDenomination = currency.denominations.filter { it.decimals != 0u }
 
                 val baseUnit = if (baseDenomination != null) {
                     currencyDenominationToBaseUnit(libCurrency, baseDenomination)
@@ -105,7 +105,7 @@ internal object NetworkDiscovery {
             val fees = blockchain.feeEstimates.mapNotNull { estimate ->
                 Amount.create(estimate.fee.value, feeUnit, false)
                         ?.let { amount ->
-                            NetworkFee(estimate.confirmationTimeInMilliseconds.toULong(), amount)
+                            NetworkFee(estimate.confirmationTimeInMilliseconds, amount)
                         }
             }
 
@@ -153,7 +153,7 @@ internal object NetworkDiscovery {
                     denomination.name,
                     denomination.getSymbolSafe(),
                     base,
-                    denomination.decimals.toUInt()
+                    denomination.decimals
             )
         }
     }

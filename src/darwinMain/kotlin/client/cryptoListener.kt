@@ -9,7 +9,7 @@ internal fun createCryptoListener(
         c: BRCryptoCWMListenerContext
 ) = nativeHeap.alloc<BRCryptoCWMListener> {
     context = c
-    walletManagerEventCallback = staticCFunction(::walletManagerEventHandler).reinterpret()
+    walletManagerEventCallback = staticCFunction(::walletManagerEventHandler)
     walletEventCallback = staticCFunction(::walletEventHandler)
     transferEventCallback = staticCFunction(::transferEventHandler)
 }

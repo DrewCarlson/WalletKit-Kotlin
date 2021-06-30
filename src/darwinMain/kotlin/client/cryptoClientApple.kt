@@ -28,7 +28,7 @@ internal fun createCryptoClient(
                     cwmAnnounceGetBlockNumberSuccessAsInteger(
                             cwm,
                             sid,
-                            chain.blockHeight.toULong(),
+                            chain.blockHeight,
                             chain.verifiedBlockHash
                     )
                 } catch (e: Exception) {
@@ -58,7 +58,7 @@ internal fun createCryptoClient(
                                 system.query.getTransactions(
                                         manager.network.uids,
                                         chunk,
-                                        if (begBlockNumber == BLOCK_HEIGHT_UNBOUND_VALUE) null else begBlockNumber,
+                                        if (begBlockNumber == BLOCK_HEIGHT_UNBOUND_VALUE) 0u else begBlockNumber,
                                         if (endBlockNumber == BLOCK_HEIGHT_UNBOUND_VALUE) null else endBlockNumber,
                                         includeRaw = true,
                                         includeProof = false
@@ -95,7 +95,7 @@ internal fun createCryptoClient(
                                     system.query.getTransactions(
                                             manager.network.uids,
                                             chunk,
-                                            if (begBlockNumber == BLOCK_HEIGHT_UNBOUND_VALUE) null else begBlockNumber,
+                                            if (begBlockNumber == BLOCK_HEIGHT_UNBOUND_VALUE) 0u else begBlockNumber,
                                             if (endBlockNumber == BLOCK_HEIGHT_UNBOUND_VALUE) null else endBlockNumber,
                                             includeRaw = true,
                                             includeProof = false
@@ -107,7 +107,7 @@ internal fun createCryptoClient(
                                     val blockTimestamp = bdbTx.timestamp?.run(fmt::dateFromString)
                                             ?.timeIntervalSince1970
                                             ?.toLong() ?: 0L
-                                    val blockHeight = bdbTx.blockHeight ?: 0L
+                                    val blockHeight = bdbTx.blockHeight ?: 0uL
                                     val blockConfirmations = bdbTx.confirmations ?: 0L
                                     val blockTransactionIndex = bdbTx.index ?: 0
                                     val blockHash = bdbTx.blockHash
@@ -131,7 +131,7 @@ internal fun createCryptoClient(
                                                 transfer.amount.currencyId,
                                                 fee,
                                                 blockTimestamp.toULong(),
-                                                blockHeight.toULong(),
+                                                blockHeight,
                                                 blockHash,
                                                 transfer.meta.size.toULong(),
                                                 metaKeysPtr,
@@ -193,7 +193,7 @@ private fun processTransactions(
                     ?.timeIntervalSince1970
                     ?.toLong()
                     ?: 0L
-            val height = bdbTx.blockHeight ?: 0L
+            val height = bdbTx.blockHeight ?: 0uL
             val status = when (bdbTx.status) {
                 "confirmed" -> CRYPTO_TRANSFER_STATE_INCLUDED
                 "submitted", "reverted" -> CRYPTO_TRANSFER_STATE_SUBMITTED
@@ -207,7 +207,7 @@ private fun processTransactions(
                         rawTxData.refTo(0),
                         rawTxData.size.toULong(),
                         timestamp.toULong(),
-                        height.toULong()
+                        height
                 )
             }
         }

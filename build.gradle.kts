@@ -9,6 +9,7 @@ buildscript {
         mavenCentral()
         jcenter()
         google()
+        maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
     }
 }
 
@@ -24,6 +25,7 @@ allprojects {
         mavenCentral()
         google()
         jcenter()
+        maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
     }
 }
 

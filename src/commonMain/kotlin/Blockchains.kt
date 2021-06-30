@@ -18,13 +18,13 @@ internal object Blockchains {
                 BdbCurrency.Denomination(
                         name = "$name Token INT",
                         code = "${codeLowerCase}i",
-                        decimals = 0,
+                        decimals = 0u,
                         symbol = "${codeLowerCase}i"
                 ),
                 BdbCurrency.Denomination(
                         name = "$name Token",
                         code = codeLowerCase,
-                        decimals = decimals.toInt(),
+                        decimals = decimals,
                         symbol = codeLowerCase
                 )
         )

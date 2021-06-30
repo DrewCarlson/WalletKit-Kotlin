@@ -13,7 +13,6 @@ internal fun transferEventHandler(
         ct: BRCryptoTransfer?,
         eventCval: CValue<BRCryptoTransferEvent>
 ) {
-    initRuntimeIfNeeded()
     try {
         memScoped {
             checkNotNull(ctx)
