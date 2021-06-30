@@ -121,8 +121,8 @@ internal object NetworkDiscovery {
     }
 
     private fun currencyToDefaultBaseUnit(currency: Currency): CUnit {
-        val symb: String = currency.code.toLowerCase() + "i"
-        val name: String = currency.code.toUpperCase() + "_INTEGER"
+        val symb: String = currency.code.lowercase() + "i"
+        val name: String = currency.code.uppercase() + "_INTEGER"
         val uids = "${currency.uids}:$name"
         return CUnit.create(currency, uids, name, symb)
     }

@@ -80,6 +80,6 @@ internal class BdbServiceImpl internal constructor(
         }
 
     private fun getNetworkName(networkName: String): String? {
-        return if (networkName.toLowerCase() == "testnet") "ropsten" else networkName
+        return if (networkName.lowercase() == "testnet") "ropsten" else networkName
     }
 }

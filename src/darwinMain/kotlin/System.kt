@@ -276,10 +276,10 @@ public actual class System(
             val index = uids.indexOf(':')
             if (index == -1) return null
 
-            val typeLowerCase = type.toLowerCase()
+            val typeLowerCase = type.lowercase()
             if ("erc20" != type && "native" != type) return null
 
-            val codeLowerCase = code.toLowerCase()
+            val codeLowerCase = code.lowercase()
             val blockchainId = uids.substring(0, index)
             val address = uids.substring(index)
 

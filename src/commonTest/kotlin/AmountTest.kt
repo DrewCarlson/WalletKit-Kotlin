@@ -264,7 +264,7 @@ class AmountTest {
 
         assertEquals("1000000000000000000", Amount.create("1", unitEther, false)?.asString(10, ""))
         // String (1000000000000000000, radix:16, uppercase: true) -> DE0B6B3A7640000
-        assertEquals("0xDE0B6B3A7640000".toLowerCase(), Amount.create("1", unitEther, false)?.asString(16, "0x"))
+        assertEquals("0xDE0B6B3A7640000".lowercase(), Amount.create("1", unitEther, false)?.asString(16, "0x"))
 
         val a6 = Amount.create("123000000000000000000.0", unitWei, false)
         assertNotNull(a6)

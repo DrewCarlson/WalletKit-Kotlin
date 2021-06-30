@@ -87,9 +87,9 @@ public actual class Network internal constructor(
             currencies.firstOrNull { it.code == code }
 
     public actual fun currencyByIssuer(issuer: String): Currency? {
-        val issuerLowerCase = issuer.toLowerCase()
+        val issuerLowerCase = issuer.lowercase()
         return currencies.firstOrNull { currency ->
-            currency.issuer?.toLowerCase() == issuerLowerCase
+            currency.issuer?.lowercase() == issuerLowerCase
         }
     }
 

@@ -26,8 +26,8 @@ val installTestConfig by tasks.creating {
                 "BDB_CLIENT_TOKEN must be set for tests to run."
             }
             configFile.writeText(buildString {
-                appendln("package demo")
-                appendln("const val BDB_CLIENT_TOKEN = \"$bdbClientToken\"")
+                appendLine("package demo")
+                appendLine("const val BDB_CLIENT_TOKEN = \"$bdbClientToken\"")
             })
         }
     }

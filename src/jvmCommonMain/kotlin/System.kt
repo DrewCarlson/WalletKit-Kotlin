@@ -287,10 +287,10 @@ public actual class System internal constructor(
             val index = uids.indexOf(':')
             if (index == -1) return null
 
-            val typeLowerCase = type.toLowerCase(Locale.ROOT)
+            val typeLowerCase = type.lowercase()
             if ("erc20" != type && "native" != type) return null
 
-            val codeLowerCase = code.toLowerCase(Locale.ROOT)
+            val codeLowerCase = code.lowercase()
             val blockchainId = uids.substring(0, index)
             val address = uids.substring(index)
 

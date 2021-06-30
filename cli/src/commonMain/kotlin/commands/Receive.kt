@@ -19,7 +19,7 @@ class Receive(
     private val timestamp by optTimestamp()
     private val addressScheme by option(
         ArgType.Choice<AddressScheme> {
-            it.toString().replace(" ", "").toLowerCase()
+            it.toString().replace(" ", "").lowercase()
         },
         fullName = "address-scheme",
         shortName = "as",

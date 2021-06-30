@@ -12,8 +12,8 @@ internal object Blockchains {
             code: String,
             decimals: UInt
     ): List<BdbCurrency.Denomination> {
-        val name = code.toUpperCase()
-        val codeLowerCase = code.toLowerCase()
+        val name = code.uppercase()
+        val codeLowerCase = code.lowercase()
         return listOf(
                 BdbCurrency.Denomination(
                         name = "$name Token INT",
