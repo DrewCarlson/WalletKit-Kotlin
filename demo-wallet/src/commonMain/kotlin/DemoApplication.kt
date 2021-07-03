@@ -1,21 +1,8 @@
 package demo
 
 import drewcarlson.blockset.BdbService
-import drewcarlson.walletkit.Account
-import drewcarlson.walletkit.AddressScheme
-import drewcarlson.walletkit.Network
-import drewcarlson.walletkit.NetworkEvent
-import drewcarlson.walletkit.System
-import drewcarlson.walletkit.SystemListener
-import drewcarlson.walletkit.Wallet
-import drewcarlson.walletkit.WalletEvent
-import drewcarlson.walletkit.WalletListener
-import drewcarlson.walletkit.WalletManager
-import drewcarlson.walletkit.WalletManagerEvent
-import drewcarlson.walletkit.WalletManagerMode
-import drewcarlson.walletkit.WalletManagerState
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import drewcarlson.walletkit.*
+import kotlinx.coroutines.*
 
 const val PHRASE = "under chief october surface cause ivory visa wreck fall caution taxi genius"
 const val DEFAULT_CURRENCY_ID = "bitcoin-testnet:__native__"
@@ -33,8 +20,10 @@ expect fun deleteData()
 
 class DemoApplication {
 
+    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
     fun start(walletListener: WalletListener) {
-        GlobalScope.launch {
+        scope.launch {
             val account = Account.createFromPhrase(PHRASE.encodeToByteArray(), 0, uids)
             val system = System.create(
                 createSystemListener(
@@ -48,7 +37,12 @@ class DemoApplication {
             )
 
             system.configure(emptyList())
+            system.resume()
         }
+    }
+
+    fun stop() {
+        scope.cancel()
     }
 }
 
@@ -57,11 +51,17 @@ private fun createSystemListener(
     walletListener: WalletListener
 ) = object : SystemListener {
 
+    override fun handleSystemEvent(system: System, event: SystemEvent) {
+        println(event)
+    }
+
     override fun handleWalletEvent(system: System, manager: WalletManager, wallet: Wallet, event: WalletEvent) {
+        println(event)
         walletListener.handleWalletEvent(system, manager, wallet, event)
     }
 
     override fun handleNetworkEvent(system: System, network: Network, event: NetworkEvent) {
+        println(event)
         if (event is NetworkEvent.Created && network.currency.uids == currencyId) {
             printlnMagenta("${network.currency.name} Network Created")
 
@@ -73,6 +73,7 @@ private fun createSystemListener(
     }
 
     override fun handleManagerEvent(system: System, manager: WalletManager, event: WalletManagerEvent) {
+        println(event)
         when (event) {
             WalletManagerEvent.Created -> {
                 printlnMagenta("${manager.currency.name} Manager Created")
@@ -85,7 +86,7 @@ private fun createSystemListener(
             is WalletManagerEvent.SyncStopped -> {
                 printlnMagenta("${manager.currency.name} Sync ${event.reason}")
                 printlnGreen(manager.primaryWallet.balance)
-                system.disconnectAll()
+                system.pause()
             }
             is WalletManagerEvent.Changed -> {
                 if (event.newState is WalletManagerState.DISCONNECTED) {
@@ -95,6 +96,16 @@ private fun createSystemListener(
             }
             else -> Unit // Ignore other events
         }
+    }
+
+    override fun handleTransferEvent(
+        system: System,
+        manager: WalletManager,
+        wallet: Wallet,
+        transfer: Transfer,
+        event: TransferEvent
+    ) {
+        println(event)
     }
 }
 

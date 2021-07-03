@@ -1,16 +1,9 @@
 import org.jetbrains.compose.compose
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("org.jetbrains.compose") version JB_COMPOSE_VERSION
-    application
-}
-
-repositories {
-    mavenCentral()
-    maven { setUrl("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+    id("org.jetbrains.compose")
 }
 
 val genSrcFile = file("build/generated/constants")
@@ -35,9 +28,11 @@ val installTestConfig by tasks.creating {
 
 kotlin {
     jvm {
-        withJava()
+        compilations.all {
+            kotlinOptions.jvmTarget = "11"
+        }
     }
-    iosX64 {
+    ios {
         compilations.getByName("main") {
             kotlinOptions {
                 freeCompilerArgs += listOf("-Xallocator=mimalloc")
@@ -46,7 +41,7 @@ kotlin {
         binaries {
             framework {
                 baseName = "DemoWalletKotlin"
-                export(rootProject)
+                export(project(":library"))
                 export("org.drewcarlson:blockset:$BLOCKSET_VERSION")
                 isStatic = true
                 linkerOpts.addAll(listOf("-framework", "Security"))
@@ -61,25 +56,23 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting {
+        named("commonMain") {
             kotlin.srcDir(genSrcFile)
             dependencies {
-                api(rootProject)
+                api(project(":library"))
                 api("org.drewcarlson:blockset:$BLOCKSET_VERSION")
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")
-                implementation("org.drewcarlson:coingecko:$COINGECKO_VERSION")
             }
         }
 
-        val jvmMain by getting {
+        named("jvmMain") {
             dependencies {
                 implementation(compose.desktop.currentOs)
-                //implementation(compose.materialIconsExtended)
                 implementation("io.ktor:ktor-client-okhttp:$KTOR_VERSION")
             }
         }
 
-        val iosX64Main by getting {
+        named("iosMain") {
             dependencies {
                 implementation("io.ktor:ktor-client-ios:$KTOR_VERSION")
             }
@@ -87,6 +80,8 @@ kotlin {
     }
 }
 
-application {
-    mainClassName = "demo.MainKt"
+compose.desktop {
+    application {
+        mainClass = "demo.MainKt"
+    }
 }

@@ -6,10 +6,6 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-repositories {
-    maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-}
-
 kotlin {
     jvm {
         withJava()
@@ -44,13 +40,12 @@ kotlin {
         all {
             languageSettings.apply {
                 useExperimentalAnnotation("kotlinx.cli.ExperimentalCli")
-                useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
                 enableLanguageFeature("InlineClasses")
             }
         }
-        val commonMain by getting {
+        named("commonMain") {
             dependencies {
-                implementation(rootProject)
+                implementation(project(":library"))
                 implementation("org.jetbrains.kotlinx:kotlinx-cli:$KOTLIN_CLI_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")
@@ -59,15 +54,14 @@ kotlin {
             }
         }
 
-        val macosMain by getting {
+        named("macosMain") {
             dependencies {
                 implementation("io.ktor:ktor-client-curl:$KTOR_VERSION")
             }
         }
 
-        val jvmMain by getting {
+        named("jvmMain") {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$KOTLIN_VERSION")
                 implementation("io.ktor:ktor-client-okhttp:$KTOR_VERSION")
             }
         }
@@ -77,7 +71,6 @@ kotlin {
 tasks.withType(KotlinCompile::class) {
     kotlinOptions {
         jvmTarget = "1.8"
-        useIR = true
     }
 }
 

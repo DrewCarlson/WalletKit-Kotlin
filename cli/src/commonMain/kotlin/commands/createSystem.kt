@@ -85,7 +85,7 @@ open class BaseListener(
                 scope.launch {
                     onSyncComplete(system, manager)
                     if (autoQuit) {
-                        system.disconnectAll()
+                        system.pause()
                     }
                 }
             }

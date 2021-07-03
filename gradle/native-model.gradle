@@ -42,7 +42,7 @@ if (clangBin.length() > 0) {
     clangPath = clangBin.substring(0, clangBin.lastIndexOf("/"))
 }
 
-def corePath = file("walletkit/WalletKitCore").absolutePath
+def corePath = rootProject.file("walletkit/WalletKitCore").absolutePath
 
 def cppSqliteSrcDir = "$corePath/vendor/sqlite3"
 def cppEd25519SrcDir = "$corePath/vendor/ed25519"
@@ -199,7 +199,7 @@ model {
                     //buildable = false
                 }
                 withType(SharedLibraryBinarySpec) {
-                    buildable = false
+                    //buildable = false
                 }
             }
         }
@@ -236,7 +236,7 @@ model {
                     //}
                 }
                 withType(SharedLibraryBinarySpec) {
-                    buildable = false
+                    //buildable = false
                     def os = targetPlatform.operatingSystem.name
                     if (os == "osx" || os == "ios") {
                         linker.args "-framework", "Security"

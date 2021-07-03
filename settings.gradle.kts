@@ -2,13 +2,14 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
     }
 }
 
 rootProject.name = "WalletKit-Kotlin"
 
+include(":library")
 include(":cli")
 include(":demo-wallet")
 /*include(
@@ -20,10 +21,10 @@ include(":demo-wallet")
 
 includeBuild("walletkit/WalletKitJava") {
     dependencySubstitution {
-        substitute(module("com.breadwallet.core:corenative-android"))
-                .with(project(":corenative-android"))
+//        substitute(module("com.breadwallet.core:corenative-android"))
+//            .using(project(":corenative-android"))
         substitute(module("com.breadwallet.core:corenative-jre"))
-                .with(project(":corenative-jre"))
+            .using(project(":corenative-jre"))
     }
 }
 
