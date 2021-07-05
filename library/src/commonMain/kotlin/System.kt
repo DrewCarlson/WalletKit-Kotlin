@@ -28,11 +28,8 @@ public expect class System {
      * establish the available networks (aka blockchains) and their currencies.  For each
      * `Network` there will be `SystemEvent` which can be used by the App to create a
      * `WalletManager`.
-     *
-     * @param appCurrencies If the BlockChainDB does not return any currencies, then
-     * use `applicationCurrencies` merged into the defaults.
      */
-    public fun configure(appCurrencies: List<BdbCurrency>)
+    public fun configure()
 
     /**
      * Create a wallet manager for `network` using `mode.
@@ -99,6 +96,8 @@ public expect class System {
      */
     @Throws(FeeEstimationError::class, CancellationException::class)
     public suspend fun updateNetworkFees(): List<Network>
+
+    public suspend fun updateCurrencies()
 
     /**
      * Set the network reachable flag for all managers.

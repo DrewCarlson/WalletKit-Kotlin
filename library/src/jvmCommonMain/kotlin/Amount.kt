@@ -11,13 +11,13 @@ public actual class Amount internal constructor(
         internal val core: BRCryptoAmount
 ) : Comparable<Amount>, Closeable {
     public actual companion object {
-        public actual fun create(double: Double, unit: CUnit): Amount =
+        public actual fun create(double: Double, unit: WKUnit): Amount =
                 Amount(BRCryptoAmount.create(double, unit.core))
 
-        public actual fun create(long: Long, unit: CUnit): Amount =
+        public actual fun create(long: Long, unit: WKUnit): Amount =
                 Amount(BRCryptoAmount.create(long, unit.core))
 
-        public actual fun create(string: String, unit: CUnit, isNegative: Boolean): Amount? =
+        public actual fun create(string: String, unit: WKUnit, isNegative: Boolean): Amount? =
                 BRCryptoAmount.create(string, isNegative, unit.core).orNull()?.run(::Amount)
     }
 
@@ -25,8 +25,8 @@ public actual class Amount internal constructor(
         ReferenceCleaner.register(core, ::close)
     }
 
-    public actual val unit: CUnit
-        get() = CUnit(core.unit)
+    public actual val unit: WKUnit
+        get() = WKUnit(core.unit)
     public actual val currency: Currency
         get() = Currency(core.currency)
     public actual val isNegative: Boolean
@@ -36,10 +36,10 @@ public actual class Amount internal constructor(
     public actual val isZero: Boolean
         get() = core.isZero
 
-    public actual fun asDouble(unit: CUnit): Double? =
+    public actual fun asDouble(unit: WKUnit): Double? =
             core.getDouble(unit.core).orNull()
 
-    public actual fun asString(unit: CUnit): String? {
+    public actual fun asString(unit: WKUnit): String? {
         val amountDouble = asDouble(unit) ?: return null
         return formatterWithUnit(unit).format(amountDouble)
     }
@@ -56,7 +56,7 @@ public actual class Amount internal constructor(
     public actual operator fun minus(that: Amount): Amount =
             Amount(checkNotNull(core.sub(that.core).orNull()))
 
-    public actual fun convert(unit: CUnit): Amount? =
+    public actual fun convert(unit: WKUnit): Amount? =
             core.convert(unit.core).orNull()?.run(::Amount)
 
     public actual fun isCompatible(amount: Amount): Boolean =
@@ -85,7 +85,7 @@ public actual class Amount internal constructor(
                 else -> error("Failed crypto compare")
             }
 
-    private fun formatterWithUnit(unit: CUnit): DecimalFormat =
+    private fun formatterWithUnit(unit: WKUnit): DecimalFormat =
             (DecimalFormat.getCurrencyInstance().clone() as DecimalFormat).apply {
                 val decimals: Int = unit.decimals.toInt()
                 maximumFractionDigits = decimals

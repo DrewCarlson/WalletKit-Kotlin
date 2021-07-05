@@ -1,6 +1,7 @@
 package drewcarlson.walletkit
 
 import brcrypto.*
+import kotlin.native.concurrent.*
 
 public actual class NetworkFee(
         core: BRCryptoNetworkFee,
@@ -27,6 +28,10 @@ public actual class NetworkFee(
             cryptoNetworkFeeGetConfirmationTimeInMilliseconds(core)
     internal actual val pricePerCostFactor: Amount =
             Amount(checkNotNull(cryptoNetworkFeeGetPricePerCostFactor(core)), false)
+
+    init {
+        freeze()
+    }
 
     actual override fun hashCode(): Int = core.hashCode()
     actual override fun equals(other: Any?): Boolean =

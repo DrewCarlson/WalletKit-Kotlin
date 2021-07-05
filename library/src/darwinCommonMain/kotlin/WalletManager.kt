@@ -2,31 +2,30 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import brcrypto.BRCryptoSyncDepth.*
-import brcrypto.BRCryptoWalletManagerDisconnectReasonType.*
-import brcrypto.BRCryptoWalletManagerStateType.*
 import drewcarlson.walletkit.WalletManagerState.*
 import drewcarlson.walletkit.WalletManagerSyncDepth.*
-import drewcarlson.walletkit.common.Key
+import drewcarlson.walletkit.common.*
 import kotlinx.cinterop.*
-import kotlinx.coroutines.CoroutineScope
-import platform.posix.size_tVar
+import kotlinx.coroutines.*
+import platform.posix.*
+import kotlin.native.concurrent.*
 
 public actual class WalletManager internal constructor(
-        core: BRCryptoWalletManager,
-        public actual val system: System,
-        private val scope: CoroutineScope,
-        take: Boolean
+    core: BRCryptoWalletManager,
+    public actual val system: System,
+    private val scope: CoroutineScope,
+    take: Boolean
 ) {
 
     internal val core: BRCryptoWalletManager =
-            if (take) checkNotNull(cryptoWalletManagerTake(core))
-            else core
+        if (take) checkNotNull(cryptoWalletManagerTake(core))
+        else core
 
     public actual val network: Network
 
     public actual val account: Account
 
-    internal actual val unit: CUnit
+    internal actual val unit: WKUnit
 
     public actual val path: String
 
@@ -51,6 +50,7 @@ public actual class WalletManager internal constructor(
         path = checkNotNull(cryptoWalletManagerGetPath(core)).toKStringFromUtf8()
 
         defaultNetworkFee = network.minimumFee
+        freeze()
     }
 
     public actual var mode: WalletManagerMode
@@ -63,32 +63,24 @@ public actual class WalletManager internal constructor(
         }
 
     public actual val state: WalletManagerState
-        get() = cryptoWalletManagerGetState(core).useContents {
-            when (type) {
-                CRYPTO_WALLET_MANAGER_STATE_CONNECTED -> CONNECTED
-                CRYPTO_WALLET_MANAGER_STATE_CREATED -> CREATED
-                CRYPTO_WALLET_MANAGER_STATE_SYNCING -> SYNCING
-                CRYPTO_WALLET_MANAGER_STATE_DELETED -> DELETED
-                CRYPTO_WALLET_MANAGER_STATE_DISCONNECTED ->
-                    DISCONNECTED(u.disconnected.reason.asApiReason())
-            }
+        get() = cryptoWalletManagerGetState(core).useContents { asApiState() }
+
+    internal actual val height: ULong
+        get() = network.height
+
+    public actual val wallet: Wallet
+        get() {
+            val coreWallet = cryptoWalletManagerGetWallet(core)
+            return Wallet(checkNotNull(coreWallet), this, scope, false)
         }
-
-    internal actual val height: ULong = network.height
-
-    public actual val primaryWallet: Wallet by lazy {
-        val coreWallet = cryptoWalletManagerGetWallet(core)
-        Wallet(checkNotNull(coreWallet), this, scope, false)
-    }
 
     public actual val wallets: List<Wallet>
         get() = memScoped {
             val count = alloc<size_tVar>()
-            val coreWallets = cryptoWalletManagerGetWallets(core, count.ptr)?.also { pointer ->
-                defer { cryptoMemoryFree(pointer) }
-            }
+            val coreWallets = checkNotNull(cryptoWalletManagerGetWallets(core, count.ptr))
+            defer { cryptoMemoryFree(coreWallets) }
             List(count.value.toInt()) { i ->
-                Wallet(checkNotNull(coreWallets!![i]), this@WalletManager, scope, false)
+                Wallet(checkNotNull(coreWallets[i]), this@WalletManager, scope, false)
             }
         }
 
@@ -98,10 +90,10 @@ public actual class WalletManager internal constructor(
     public actual val name: String
         get() = currency.code
 
-    public actual val baseUnit: CUnit
+    public actual val baseUnit: WKUnit
         get() = checkNotNull(network.baseUnitFor(network.currency))
 
-    public actual val defaultUnit: CUnit
+    public actual val defaultUnit: WKUnit
         get() = checkNotNull(network.defaultUnitFor(network.currency))
 
     public actual val isActive: Boolean
@@ -129,11 +121,13 @@ public actual class WalletManager internal constructor(
     }
 
     public actual fun syncToDepth(depth: WalletManagerSyncDepth) {
-        cryptoWalletManagerSyncToDepth(core, when (depth) {
-            FROM_CREATION -> CRYPTO_SYNC_DEPTH_FROM_CREATION
-            FROM_LAST_CONFIRMED_SEND -> CRYPTO_SYNC_DEPTH_FROM_LAST_CONFIRMED_SEND
-            FROM_LAST_TRUSTED_BLOCK -> CRYPTO_SYNC_DEPTH_FROM_LAST_TRUSTED_BLOCK
-        })
+        cryptoWalletManagerSyncToDepth(
+            core, when (depth) {
+                FROM_CREATION -> CRYPTO_SYNC_DEPTH_FROM_CREATION
+                FROM_LAST_CONFIRMED_SEND -> CRYPTO_SYNC_DEPTH_FROM_LAST_CONFIRMED_SEND
+                FROM_LAST_TRUSTED_BLOCK -> CRYPTO_SYNC_DEPTH_FROM_LAST_TRUSTED_BLOCK
+            }
+        )
     }
 
     public actual fun submit(transfer: Transfer, phraseUtf8: ByteArray) {

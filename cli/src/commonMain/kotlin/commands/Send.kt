@@ -34,7 +34,7 @@ class Send(val bdbToken: String) : Subcommand(
             bdbToken = bdbToken,
             isMainnet = mainnet,
             listener = SendSystemListener(currencyId) { _, manager ->
-                val wallet = manager.primaryWallet
+                val wallet = manager.wallet
                 val txAmount = Amount.create(amount, wallet.unit)
                 val address = checkNotNull(manager.network.addressFor(target)) {
                     "Invalid target address"

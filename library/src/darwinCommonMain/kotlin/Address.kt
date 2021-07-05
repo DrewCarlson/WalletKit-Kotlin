@@ -2,6 +2,7 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
+import kotlin.native.concurrent.*
 
 public actual class Address(
         core: BRCryptoAddress,
@@ -11,6 +12,10 @@ public actual class Address(
     internal val core: BRCryptoAddress =
             if (take) checkNotNull(cryptoAddressTake(core))
             else core
+
+    init {
+        freeze()
+    }
 
     actual override fun equals(other: Any?): Boolean =
             other is Address && CRYPTO_TRUE == cryptoAddressIsIdentical(core, other.core)

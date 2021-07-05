@@ -5,6 +5,7 @@ import drewcarlson.walletkit.Secret
 import kotlinx.atomicfu.atomic
 import kotlinx.cinterop.*
 import drewcarlson.walletkit.Closeable
+import kotlin.native.concurrent.*
 
 public actual class Key internal constructor(
         core: BRCryptoKey,
@@ -21,6 +22,10 @@ public actual class Key internal constructor(
             checkNotNull(cryptoKeyCreateFromSecret(secret.readValue())),
             false
     )
+
+    init {
+        freeze()
+    }
 
     public actual val hasSecret: Boolean
         get() = CRYPTO_TRUE == cryptoKeyHasSecret(core).toUInt()

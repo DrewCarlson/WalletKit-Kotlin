@@ -16,8 +16,7 @@ public enum class AddressScheme(
 
     BTCLegacy(0u, "BTC Legacy"),
     BTCSegwit(1u, "BTC Segwit"),
-    ETHDefault(2u, "ETH Default"),
-    GENDefault(3u, "GEN Default");
+    Native(2u, "Native");
 
     override fun toString(): String = label
 
@@ -25,8 +24,7 @@ public enum class AddressScheme(
         public fun fromCoreInt(core: UInt): AddressScheme = when (core) {
             0u -> BTCLegacy
             1u -> BTCSegwit
-            2u -> ETHDefault
-            3u -> GENDefault
+            2u -> Native
             else -> error("Unknown core AddressScheme value ($core)")
         }
     }

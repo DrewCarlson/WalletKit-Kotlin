@@ -76,19 +76,19 @@ public expect class Network : Closeable {
 
     public fun hasCurrency(currency: Currency): Boolean
 
-    public fun baseUnitFor(currency: Currency): CUnit?
+    public fun baseUnitFor(currency: Currency): WKUnit?
 
-    public fun defaultUnitFor(currency: Currency): CUnit?
+    public fun defaultUnitFor(currency: Currency): WKUnit?
 
-    public fun unitsFor(currency: Currency): Set<CUnit>?
+    public fun unitsFor(currency: Currency): Set<WKUnit>?
 
-    public fun hasUnitFor(currency: Currency, unit: CUnit): Boolean?
+    public fun hasUnitFor(currency: Currency, unit: WKUnit): Boolean?
 
     public fun addressFor(string: String): Address?
 
-    public fun addCurrency(currency: Currency, baseUnit: CUnit, defaultUnit: CUnit)
+    public fun addCurrency(currency: Currency, baseUnit: WKUnit, defaultUnit: WKUnit)
 
-    public fun addUnitFor(currency: Currency, unit: CUnit)
+    public fun addUnitFor(currency: Currency, unit: WKUnit)
 
     public fun supportsWalletManagerMode(mode: WalletManagerMode): Boolean
 
@@ -106,7 +106,7 @@ public expect class Network : Closeable {
 }
 
 public data class NetworkAssociation(
-        val baseUnit: CUnit,
-        val defaultUnit: CUnit,
-        val units: Set<CUnit>
+        val baseUnit: WKUnit,
+        val defaultUnit: WKUnit,
+        val units: Set<WKUnit>
 )

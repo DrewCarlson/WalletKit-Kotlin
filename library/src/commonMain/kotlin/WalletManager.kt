@@ -28,7 +28,7 @@ public expect class WalletManager {
 
 
     /** The default unit - as the networks default unit */
-    internal val unit: CUnit
+    internal val unit: WKUnit
 
     /** The mode determines how the manager manages the account and wallets on network. */
     public var mode: WalletManagerMode
@@ -47,7 +47,7 @@ public expect class WalletManager {
      * fees are applied which may or may not differ from the specific wallet used for a
      * transfer (like BRD transfer => ETH fee)
      */
-    public val primaryWallet: Wallet
+    public val wallet: Wallet
 
     /** The managed wallets - often will just be listOf(primaryWallet) */
     public val wallets: List<Wallet>
@@ -63,10 +63,10 @@ public expect class WalletManager {
     public val name: String
 
     /** The baseUnit for the network's currency. */
-    public val baseUnit: CUnit
+    public val baseUnit: WKUnit
 
     /** The defaultUnit for the network's currency. */
-    public val defaultUnit: CUnit
+    public val defaultUnit: WKUnit
 
     /** A manager `isActive` if connected or syncing */
     public val isActive: Boolean

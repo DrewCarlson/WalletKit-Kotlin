@@ -2,8 +2,9 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
+import kotlin.native.concurrent.*
 
-public actual class CUnit internal constructor(
+public actual class WKUnit internal constructor(
         core: BRCryptoUnit,
         take: Boolean
 ) : Closeable {
@@ -11,6 +12,10 @@ public actual class CUnit internal constructor(
     internal val core: BRCryptoUnit = if (take) {
         checkNotNull(cryptoUnitTake(core))
     } else core
+
+    init {
+        freeze()
+    }
 
     public actual val currency: Currency
         get() = Currency(checkNotNull(cryptoUnitGetCurrency(core)), false)
@@ -20,12 +25,12 @@ public actual class CUnit internal constructor(
         get() = checkNotNull(cryptoUnitGetName(core)).toKStringFromUtf8()
     public actual val symbol: String
         get() = checkNotNull(cryptoUnitGetSymbol(core)).toKStringFromUtf8()
-    public actual val base: CUnit
-        get() = CUnit(checkNotNull(cryptoUnitGetBaseUnit(core)), false)
+    public actual val base: WKUnit
+        get() = WKUnit(checkNotNull(cryptoUnitGetBaseUnit(core)), false)
     public actual val decimals: UInt
         get() = cryptoUnitGetBaseDecimalOffset(core).toUInt()
 
-    public actual fun isCompatible(unit: CUnit): Boolean {
+    public actual fun isCompatible(unit: WKUnit): Boolean {
         return CRYPTO_TRUE == cryptoUnitIsCompatible(core, unit.core)
     }
 
@@ -34,7 +39,7 @@ public actual class CUnit internal constructor(
     }
 
     actual override fun equals(other: Any?): Boolean {
-        return other is CUnit && CRYPTO_TRUE == cryptoUnitIsIdentical(core, other.core)
+        return other is WKUnit && CRYPTO_TRUE == cryptoUnitIsIdentical(core, other.core)
     }
 
     actual override fun hashCode(): Int = uids.hashCode()
@@ -49,7 +54,7 @@ public actual class CUnit internal constructor(
                 uids: String,
                 name: String,
                 symbol: String
-        ) = CUnit(
+        ) = WKUnit(
                 core = checkNotNull(
                         cryptoUnitCreateAsBase(
                                 currency.core,
@@ -66,9 +71,9 @@ public actual class CUnit internal constructor(
                 uids: String,
                 name: String,
                 symbol: String,
-                base: CUnit,
+                base: WKUnit,
                 decimals: UInt
-        ) = CUnit(
+        ) = WKUnit(
                 core = checkNotNull(
                         cryptoUnitCreate(
                                 currency.core,

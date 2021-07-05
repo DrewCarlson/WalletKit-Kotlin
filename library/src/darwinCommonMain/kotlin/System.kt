@@ -1,44 +1,68 @@
 package drewcarlson.walletkit
 
 import brcrypto.*
-import co.touchlab.stately.collections.IsoMutableList
-import co.touchlab.stately.collections.IsoMutableMap
-import co.touchlab.stately.collections.IsoMutableSet
-import drewcarlson.blockset.BdbService
-import drewcarlson.blockset.model.BdbCurrency
-import drewcarlson.walletkit.System.Companion.system
+import co.touchlab.stately.collections.*
+import drewcarlson.blockset.*
+import drewcarlson.blockset.model.*
 import io.ktor.client.*
-import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.*
 import kotlinx.cinterop.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.toList
-import platform.Foundation.NSFileManager
+import platform.FileProvider.*
+import platform.Foundation.*
 import platform.posix.*
+import kotlin.collections.List
+import kotlin.collections.Set
+import kotlin.collections.emptyList
+import kotlin.collections.flatMap
+import kotlin.collections.forEach
+import kotlin.collections.hashMapOf
+import kotlin.collections.isNotEmpty
+import kotlin.collections.map
+import kotlin.collections.mapNotNull
+import kotlin.collections.none
+import kotlin.collections.set
+import kotlin.native.concurrent.*
 
 public actual class System(
-        private val dispatcher: CoroutineDispatcher,
-        private val listener: SystemListener,
-        public actual val account: Account,
-        internal actual val isMainnet: Boolean,
-        public actual val storagePath: String,
-        internal actual val query: BdbService,
-        private val context: BRCryptoClientContext,
-        private val cwmListener: BRCryptoListener,
-        private val cwmClient: BRCryptoClient
+    private val dispatcher: CoroutineDispatcher,
+    private val listener: SystemListener,
+    public actual val account: Account,
+    internal actual val isMainnet: Boolean,
+    public actual val storagePath: String,
+    internal actual val query: BdbService,
+    private val context: BRCryptoClientContext,
+    private val cwmListener: BRCryptoListener,
+    private val cwmClient: BRCryptoClient
 ) {
 
     internal val scope = CoroutineScope(
-            SupervisorJob() + dispatcher + CoroutineExceptionHandler { _, throwable ->
-                println("ERROR: ${throwable.message}")
-                throwable.printStackTrace()
-            })
+        SupervisorJob() + dispatcher + CoroutineExceptionHandler { _, throwable ->
+            println("ERROR: ${throwable.message}")
+            throwable.printStackTrace()
+        })
 
-
-    internal val core: BRCryptoSystem
+    internal val core: BRCryptoSystem = checkNotNull(
+        cryptoSystemCreate(
+            cwmClient.readValue(),
+            cwmListener,
+            account.core,
+            storagePath,
+            isMainnet.toCryptoBoolean()
+        )
+    )
 
     private val isNetworkReachable = atomic(true)
+
+
+    public actual val wallets: List<Wallet>
+        get() = walletManagers.flatMap(WalletManager::wallets)
+
+    init {
+        freeze()
+        announceSystemEvent(SystemEvent.Created)
+    }
 
     public actual val networks: List<Network>
         get() {
@@ -74,52 +98,23 @@ public actual class System(
             }
         }
 
-    public actual val wallets: List<Wallet>
-        get() = walletManagers.flatMap(WalletManager::wallets)
-
-    init {
-        core = checkNotNull(
-            cryptoSystemCreate(
-                cwmClient.readValue(),
-                cwmListener,
-                account.core,
-                storagePath,
-                isMainnet.toCryptoBoolean()
-            )
-        )
-        announceSystemEvent(SystemEvent.Created)
-    }
-
-    public actual fun configure(appCurrencies: List<BdbCurrency>) {
+    public actual fun configure() {
         scope.launch { updateNetworkFees() }
         scope.launch { updateCurrencies() }
-        //val query = query
-        /*val isMainnet = isMainnet
-        val _networks = _networks
-        val query = query
-
-        scope.launch {
-            val networks = NetworkDiscovery.discoverNetworks(query, isMainnet, appCurrencies)
-                    .onEach { network ->
-                        if (_networks.add(network)) {
-                            announceNetworkEvent(network, NetworkEvent.Created)
-                            announceSystemEvent(SystemEvent.NetworkAdded(network))
-                        }
-                    }
-                    .toList()
-
-            announceSystemEvent(SystemEvent.DiscoveredNetworks(networks))
-        }*/
     }
 
     public actual fun createWalletManager(
-            network: Network,
-            mode: WalletManagerMode,
-            addressScheme: AddressScheme,
-            currencies: Set<Currency>
+        network: Network,
+        mode: WalletManagerMode,
+        addressScheme: AddressScheme,
+        currencies: Set<Currency>
     ): Boolean {
-        require(network.supportsWalletManagerMode(mode))
-        require(network.supportsAddressScheme(addressScheme))
+        require(network.supportsWalletManagerMode(mode)) {
+            "${network.name} does not support mode=$mode"
+        }
+        require(network.supportsAddressScheme(addressScheme)) {
+            "${network.name} does not support addressScheme=$addressScheme"
+        }
 
         return cryptoSystemCreateWalletManager(
             core,
@@ -166,8 +161,8 @@ public actual class System(
             networksByUuid[network.uids] = network
         }
 
-        val networks = blockchains.mapNotNull { blockchain ->
-            networksByUuid[blockchain.id]?.let { network ->
+        return blockchains.mapNotNull { blockchain ->
+            networksByUuid[blockchain.id]?.also { network ->
                 // We always have a feeUnit for network
                 val feeUnit = checkNotNull(network.baseUnitFor(network.currency))
 
@@ -180,11 +175,9 @@ public actual class System(
                 announceNetworkEvent(network, NetworkEvent.FeesUpdated)
             }
         }
-
-        return emptyList()
     }
 
-    public suspend fun updateCurrencies() {
+    public actual suspend fun updateCurrencies() {
         val currencyBundles = try {
             query.getCurrencies(testnet = !isMainnet).embedded.currencies
         } catch (e: Throwable) {
@@ -250,18 +243,21 @@ public actual class System(
     }
 
     internal fun announceTransferEvent(
-            manager: WalletManager,
-            wallet: Wallet,
-            transfer: Transfer,
-            event: TransferEvent
+        manager: WalletManager,
+        wallet: Wallet,
+        transfer: Transfer,
+        event: TransferEvent
     ) {
         scope.launch {
             listener.handleTransferEvent(this@System, manager, wallet, transfer, event)
         }
     }
 
-    internal fun createWalletManager(coreWalletManager: BRCryptoWalletManager): WalletManager =
-            WalletManager(coreWalletManager, this, scope, true)
+    internal fun createWalletManager(
+        coreWalletManager: BRCryptoWalletManager,
+        needTake: Boolean
+    ): WalletManager =
+        WalletManager(coreWalletManager, this, scope, needTake)
 
     internal fun getWalletManager(coreWalletManager: BRCryptoWalletManager): WalletManager? {
         return if (cryptoSystemHasWalletManager(core, coreWalletManager) == CRYPTO_TRUE) {
@@ -291,20 +287,20 @@ public actual class System(
          * Swift compatible [System.Companion.create].
          */
         public fun create(
-                listener: SystemListener,
-                account: Account,
-                isMainnet: Boolean,
-                storagePath: String,
-                query: BdbService
+            listener: SystemListener,
+            account: Account,
+            isMainnet: Boolean,
+            storagePath: String,
+            query: BdbService
         ): System = create(listener, account, isMainnet, storagePath, query, Default)
 
         public actual fun create(
-                listener: SystemListener,
-                account: Account,
-                isMainnet: Boolean,
-                storagePath: String,
-                query: BdbService,
-                dispatcher: CoroutineDispatcher
+            listener: SystemListener,
+            account: Account,
+            isMainnet: Boolean,
+            storagePath: String,
+            query: BdbService,
+            dispatcher: CoroutineDispatcher
         ): System {
             val accountStoragePath = "${storagePath.trimEnd('/')}/${account.filesystemIdentifier}"
             check(ensurePath(accountStoragePath)) {
@@ -316,15 +312,15 @@ public actual class System(
             }.ptr
 
             val system = System(
-                    dispatcher,
-                    listener,
-                    account,
-                    isMainnet,
-                    accountStoragePath,
-                    query,
-                    context,
-                    checkNotNull(createCryptoListener(context)),
-                    createCryptoClient(context)
+                dispatcher,
+                listener,
+                account,
+                isMainnet,
+                accountStoragePath,
+                query,
+                context,
+                checkNotNull(createCryptoListener(context)),
+                createCryptoClient(context)
             )
 
             SYSTEMS_ACTIVE[context] = system
@@ -335,11 +331,11 @@ public actual class System(
         }
 
         public actual fun asBdbCurrency(
-                uids: String,
-                name: String,
-                code: String,
-                type: String,
-                decimals: UInt
+            uids: String,
+            name: String,
+            code: String,
+            type: String,
+            decimals: UInt
         ): BdbCurrency? {
             val index = uids.indexOf(':')
             if (index == -1) return null
@@ -353,37 +349,81 @@ public actual class System(
 
             // TODO(fix): What should the supply values be here?
             return BdbCurrency(
-                    currencyId = uids,
-                    name = name,
-                    code = codeLowerCase,
-                    type = typeLowerCase,
-                    blockchainId = blockchainId,
-                    address = if (address == "__native__") null else address,
-                    verified = true,
-                    denominations = Blockchains.makeCurrencyDenominationsErc20(codeLowerCase, decimals),
-                    initialSupply = "0",
-                    totalSupply = "0"
+                currencyId = uids,
+                name = name,
+                code = codeLowerCase,
+                type = typeLowerCase,
+                blockchainId = blockchainId,
+                address = if (address == "__native__") null else address,
+                verified = true,
+                denominations = Blockchains.makeCurrencyDenominationsErc20(codeLowerCase, decimals),
+                initialSupply = "0",
+                totalSupply = "0"
             )
         }
 
         public actual fun wipe(system: System) {
-            //TODO("not implemented")
+            val storagePath = system.storagePath
+
+            destroy(system)
+
+            deleteRecursively(storagePath)
         }
 
         public actual fun wipeAll(storagePath: String, exemptSystems: List<System>) {
-            //TODO("not implemented")
+            val exemptSystemPath = exemptSystems
+                .map(System::storagePath)
+                .toHashSet()
+
+            memScoped {
+                val error = alloc<ObjCObjectVar<NSError?>>()
+                val files = NSFileManager.defaultManager.contentsOfDirectoryAtPath(storagePath, error.ptr)
+                if (error.value == null) {
+                    files.orEmpty()
+                        .filterIsInstance<String>()
+                        .filterNot(exemptSystemPath::contains)
+                        .forEach(::deleteRecursively)
+                } else {
+                    // todo: log error.value
+                }
+            }
         }
 
         private fun ensurePath(path: String): Boolean {
             try {
                 NSFileManager.defaultManager.createDirectoryAtPath(path, true, null, null)
             } catch (e: Exception) {
-                println("File creation error")
+                // todo: log error
                 e.printStackTrace()
                 return false
             }
 
             return NSFileManager.defaultManager.isWritableFileAtPath(path)
+        }
+
+        private fun destroy(system: System) {
+            SYSTEMS_ACTIVE.remove(system.context)
+
+            system.pause()
+
+            system.walletManagers.forEach(WalletManager::stop)
+
+            system.scope.coroutineContext.cancelChildren()
+
+            @Suppress("ConstantConditionIf")
+            if (SYSTEMS_INACTIVE_RETAIN) {
+                SYSTEMS_INACTIVE.add(system)
+            }
+        }
+
+        private fun deleteRecursively(toDeletePath: String) {
+            memScoped {
+                val error = alloc<ObjCObjectVar<NSError?>>()
+                val deleted = NSFileManager.defaultManager.removeItemAtPath(toDeletePath, error.ptr)
+                if (error.value != null || !deleted) {
+                    // Log.log(Level.SEVERE, "Failed to delete " + toDelete.absolutePath)
+                }
+            }
         }
     }
 }

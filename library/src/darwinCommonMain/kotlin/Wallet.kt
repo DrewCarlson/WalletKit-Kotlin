@@ -5,6 +5,7 @@ import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_CREATED
 import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_DELETED
 import kotlinx.cinterop.*
 import kotlinx.coroutines.CoroutineScope
+import kotlin.native.concurrent.*
 
 public actual class Wallet internal constructor(
         core: BRCryptoWallet,
@@ -17,30 +18,33 @@ public actual class Wallet internal constructor(
             if (take) checkNotNull(cryptoWalletTake(core))
             else core
 
+    init {
+        freeze()
+    }
+
     public actual val system: System
         get() = manager.system
 
-    public actual val unit: CUnit
-        get() = CUnit(checkNotNull(cryptoWalletGetUnit(core)), false)
+    public actual val unit: WKUnit
+        get() = WKUnit(checkNotNull(cryptoWalletGetUnit(core)), false)
 
-    public actual val unitForFee: CUnit
-        get() = CUnit(checkNotNull(cryptoWalletGetUnitForFee(core)), false)
+    public actual val unitForFee: WKUnit
+        get() = WKUnit(checkNotNull(cryptoWalletGetUnitForFee(core)), false)
 
     public actual val balance: Amount
         get() = Amount(checkNotNull(cryptoWalletGetBalance(core)), false)
 
-    public actual val transfers: List<Transfer> by lazy {
-        memScoped {
+    public actual val transfers: List<Transfer>
+        get() = memScoped {
             val count = alloc<ULongVar>()
-            val coreTransfers = cryptoWalletGetTransfers(core, count.ptr)?.also { pointer ->
-                defer { cryptoMemoryFree(pointer) }
-            }
+            val coreTransfers = cryptoWalletGetTransfers(core, count.ptr)
+            checkNotNull(coreTransfers)
+            defer { cryptoMemoryFree(coreTransfers) }
 
             List(count.value.toInt()) { i ->
-                Transfer(checkNotNull(coreTransfers!![i]), this@Wallet, false)
+                Transfer(checkNotNull(coreTransfers[i]), this@Wallet, false)
             }
         }
-    }
 
     public actual fun getTransferByHash(hash: TransferHash?): Transfer? =
             transfers.singleOrNull { it.hash == hash }
@@ -57,7 +61,7 @@ public actual class Wallet internal constructor(
         get() = Currency(checkNotNull(cryptoWalletGetCurrency(core)), false)
 
     public actual val name: String
-        get() = unit.currency.code
+        get() = unit.currency.name
 
     public actual val state: WalletState
         get() = when (cryptoWalletGetState(core)) {

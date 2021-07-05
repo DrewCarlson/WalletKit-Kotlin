@@ -2,6 +2,7 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
+import kotlin.native.concurrent.*
 
 public actual class Currency internal constructor(
         core: BRCryptoCurrency,
@@ -11,6 +12,10 @@ public actual class Currency internal constructor(
     internal val core: BRCryptoCurrency = if (take) {
         checkNotNull(cryptoCurrencyTake(core))
     } else core
+
+    init {
+        freeze()
+    }
 
     public actual val uids: String
         get() = checkNotNull(cryptoCurrencyGetUids(core)).toKStringFromUtf8()

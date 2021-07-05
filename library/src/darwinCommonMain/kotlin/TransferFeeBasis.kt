@@ -1,6 +1,7 @@
 package drewcarlson.walletkit
 
 import brcrypto.*
+import kotlin.native.concurrent.*
 
 public actual class TransferFeeBasis internal constructor(
         core: BRCryptoFeeBasis,
@@ -11,7 +12,11 @@ public actual class TransferFeeBasis internal constructor(
             if (take) checkNotNull(cryptoFeeBasisTake(core))
             else core
 
-    public actual val unit: CUnit
+    init {
+        freeze()
+    }
+
+    public actual val unit: WKUnit
         get() = pricePerCostFactor.unit
 
     public actual val currency: Currency

@@ -15,12 +15,17 @@ import kotlinx.cinterop.ptr
 import kotlinx.cinterop.toKStringFromUtf8
 import kotlinx.cinterop.readValue
 
+internal fun Boolean.toCryptoBoolean(): UInt =
+    if (this) CRYPTO_TRUE else CRYPTO_FALSE
+
+internal fun BRCryptoBoolean.toBoolean(): Boolean =
+    this == CRYPTO_TRUE
+
 internal fun AddressScheme.toCore(): BRCryptoAddressScheme {
     return when (this) {
         AddressScheme.BTCLegacy -> CRYPTO_ADDRESS_SCHEME_BTC_LEGACY
         AddressScheme.BTCSegwit -> CRYPTO_ADDRESS_SCHEME_BTC_SEGWIT
-        AddressScheme.ETHDefault -> CRYPTO_ADDRESS_SCHEME_NATIVE
-        AddressScheme.GENDefault -> CRYPTO_ADDRESS_SCHEME_NATIVE
+        AddressScheme.Native -> CRYPTO_ADDRESS_SCHEME_NATIVE
     }
 }
 

@@ -9,8 +9,12 @@ plugins {
 kotlin {
     jvm {
         withJava()
+        compilations.all {
+            kotlinOptions.jvmTarget = "11"
+        }
         val jvmJar by tasks.getting(Jar::class) {
             doFirst {
+                archiveFileName.set("cli-jvm.jar")
                 manifest {
                     attributes["Main-Class"] = "cli.MainKt"
                 }
@@ -18,6 +22,7 @@ kotlin {
                     configurations.getByName("runtimeClasspath")
                         .map { if (it.isDirectory) it else zipTree(it) }
                 )
+                exclude("META-INF/versions/9/module-info.class")
             }
         }
     }
@@ -65,12 +70,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-okhttp:$KTOR_VERSION")
             }
         }
-    }
-}
-
-tasks.withType(KotlinCompile::class) {
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 }
 

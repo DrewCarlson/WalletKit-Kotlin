@@ -2,9 +2,8 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import brcrypto.BRCryptoTransferDirection.*
-import brcrypto.BRCryptoTransferStateType.*
-import brcrypto.BRCryptoTransferSubmitErrorType.*
 import kotlinx.cinterop.*
+import kotlin.native.concurrent.*
 
 public actual class Transfer internal constructor(
     core: BRCryptoTransfer,
@@ -15,6 +14,10 @@ public actual class Transfer internal constructor(
     internal val core: BRCryptoTransfer =
         if (take) checkNotNull(cryptoTransferTake(core))
         else core
+
+    init {
+        freeze()
+    }
 
     public actual val source: Address?
         get() = cryptoTransferGetSourceAddress(core)?.let { coreAddress ->
@@ -62,11 +65,11 @@ public actual class Transfer internal constructor(
     // NOTE: Added for Swift interop to avoid `hash` naming conflict
     public val txHash: TransferHash? get() = hash
 
-    public actual val unit: CUnit
-        get() = CUnit(checkNotNull(cryptoTransferGetUnitForAmount(core)), false)
+    public actual val unit: WKUnit
+        get() = WKUnit(checkNotNull(cryptoTransferGetUnitForAmount(core)), false)
 
-    public actual val unitForFee: CUnit
-        get() = CUnit(checkNotNull(cryptoTransferGetUnitForFee(core)), false)
+    public actual val unitForFee: WKUnit
+        get() = WKUnit(checkNotNull(cryptoTransferGetUnitForFee(core)), false)
 
     public actual val confirmation: TransferConfirmation?
         get() = (state as? TransferState.INCLUDED)?.confirmation
@@ -77,58 +80,9 @@ public actual class Transfer internal constructor(
     public actual val state: TransferState
         get() {
             return memScoped {
-                val coreState = cryptoTransferGetState(core)
-                when (cryptoTransferGetStateType(core)) {
-                    CRYPTO_TRANSFER_STATE_CREATED -> TransferState.CREATED
-                    CRYPTO_TRANSFER_STATE_SIGNED -> TransferState.SIGNED
-                    CRYPTO_TRANSFER_STATE_SUBMITTED -> TransferState.SUBMITTED
-                    CRYPTO_TRANSFER_STATE_DELETED -> TransferState.DELETED
-                    CRYPTO_TRANSFER_STATE_INCLUDED ->{
-                        val blockNumber = alloc<ULongVar>()
-                        val blockTimestamp = alloc<ULongVar>()
-                        val transactionIndex = alloc<ULongVar>()
-                        val feeBasis = alloc<BRCryptoFeeBasisVar>()
-                        val success = alloc<BRCryptoBooleanVar>()
-                        val error = allocPointerTo<ByteVar>()
-                        val result = cryptoTransferStateExtractIncluded(
-                            coreState,
-                            blockNumber.ptr,
-                            blockTimestamp.ptr,
-                            transactionIndex.ptr,
-                            feeBasis.ptr,
-                            success.ptr,
-                            error.ptr,
-                        )
-                        check(result)
-                        TransferState.INCLUDED(
-                            TransferConfirmation(
-                                blockNumber = blockNumber.value,
-                                timestamp = blockTimestamp.value,
-                                transactionIndex = transactionIndex.value,
-                                fee = cryptoFeeBasisGetFee(feeBasis.value)?.let { coreAmount ->
-                                    Amount(coreAmount, false)
-                                },
-                                success = success.value.toBoolean(),
-                                error = error.value?.toKStringFromUtf8(),
-                            )
-                        )
-                    }
-                    CRYPTO_TRANSFER_STATE_ERRORED -> {
-                        val error = alloc<BRCryptoTransferSubmitError>()
-                        check(cryptoTransferStateExtractError(coreState, error.ptr))
-                        TransferState.FAILED(when (error.type) {
-                            CRYPTO_TRANSFER_SUBMIT_ERROR_UNKNOWN ->
-                                TransferSubmitError.UNKNOWN
-                            CRYPTO_TRANSFER_SUBMIT_ERROR_POSIX ->
-                                error.u.posix.run {
-                                    TransferSubmitError.POSIX(
-                                        errNum = errnum,
-                                        errMessage = cryptoTransferSubmitErrorGetMessage(error.ptr)?.toKStringFromUtf8()
-                                    )
-                                }
-                        })
-                    }
-                }
+                val coreState = checkNotNull(cryptoTransferGetState(core))
+                defer { cryptoMemoryFree(coreState) }
+                coreState.pointed.toTransferState()
             }
         }
 

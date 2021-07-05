@@ -7,11 +7,16 @@ import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.usePinned
 import drewcarlson.walletkit.Closeable
 import drewcarlson.walletkit.common.HashAlgorithm.*
+import kotlin.native.concurrent.*
 
 public actual class Hasher internal constructor(
         core: BRCryptoHasher?
 ) : Closeable {
     internal val core: BRCryptoHasher = checkNotNull(core)
+
+    init {
+        freeze()
+    }
 
     public actual fun hash(data: ByteArray): ByteArray? {
         val dataBytes = data.asUByteArray().toCValues()

@@ -36,7 +36,13 @@ public actual class System internal constructor(
             throwable.printStackTrace(java.lang.System.err)
         })
 
-    private val core: BRCryptoSystem
+    private val core: BRCryptoSystem = BRCryptoSystem.create(
+        cwmClient,
+        cwmListener,
+        account.core,
+        storagePath,
+        isMainnet
+    ).get()
 
     private var isNetworkReachable = true
 
@@ -50,32 +56,12 @@ public actual class System internal constructor(
         get() = walletManagers.flatMap(WalletManager::wallets)
 
     init {
-        this.core = BRCryptoSystem.create(
-            cwmClient,
-            cwmListener,
-            account.core,
-            storagePath,
-            isMainnet
-        ).get()
         announceSystemEvent(SystemEvent.Created)
     }
 
-    public actual fun configure(appCurrencies: List<BdbCurrency>) {
+    public actual fun configure() {
         scope.launch { updateNetworkFees() }
         scope.launch { updateCurrencies() }
-        /*scope.launch {
-            val networks = NetworkDiscovery.discoverNetworks(query, isMainnet, appCurrencies)
-                .onEach { network ->
-                    println("network discovered $network")
-                    //if (_networks.add(network)) {
-                        announceNetworkEvent(network, NetworkEvent.Created)
-                        announceSystemEvent(SystemEvent.NetworkAdded(network))
-                    //}
-                }
-                .toList()
-
-            announceSystemEvent(SystemEvent.DiscoveredNetworks(networks))
-        }*/
     }
 
     public actual fun createWalletManager(
@@ -135,8 +121,8 @@ public actual class System internal constructor(
             networksByUuid[network.uids] = network
         }
 
-        val networks = blockchains.mapNotNull { blockchain ->
-            networksByUuid[blockchain.id]?.let { network ->
+        return blockchains.mapNotNull { blockchain ->
+            networksByUuid[blockchain.id]?.also { network ->
                 // We always have a feeUnit for network
                 val feeUnit = checkNotNull(network.baseUnitFor(network.currency))
 
@@ -149,12 +135,9 @@ public actual class System internal constructor(
                 announceNetworkEvent(network, NetworkEvent.FeesUpdated)
             }
         }
-
-        //completion?.invoke(networks, null)
-        return emptyList()
     }
 
-    public suspend fun updateCurrencies() {
+    public actual suspend fun updateCurrencies() {
         val currencyBundles = try {
             query.getCurrencies(testnet = !isMainnet).embedded.currencies
         } catch (e: Throwable) {

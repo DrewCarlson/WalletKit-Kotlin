@@ -9,8 +9,8 @@ class NetworkTest {
     fun testNetworkBTC() {
         val btc = Currency.create("bitcoin-mainnet:__native__", "Bitcoin", "btc", "native", null)
 
-        val unitSat = CUnit.create(btc, "sat", "Satoshi", "SAT")
-        val unitBtc = CUnit.create(btc, "btc", "Bitcoin", "B", unitSat, 8u)
+        val unitSat = WKUnit.create(btc, "sat", "Satoshi", "SAT")
+        val unitBtc = WKUnit.create(btc, "btc", "Bitcoin", "B", unitSat, 8u)
 
         val network = checkNotNull(Network.findBuiltin("bitcoin-mainnet"))
 
@@ -36,7 +36,7 @@ class NetworkTest {
         assertTrue(network.hasUnitFor(btc, unitSat) ?: false)
 
         val eth = Currency.create("ethereum-mainnet:__native__", "Ethereum", "ETH", "native", null)
-        val unitWei = CUnit.create(eth, "ETH-WEI", "WEI", "wei")
+        val unitWei = WKUnit.create(eth, "ETH-WEI", "WEI", "wei")
 
         assertFalse(network.hasCurrency(eth))
         assertNull(network.baseUnitFor(eth))
@@ -55,9 +55,9 @@ class NetworkTest {
     @Test
     fun testNetworkETH() {
         val eth = Currency.create("ethereum-mainnet:__native__", "Ethereum", "eth", "native", null)
-        val unitWei = CUnit.create(eth, "wei", "WEI", "wei")
-        val unitGwei = CUnit.create(eth, "gwei", "GWEI", "gwei", unitWei, 9u)
-        val unitEther = CUnit.create(eth, "eth", "ETHER", "E", unitWei, 18u)
+        val unitWei = WKUnit.create(eth, "wei", "WEI", "wei")
+        val unitGwei = WKUnit.create(eth, "gwei", "GWEI", "gwei", unitWei, 9u)
+        val unitEther = WKUnit.create(eth, "eth", "ETHER", "E", unitWei, 18u)
 
         val brd = Currency.create("ethereum-mainnet:0x558ec3152e2eb2174905cd19aea4e34a23de9ad6", "BRD Token", "brd", "erc20", "0x558ec3152e2eb2174905cd19aea4e34a23de9ad6")
 

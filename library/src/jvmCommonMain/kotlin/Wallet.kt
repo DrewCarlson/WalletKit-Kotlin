@@ -13,11 +13,11 @@ public actual class Wallet internal constructor(
     public actual val system: System
         get() = manager.system
 
-    public actual val unit: CUnit
-        get() = CUnit(core.unit)
+    public actual val unit: WKUnit
+        get() = WKUnit(core.unit)
 
-    public actual val unitForFee: CUnit
-        get() = CUnit(core.unitForFee)
+    public actual val unitForFee: WKUnit
+        get() = WKUnit(core.unitForFee)
 
     public actual val balance: Amount
         get() = core.balance.run(::Amount)

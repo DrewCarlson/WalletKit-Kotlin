@@ -4,7 +4,7 @@ import com.breadwallet.corenative.cleaner.ReferenceCleaner
 import com.breadwallet.corenative.crypto.BRCryptoUnit
 import com.google.common.primitives.UnsignedInteger
 
-public actual class CUnit internal constructor(
+public actual class WKUnit internal constructor(
         internal val core: BRCryptoUnit
 ) : Closeable {
 
@@ -20,19 +20,19 @@ public actual class CUnit internal constructor(
         get() = core.name
     public actual val symbol: String
         get() = core.symbol
-    public actual val base: CUnit
-        get() = CUnit(core.baseUnit)
+    public actual val base: WKUnit
+        get() = WKUnit(core.baseUnit)
     public actual val decimals: UInt
         get() = core.decimals.toByte().toUInt()
 
-    public actual fun isCompatible(unit: CUnit): Boolean =
+    public actual fun isCompatible(unit: WKUnit): Boolean =
             core.isCompatible(unit.core)
 
     public actual fun hasCurrency(currency: Currency): Boolean =
             core.hasCurrency(currency.core)
 
     actual override fun equals(other: Any?): Boolean =
-            other is CUnit && core.isIdentical(other.core)
+            other is WKUnit && core.isIdentical(other.core)
 
     actual override fun hashCode(): Int = uids.hashCode()
 
@@ -46,7 +46,7 @@ public actual class CUnit internal constructor(
                 uids: String,
                 name: String,
                 symbol: String
-        ) = CUnit(
+        ) = WKUnit(
                 core = checkNotNull(
                         BRCryptoUnit.createAsBase(
                                 currency.core,
@@ -62,9 +62,9 @@ public actual class CUnit internal constructor(
                 uids: String,
                 name: String,
                 symbol: String,
-                base: CUnit,
+                base: WKUnit,
                 decimals: UInt
-        ) = CUnit(
+        ) = WKUnit(
                 core = checkNotNull(
                         BRCryptoUnit.create(
                                 currency.core,

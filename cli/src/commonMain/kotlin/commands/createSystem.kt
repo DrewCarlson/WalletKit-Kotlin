@@ -27,7 +27,8 @@ fun createSystem(
         storagePath,
         createBdbService(bdbToken)
     )
-    system.configure(emptyList())
+    system.configure()
+    system.resume()
     return system
 }
 

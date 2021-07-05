@@ -5,7 +5,7 @@ import io.ktor.utils.io.core.*
 import kotlinx.cinterop.*
 import platform.Foundation.NSData
 import platform.posix.size_tVar
-
+import kotlin.native.concurrent.*
 
 public actual class Account(
         core: BRCryptoAccount,
@@ -15,6 +15,10 @@ public actual class Account(
     internal val core: BRCryptoAccount =
             if (take) checkNotNull(cryptoAccountTake(core))
             else core
+
+    init {
+        freeze()
+    }
 
     public actual val uids: String
         get() = checkNotNull(cryptoAccountGetUids(core)).toKStringFromUtf8()

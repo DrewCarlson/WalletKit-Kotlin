@@ -2,6 +2,7 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
+import kotlin.native.concurrent.*
 
 public actual class NetworkPeer(
         core: BRCryptoPeer,
@@ -25,6 +26,10 @@ public actual class NetworkPeer(
                     publicKey
             ))
     )
+
+    init {
+        freeze()
+    }
 
     public actual val network: Network
         get() = Network(checkNotNull(cryptoPeerGetNetwork(core)), false)

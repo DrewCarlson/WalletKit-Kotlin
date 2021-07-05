@@ -2,10 +2,15 @@ package drewcarlson.walletkit
 
 import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
+import kotlin.native.concurrent.*
 
 public actual class TransferAttribute(
         internal val core: BRCryptoTransferAttribute
 ) {
+
+    init {
+        freeze()
+    }
 
     public actual val key: String
         get() = checkNotNull(cryptoTransferAttributeGetKey(core)).toKStringFromUtf8()

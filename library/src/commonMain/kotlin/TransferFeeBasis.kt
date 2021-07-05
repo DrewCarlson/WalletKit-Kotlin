@@ -12,7 +12,7 @@ package drewcarlson.walletkit
 public expect class TransferFeeBasis {
 
     /** The unit for both the pricePerCostFactor and fee. */
-    public val unit: CUnit
+    public val unit: WKUnit
 
     /** The fee basis currency; this should/must be the Network's currency */
     public val currency: Currency

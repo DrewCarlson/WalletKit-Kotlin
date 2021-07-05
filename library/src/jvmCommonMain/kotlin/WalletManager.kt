@@ -15,7 +15,7 @@ public actual class WalletManager(
 
     public actual val network: Network = Network(core.network)
 
-    internal actual val unit: CUnit =
+    internal actual val unit: WKUnit =
             checkNotNull(network.defaultUnitFor(network.currency))
 
     public actual var mode: WalletManagerMode
@@ -33,7 +33,7 @@ public actual class WalletManager(
     internal actual val height: ULong
         get() = network.height
 
-    public actual val primaryWallet: Wallet by lazy {
+    public actual val wallet: Wallet by lazy {
         Wallet(core.wallet, this, scope)
     }
 
@@ -45,9 +45,9 @@ public actual class WalletManager(
 
     public actual val name: String = currency.code
 
-    public actual val baseUnit: CUnit = checkNotNull(network.baseUnitFor(network.currency))
+    public actual val baseUnit: WKUnit = checkNotNull(network.baseUnitFor(network.currency))
 
-    public actual val defaultUnit: CUnit = checkNotNull(network.defaultUnitFor(network.currency))
+    public actual val defaultUnit: WKUnit = checkNotNull(network.defaultUnitFor(network.currency))
 
     public actual val isActive: Boolean
         get() = when (state) {
@@ -85,7 +85,7 @@ public actual class WalletManager(
     }
 
     public actual fun submit(transfer: Transfer, phraseUtf8: ByteArray) {
-        core.submit(primaryWallet.core, transfer.core, phraseUtf8)
+        core.submit(wallet.core, transfer.core, phraseUtf8)
     }
 
     internal actual fun setNetworkReachable(isNetworkReachable: Boolean) {

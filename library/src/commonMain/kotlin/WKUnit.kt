@@ -11,7 +11,7 @@ package drewcarlson.walletkit
  * ane WEI for Bitcoin and Ethereum, respectively.  There can be multiple 'derivedUnits' - which
  * are derived by scaling off of a baseUnit.  For example, BTC and ETHER respectively.
  */
-public expect class CUnit : Closeable {
+public expect class WKUnit : Closeable {
 
     public val currency: Currency
 
@@ -19,10 +19,10 @@ public expect class CUnit : Closeable {
 
     public val name: String
     public val symbol: String
-    public val base: CUnit
+    public val base: WKUnit
     public val decimals: UInt // TODO: Maybe use UByte here
 
-    public fun isCompatible(unit: CUnit): Boolean
+    public fun isCompatible(unit: WKUnit): Boolean
     public fun hasCurrency(currency: Currency): Boolean
 
     override fun equals(other: Any?): Boolean
@@ -34,15 +34,15 @@ public expect class CUnit : Closeable {
                 uids: String,
                 name: String,
                 symbol: String
-        ): CUnit
+        ): WKUnit
 
         internal fun create(
                 currency: Currency,
                 uids: String,
                 name: String,
                 symbol: String,
-                base: CUnit,
+                base: WKUnit,
                 decimals: UInt
-        ): CUnit
+        ): WKUnit
     }
 }

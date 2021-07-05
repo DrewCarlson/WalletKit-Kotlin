@@ -91,7 +91,7 @@ internal object NetworkDiscovery {
                 }
 
                 val nonBaseUnits = currencyDenominationToUnits(libCurrency, nonBaseDenomination, baseUnit)
-                val units = (nonBaseUnits + baseUnit).sortedBy(CUnit::decimals)
+                val units = (nonBaseUnits + baseUnit).sortedBy(WKUnit::decimals)
 
                 val defaultUnit = units.first()
 
@@ -120,19 +120,19 @@ internal object NetworkDiscovery {
         }
     }
 
-    private fun currencyToDefaultBaseUnit(currency: Currency): CUnit {
+    private fun currencyToDefaultBaseUnit(currency: Currency): WKUnit {
         val symb: String = currency.code.lowercase() + "i"
         val name: String = currency.code.uppercase() + "_INTEGER"
         val uids = "${currency.uids}:$name"
-        return CUnit.create(currency, uids, name, symb)
+        return WKUnit.create(currency, uids, name, symb)
     }
 
     private fun currencyDenominationToBaseUnit(
             currency: Currency,
             denomination: BdbCurrency.Denomination
-    ): CUnit {
+    ): WKUnit {
         val uids = "${currency.uids}:${denomination.code}"
-        return CUnit.create(
+        return WKUnit.create(
                 currency,
                 uids,
                 denomination.name,
@@ -143,11 +143,11 @@ internal object NetworkDiscovery {
     private fun currencyDenominationToUnits(
             currency: Currency,
             denominations: List<BdbCurrency.Denomination>,
-            base: CUnit
-    ): List<CUnit> {
+            base: WKUnit
+    ): List<WKUnit> {
         return denominations.map { denomination ->
             val uids = "${currency.uids}:${denomination.code}"
-            CUnit.create(
+            WKUnit.create(
                     currency,
                     uids,
                     denomination.name,

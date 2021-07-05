@@ -1,15 +1,15 @@
 package drewcarlson.walletkit.client
 
 import com.breadwallet.corenative.crypto.*
-import drewcarlson.walletkit.System.Companion.system
 import com.breadwallet.corenative.crypto.BRCryptoClient.*
 import com.breadwallet.corenative.crypto.BRCryptoTransferStateType.*
-import com.breadwallet.corenative.support.BRConstants.BLOCK_HEIGHT_UNBOUND
-import com.breadwallet.corenative.utility.Cookie
-import com.google.common.primitives.UnsignedLong
-import drewcarlson.walletkit.decodeBase64Bytes
-import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
+import com.breadwallet.corenative.support.BRConstants.*
+import com.breadwallet.corenative.utility.*
+import com.google.common.primitives.*
+import drewcarlson.walletkit.*
+import drewcarlson.walletkit.System.Companion.system
+import kotlinx.coroutines.*
+import java.time.*
 
 internal fun cryptoClient(c: Cookie) = BRCryptoClient(
     c,
@@ -45,24 +45,17 @@ private val funcGetTransactions =
         val system = checkNotNull(cookie.system)
         system.scope.launch {
             val manager = checkNotNull(system.getWalletManager(coreManager))
-            runCatching {
-                val transactions = addrs.chunked(50).flatMap { chunk ->
-                    // TODO: Exhaust more links
-                    system.query.getTransactions(
-                            manager.network.uids,
-                            chunk,
-                            if (begBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) 0uL else begBlockNumber.toULong(),
-                            if (endBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) null else endBlockNumber.toULong(),
-                            includeRaw = true,
-                            includeProof = false,
-                            maxPageSize = null
-                    ).embedded.transactions
-                }
+            try {
+                val transactions = system.query.getAllTransactions(
+                    manager.network.uids,
+                    addrs,
+                    if (begBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) 0uL else begBlockNumber.toULong(),
+                    if (endBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) null else endBlockNumber.toULong(),
+                )
 
                 val bundles = transactions.map { bdbTx ->
                     val rawTxData = checkNotNull(bdbTx.raw).decodeBase64Bytes()
-                    val timestamp = ZonedDateTime.parse(bdbTx.timestamp)
-                        .toInstant()
+                    val timestamp = Instant.parse(bdbTx.timestamp)
                         .toEpochMilli()
                         .run(UnsignedLong::valueOf)
                     val height = UnsignedLong.valueOf(bdbTx.blockHeight?.toLong() ?: 0L)
@@ -73,13 +66,10 @@ private val funcGetTransactions =
                         else -> error("Unhandled Transaction status '${bdbTx.status}'")
                     }
                     BRCryptoClientTransactionBundle.create(status, rawTxData, timestamp, height)
-
                 }
                 manager.core.announceTransactions(callbackState, true, bundles)
-            }.onSuccess {
-                manager.core.announceTransactions(callbackState, false, emptyList())
-            }.onFailure { error ->
-                error.printStackTrace()
+            } catch (e: Exception) {
+                e.printStackTrace()
                 manager.core.announceTransactions(callbackState, false, emptyList())
             }
             coreManager.give()
@@ -87,8 +77,67 @@ private val funcGetTransactions =
     }
 
 private val funcGetTransfers =
-    GetTransfersCallback { cookie, manager, callbackState, addrs, begBlockNumber, endBlockNumber ->
-        manager.give()
+    GetTransfersCallback { cookie, cwm, callbackState, addresses, begBlockNumber, endBlockNumber ->
+        try {
+            checkNotNull(cookie)
+            val system = checkNotNull(cookie.system)
+            system.scope.launch {
+                checkNotNull(cwm)
+                val manager = checkNotNull(system.getWalletManager(cwm))
+
+                try {
+                    val transactions = system.query.getAllTransactions(
+                        manager.network.uids,
+                        addresses,
+                        if (begBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) 0uL else begBlockNumber.toULong(),
+                        if (endBlockNumber == BLOCK_HEIGHT_UNBOUND.toLong()) null else endBlockNumber.toULong(),
+                    )
+
+                    val bundles = transactions.flatMap { bdbTx ->
+                        val blockTimestamp = bdbTx.timestamp.run(Instant::parse).toEpochMilli()
+                        val blockHeight = bdbTx.blockHeight ?: 0uL
+                        val blockConfirmations = bdbTx.confirmations ?: 0uL
+                        val blockTransactionIndex = bdbTx.index ?: 0u
+                        val blockHash = bdbTx.blockHash
+                        val status = when (bdbTx.status) {
+                            "confirmed" -> CRYPTO_TRANSFER_STATE_INCLUDED
+                            "submitted", "reverted" -> CRYPTO_TRANSFER_STATE_SUBMITTED
+                            "failed", "rejected" -> CRYPTO_TRANSFER_STATE_ERRORED
+                            else -> error("Unhandled Transaction status '${bdbTx.status}'")
+                        }
+                        mergeTransfers(bdbTx, addresses).map { (transfer, fee) ->
+                            BRCryptoClientTransferBundle.create(
+                                status,
+                                bdbTx.hash,
+                                bdbTx.identifier,
+                                transfer.transferId,
+                                transfer.fromAddress,
+                                transfer.toAddress,
+                                transfer.amount.value,
+                                transfer.amount.currencyId,
+                                fee,
+                                UnsignedLong.valueOf(transfer.index.toLong()),
+                                UnsignedLong.valueOf(blockTimestamp),
+                                UnsignedLong.valueOf(blockHeight.toLong()),
+                                UnsignedLong.valueOf(blockConfirmations.toLong()),
+                                UnsignedLong.valueOf(blockTransactionIndex.toLong()),
+                                blockHash,
+                                transfer.meta
+                            )
+                        }
+                    }
+                    cwm.announceTransfers(callbackState, true, bundles)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    cwm.announceTransfers(callbackState, false, emptyList())
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            cwm.announceTransfers(callbackState, false, emptyList())
+        } finally {
+            cwm.give()
+        }
     }
 
 private val funcSubmitTransaction = SubmitTransactionCallback { cookie, manager, callbackState, data, hashHex ->

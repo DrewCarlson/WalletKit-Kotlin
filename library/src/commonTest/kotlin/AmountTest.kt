@@ -37,8 +37,8 @@ class AmountTest {
         val btc = Currency.create("Bitcoin", "Bitcoin", "BTC", "native", null)
         val eth = Currency.create("Ethereum", "Ethereum", "ETH", "native", null)
 
-        val unitSat = CUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
-        val unitBtc = CUnit.create(btc, "BTC-BTC", "Bitcoin", "B", unitSat, 8u)
+        val unitSat = WKUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
+        val unitBtc = WKUnit.create(btc, "BTC-BTC", "Bitcoin", "B", unitSat, 8u)
 
         assertEquals(btc.code, unitSat.currency.code)
         assertEquals("Satoshi", unitSat.name)
@@ -57,7 +57,7 @@ class AmountTest {
         assertTrue(unitBtc.isCompatible(unitSat))
         assertTrue(unitSat.isCompatible(unitBtc))
 
-        val unitWei = CUnit.create(eth, "ETH-WEI", "WEI", "wei")
+        val unitWei = WKUnit.create(eth, "ETH-WEI", "WEI", "wei")
         assertFalse(unitWei.isCompatible(unitBtc))
         assertFalse(unitBtc.isCompatible(unitWei))
         /*
@@ -78,12 +78,12 @@ class AmountTest {
         val btc = Currency.create("Bitcoin", "Bitcoin", "BTC", "native", null)
         val eth = Currency.create("Ethereum", "Ethereum", "ETH", "native", null)
 
-        val unitSatoshi = CUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
-        val unitBtc = CUnit.create(btc, "BTC-BTC", "Bitcoin", "B", unitSatoshi, 8u)
+        val unitSatoshi = WKUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
+        val unitBtc = WKUnit.create(btc, "BTC-BTC", "Bitcoin", "B", unitSatoshi, 8u)
 
-        val unitWei = CUnit.create(eth, "ETH-WEI", "WEI", "wei")
-        val unitGwei = CUnit.create(eth, "ETH-GWEI", "GWEI", "gwei", unitWei, 9u)
-        val unitEther = CUnit.create(eth, "ETH-ETH", "ETHER", "E", unitWei, 18u)
+        val unitWei = WKUnit.create(eth, "ETH-WEI", "WEI", "wei")
+        val unitGwei = WKUnit.create(eth, "ETH-GWEI", "GWEI", "gwei", unitWei, 9u)
+        val unitEther = WKUnit.create(eth, "ETH-ETH", "ETHER", "E", unitWei, 18u)
 
         val btc1 = Amount.create(100_000_000L, unitSatoshi)
         assertEquals(100_000_000.0, btc1.asDouble(unitSatoshi))
@@ -220,9 +220,9 @@ class AmountTest {
         var results: List<String>
         val eth = Currency.create("Ethereum", "Ethereum", "ETH", "native", null)
 
-        val unitWei = CUnit.create(eth, "ETH-WEI", "WEI", "wei")
-        val unitGwei = CUnit.create(eth, "ETH-GWEI", "GWEI", "gwei", unitWei, 9u)
-        val unitEther = CUnit.create(eth, "ETH-ETH", "ETHER", "E", unitWei, 18u)
+        val unitWei = WKUnit.create(eth, "ETH-WEI", "WEI", "wei")
+        val unitGwei = WKUnit.create(eth, "ETH-GWEI", "GWEI", "gwei", unitWei, 9u)
+        val unitEther = WKUnit.create(eth, "ETH-ETH", "ETHER", "E", unitWei, 18u)
 
         val a1 = Amount.create("12.12345678", unitEther, false)
         assertNotNull(a1)
@@ -301,8 +301,8 @@ class AmountTest {
     fun testAmountBTC() {
         val btc = Currency.create("Bitcoin", "Bitcoin", "BTC", "native", null)
 
-        val unitSatoshi = CUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
-        val unitBtc = CUnit.create(btc, "BTC-BTC", "Bitcoin", "B", unitSatoshi, 8u)
+        val unitSatoshi = WKUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
+        val unitBtc = WKUnit.create(btc, "BTC-BTC", "Bitcoin", "B", unitSatoshi, 8u)
 
         assertEquals(btc, unitSatoshi.currency)
 
@@ -316,8 +316,8 @@ class AmountTest {
     fun testAmountExtended() {
         val btc = Currency.create("Bitcoin", "Bitcoin", "BTC", "native", null)
 
-        val unitSatoshi = CUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
-        val unitMongo = CUnit.create(btc, "BTC-MONGO", "BitMongo", "BM", unitSatoshi, 70u)
+        val unitSatoshi = WKUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
+        val unitMongo = WKUnit.create(btc, "BTC-MONGO", "BitMongo", "BM", unitSatoshi, 70u)
 
         val btc1 = Amount.create(100_000_000L, unitSatoshi)
         val btc2 = Amount.create(100_000_001L, unitSatoshi)
@@ -345,13 +345,13 @@ class AmountTest {
     fun testCurrencyPair() {
         val btc = Currency.create("Bitcoin", "Bitcoin", "BTC", "native", null)
 
-        val unitSatoshi = CUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
-        val unitBtc = CUnit.create(btc, "BTC-BTC", "Bitcoin", "B", unitSatoshi, 8u)
+        val unitSatoshi = WKUnit.create(btc, "BTC-SAT", "Satoshi", "SAT")
+        val unitBtc = WKUnit.create(btc, "BTC-BTC", "Bitcoin", "B", unitSatoshi, 8u)
 
         val usd = Currency.create("USDollar", "USDollar", "USD", "fiat", null)
 
-        val unitUsdCents = CUnit.create(usd, "USD-Cents", "Cents", "c")
-        val unitUsdDollar = CUnit.create(usd, "USD-Dollar", "Dollars", "$", unitUsdCents, 2u)
+        val unitUsdCents = WKUnit.create(usd, "USD-Cents", "Cents", "c")
+        val unitUsdDollar = WKUnit.create(usd, "USD-Dollar", "Dollars", "$", unitUsdCents, 2u)
 
         val pair = CurrencyPair(baseUnit = unitBtc, quoteUnit = unitUsdDollar, exchangeRate = 10_000.0)
         assertEquals("Bitcoin/Dollars=10000.0", pair.toString())

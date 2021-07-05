@@ -11,8 +11,8 @@ public actual class TransferFeeBasis internal constructor(
         ReferenceCleaner.register(core, core::give)
     }
 
-    public actual val unit: CUnit
-        get() = CUnit(core.pricePerCostFactorUnit)
+    public actual val unit: WKUnit
+        get() = WKUnit(core.pricePerCostFactorUnit)
 
     public actual val currency: Currency
         get() = unit.currency

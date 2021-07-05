@@ -6,10 +6,16 @@ import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.usePinned
 import drewcarlson.walletkit.Closeable
+import kotlin.native.concurrent.*
 
 public actual class Coder internal constructor(
         internal val core: BRCryptoCoder
 ) : Closeable {
+
+    init {
+        freeze()
+    }
+
     public actual fun encode(source: ByteArray): String? {
         val sourceBytes = source.asUByteArray().toCValues()
         val sourceLength = sourceBytes.size.toULong()

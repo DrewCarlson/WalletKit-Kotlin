@@ -4,6 +4,7 @@ import brcrypto.*
 import brcrypto.BRCryptoComparison.*
 import kotlinx.cinterop.*
 import platform.Foundation.*
+import kotlin.native.concurrent.*
 
 public actual class Amount internal constructor(
         core: BRCryptoAmount,
@@ -14,21 +15,12 @@ public actual class Amount internal constructor(
         checkNotNull(cryptoAmountTake(core))
     } else core
 
-    public actual companion object {
-        public actual fun create(double: Double, unit: CUnit): Amount =
-                Amount(checkNotNull(cryptoAmountCreateDouble(double, unit.core)), false)
-
-        public actual fun create(long: Long, unit: CUnit): Amount =
-                Amount(checkNotNull(cryptoAmountCreateInteger(long, unit.core)), false)
-
-        public actual fun create(string: String, unit: CUnit, isNegative: Boolean): Amount? {
-            val cryptoAmount = cryptoAmountCreateString(string, isNegative.toCryptoBoolean(), unit.core)
-            return Amount(cryptoAmount ?: return null, false)
-        }
+    init {
+        freeze()
     }
 
-    public actual val unit: CUnit
-        get() = CUnit(checkNotNull(cryptoAmountGetUnit(core)), false)
+    public actual val unit: WKUnit
+        get() = WKUnit(checkNotNull(cryptoAmountGetUnit(core)), false)
     public actual val currency: Currency
         get() = unit.currency
     public actual val isNegative: Boolean
@@ -38,7 +30,7 @@ public actual class Amount internal constructor(
     public actual val isZero: Boolean
         get() = CRYPTO_TRUE == cryptoAmountIsZero(core)
 
-    public actual fun asDouble(unit: CUnit): Double? = memScoped {
+    public actual fun asDouble(unit: WKUnit): Double? = memScoped {
         val overflow = alloc<BRCryptoBooleanVar>().apply {
             value = CRYPTO_FALSE
         }
@@ -49,7 +41,7 @@ public actual class Amount internal constructor(
         }
     }
 
-    public actual fun asString(unit: CUnit): String? {
+    public actual fun asString(unit: WKUnit): String? {
         val amountDouble = asDouble(unit) ?: return null
         return formatterWithUnit(unit).stringFromNumber(NSNumber(amountDouble))
     }
@@ -73,7 +65,7 @@ public actual class Amount internal constructor(
         return Amount(checkNotNull(cryptoAmountSub(core, that.core)), false)
     }
 
-    public actual fun convert(unit: CUnit): Amount? {
+    public actual fun convert(unit: WKUnit): Amount? {
         val converted = cryptoAmountConvertToUnit(core, unit.core) ?: return null
         return Amount(converted, false)
     }
@@ -104,7 +96,7 @@ public actual class Amount internal constructor(
                 CRYPTO_COMPARE_LT -> -1
             }
 
-    private fun formatterWithUnit(unit: CUnit) =
+    private fun formatterWithUnit(unit: WKUnit) =
             NSNumberFormatter().apply {
                 locale = NSLocale.currentLocale
                 numberStyle = NSNumberFormatterCurrencyStyle
@@ -112,4 +104,17 @@ public actual class Amount internal constructor(
                 generatesDecimalNumbers = 0u != unit.decimals
                 maximumFractionDigits = unit.decimals.toULong()
             }
+
+    public actual companion object {
+        public actual fun create(double: Double, unit: WKUnit): Amount =
+            Amount(checkNotNull(cryptoAmountCreateDouble(double, unit.core)), false)
+
+        public actual fun create(long: Long, unit: WKUnit): Amount =
+            Amount(checkNotNull(cryptoAmountCreateInteger(long, unit.core)), false)
+
+        public actual fun create(string: String, unit: WKUnit, isNegative: Boolean): Amount? {
+            val cryptoAmount = cryptoAmountCreateString(string, isNegative.toCryptoBoolean(), unit.core)
+            return Amount(cryptoAmount ?: return null, false)
+        }
+    }
 }

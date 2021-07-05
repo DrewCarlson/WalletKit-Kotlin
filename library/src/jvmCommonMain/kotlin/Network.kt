@@ -96,34 +96,34 @@ public actual class Network internal constructor(
     public actual fun hasCurrency(currency: Currency): Boolean =
             core.hasCurrency(currency.core)
 
-    public actual fun baseUnitFor(currency: Currency): CUnit? {
+    public actual fun baseUnitFor(currency: Currency): WKUnit? {
         if (!hasCurrency(currency)) return null
         val cryptoUnit = core.getUnitAsBase(currency.core).orNull() ?: return null
-        return CUnit(cryptoUnit)
+        return WKUnit(cryptoUnit)
     }
 
-    public actual fun defaultUnitFor(currency: Currency): CUnit? {
+    public actual fun defaultUnitFor(currency: Currency): WKUnit? {
         if (!hasCurrency(currency)) return null
         val cryptoUnit = core.getUnitAsDefault(currency.core).orNull() ?: return null
-        return CUnit(cryptoUnit)
+        return WKUnit(cryptoUnit)
     }
 
-    public actual fun unitsFor(currency: Currency): Set<CUnit>? {
+    public actual fun unitsFor(currency: Currency): Set<WKUnit>? {
         if (!hasCurrency(currency)) return null
         return (0 until core.getUnitCount(currency.core).toLong())
                 .map { checkNotNull(core.getUnitAt(currency.core, UnsignedLong.valueOf(it)).orNull()) }
-                .map { CUnit(it) }
+                .map { WKUnit(it) }
                 .toSet()
     }
 
-    public actual fun hasUnitFor(currency: Currency, unit: CUnit): Boolean? =
+    public actual fun hasUnitFor(currency: Currency, unit: WKUnit): Boolean? =
             unitsFor(currency)?.contains(unit)
 
     public actual fun addressFor(string: String): Address? {
         return Address.create(string, this)
     }
 
-    public actual fun addCurrency(currency: Currency, baseUnit: CUnit, defaultUnit: CUnit) {
+    public actual fun addCurrency(currency: Currency, baseUnit: WKUnit, defaultUnit: WKUnit) {
         require(baseUnit.hasCurrency(currency))
         require(defaultUnit.hasCurrency(currency))
         if (!hasCurrency(currency)) {
@@ -131,7 +131,7 @@ public actual class Network internal constructor(
         }
     }
 
-    public actual fun addUnitFor(currency: Currency, unit: CUnit) {
+    public actual fun addUnitFor(currency: Currency, unit: WKUnit) {
         require(unit.hasCurrency(currency))
         require(hasCurrency(currency))
         if (hasUnitFor(currency, unit) == null) {

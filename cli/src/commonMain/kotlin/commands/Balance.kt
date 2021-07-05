@@ -22,7 +22,7 @@ class Balance(val bdbToken: String) : Subcommand(
             bdbToken = bdbToken,
             isMainnet = mainnet,
             listener = BaseListener(currencyId) { _, manager ->
-                printlnGreen(manager.primaryWallet.target)
+                printlnGreen(manager.wallet.target)
             }
         )
         while (true) yield()

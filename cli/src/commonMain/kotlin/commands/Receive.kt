@@ -37,7 +37,7 @@ class Receive(
                 currencyId,
                 addressScheme = addressScheme
             ) { _, manager ->
-                printlnGreen(manager.primaryWallet.target)
+                printlnGreen(manager.wallet.target)
             }
         )
         while (true) yield()

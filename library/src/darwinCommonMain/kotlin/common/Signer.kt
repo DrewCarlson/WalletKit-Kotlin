@@ -7,12 +7,17 @@ import drewcarlson.walletkit.common.SignerAlgorithm.*
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.usePinned
+import kotlin.native.concurrent.*
 
 public actual class Signer internal constructor(
         core: BRCryptoSigner?
 ) : Closeable {
 
     internal val core: BRCryptoSigner = requireNotNull(core)
+
+    init {
+        freeze()
+    }
 
     public actual fun sign(digest: ByteArray, key: Key): ByteArray? {
         val privKey = key.core

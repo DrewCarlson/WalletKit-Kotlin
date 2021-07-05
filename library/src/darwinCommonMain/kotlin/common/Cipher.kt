@@ -5,10 +5,15 @@ import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.usePinned
 import drewcarlson.walletkit.Closeable
+import kotlin.native.concurrent.*
 
 public actual class Cipher internal constructor(
         internal val core: BRCryptoCipher
 ) : Closeable {
+
+    init {
+        freeze()
+    }
 
     public actual fun encrypt(data: ByteArray): ByteArray? {
         val inputBytes = data.asUByteArray().toCValues()
