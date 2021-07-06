@@ -13,26 +13,70 @@ struct TransferItemView: View {
     let transfer: Transfer
     
     var body: some View {
+        let description: String
+        let amount: String
+        let amountColor: Color
+        switch (transfer.direction) {
+        case TransferDirection.sent:
+            description = "To: \(transfer.target?.description() ?? "")"
+            amount = "-\(transfer.amount)"
+            amountColor = Color.red
+        case TransferDirection.received:
+            description = "From: \(transfer.source?.description() ?? "")"
+            amount = transfer.amount.description()
+            amountColor = Color.green
+        case TransferDirection.recovered:
+            description = "Recovered: \(transfer.source?.description() ?? "")"
+            amount = "\(transfer.amount)"
+            amountColor = Color.black
+        default:
+            description = "error"
+            amount = "error"
+            amountColor = Color.purple
+        }
+        
         return AnyView(VStack(alignment: HorizontalAlignment.leading) {
-            switch (transfer.direction) {
-            case TransferDirection.sent:
-                Text("To: \(transfer.target?.description() ?? "")")
-                    .lineLimit(1)
-                Text("-\(transfer.amount)")
-                    .foregroundColor(Color.red)
-            case TransferDirection.received:
-                Text("From: \(transfer.source?.description() ?? "")")
-                    .lineLimit(1)
-                Text("\(transfer.amount)")
-                    .foregroundColor(Color.green)
-            case TransferDirection.recovered:
-                Text("Recovered: \(transfer.source?.description() ?? "")")
-                    .lineLimit(1)
-                Text("\(transfer.amount)")
-                    .foregroundColor(Color.black)
-            default:
-                Text("error rendering transfer")
+            Text("Hash: \(transfer.txHash?.description() ?? "")")
+                .lineLimit(1)
+            Text(description)
+                .lineLimit(1)
+            ZStack {
+                HStack {
+                    Text(amount)
+                        .foregroundColor(amountColor)
+                        .lineLimit(1)
+                    Spacer()
+                }
+                
+                HStack {
+                    Spacer()
+                    switch transfer.state {
+                    case let state as TransferState.INCLUDED:
+                        if (state.confirmation.success) {
+                            let confs = transfer.confirmations?.uint64Value ?? 0
+                            let confsUntilFinal = transfer.wallet.manager.network.confirmationsUntilFinal
+                            if (confs >= confsUntilFinal) {
+                                Text("Confirmed").foregroundColor(.green)
+                            } else {
+                                Text("Confirming: \(confs)/\(confsUntilFinal)")
+                                    .foregroundColor(.blue)
+                            }
+                        } else if (state.confirmation.error != nil) {
+                            Text("Failed: \(state.confirmation.error ?? "")")
+                                .foregroundColor(.red)
+                        }
+                    case _ as TransferState.FAILED:
+                        Text("Failed").foregroundColor(.red)
+                    case _ as TransferState.DELETED:
+                        Text("Deleted").foregroundColor(.red)
+                    default:
+                        Text("Pending").foregroundColor(.blue)
+                    }
+                }
             }
-        }.padding(2))
+        }).padding(2)
+            .onTapGesture {
+                UIPasteboard.general.string = transfer.txHash?.description() ?? ""
+            }
     }
 }

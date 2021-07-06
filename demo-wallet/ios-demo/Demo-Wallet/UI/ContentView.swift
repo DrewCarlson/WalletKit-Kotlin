@@ -12,9 +12,6 @@ struct ContentView: View {
     
     var body: some View {
         return AnyView(VStack {
-            Text("Demo Wallet")
-                .bold()
-            
             switch router.stack.last {
             case _ as Route.WalletList:
                 WalletScreen()
@@ -26,7 +23,7 @@ struct ContentView: View {
                     .environmentObject(router)
             default: Text("unknown route")
             }
-        }.padding(4))
+        })
     }
 }
 

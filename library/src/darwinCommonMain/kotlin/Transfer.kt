@@ -79,11 +79,8 @@ public actual class Transfer internal constructor(
 
     public actual val state: TransferState
         get() {
-            return memScoped {
-                val coreState = checkNotNull(cryptoTransferGetState(core))
-                defer { cryptoMemoryFree(coreState) }
-                coreState.pointed.toTransferState()
-            }
+            val coreState = checkNotNull(cryptoTransferGetState(core))
+            return coreState.pointed.toTransferState()
         }
 
     public actual fun getConfirmationsAt(blockHeight: ULong): ULong? {
