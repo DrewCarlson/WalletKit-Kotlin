@@ -64,10 +64,13 @@ struct ViewWalletScreen: View {
                     Text(wallet.balance.asString(unit: wallet.unit) ?? "")
                 }.padding(4)
 
+                
+                Text("Transfers")
                 ScrollView {
-                    LazyVStack {
+                    LazyVStack(spacing:4) {
                         ForEach(observable.transfers[wallet]?.reversed() ?? [], id: \.self) { transfer in
                             TransferItemView(transfer: transfer)
+                                .padding(4)
                         }
                     }
                 }

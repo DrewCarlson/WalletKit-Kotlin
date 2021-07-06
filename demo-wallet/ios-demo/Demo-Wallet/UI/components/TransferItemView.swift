@@ -10,7 +10,16 @@ import SwiftUI
 import DemoWalletKotlin
 
 struct TransferItemView: View {
+    
     let transfer: Transfer
+    @State var manager: WalletManager
+    
+    @EnvironmentObject private var observable: SystemObservable
+    
+    init(transfer: Transfer) {
+        self.transfer = transfer
+        self.manager = transfer.wallet.manager
+    }
     
     var body: some View {
         let description: String
@@ -54,7 +63,7 @@ struct TransferItemView: View {
                     case let state as TransferState.INCLUDED:
                         if (state.confirmation.success) {
                             let confs = transfer.confirmations?.uint64Value ?? 0
-                            let confsUntilFinal = transfer.wallet.manager.network.confirmationsUntilFinal
+                            let confsUntilFinal = manager.network.confirmationsUntilFinal
                             if (confs >= confsUntilFinal) {
                                 Text("Confirmed").foregroundColor(.green)
                             } else {
@@ -77,6 +86,10 @@ struct TransferItemView: View {
         }).padding(2)
             .onTapGesture {
                 UIPasteboard.general.string = transfer.txHash?.description() ?? ""
-            }
+            }.onReceive(self.observable.$managers.map({ managers in
+                managers.first { $0 == manager } ?? manager
+            }), perform: { manager in
+                self.manager = manager
+            })
     }
 }
