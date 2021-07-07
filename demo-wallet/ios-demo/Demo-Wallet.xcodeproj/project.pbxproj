@@ -19,6 +19,7 @@
 		3AB28A782693994300E79DDE /* WalletScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB28A772693994300E79DDE /* WalletScreen.swift */; };
 		3AB28A7A26939A8700E79DDE /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB28A7926939A8700E79DDE /* Router.swift */; };
 		3AB28A7C26939D0400E79DDE /* ViewWalletScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB28A7B26939D0400E79DDE /* ViewWalletScreen.swift */; };
+		3AD34F522694D1D900206A9D /* ViewAddressScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD34F512694D1D900206A9D /* ViewAddressScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		3AB28A772693994300E79DDE /* WalletScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletScreen.swift; sourceTree = "<group>"; };
 		3AB28A7926939A8700E79DDE /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		3AB28A7B26939D0400E79DDE /* ViewWalletScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewWalletScreen.swift; sourceTree = "<group>"; };
+		3AD34F512694D1D900206A9D /* ViewAddressScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewAddressScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 			children = (
 				3AB28A772693994300E79DDE /* WalletScreen.swift */,
 				3AB28A7B26939D0400E79DDE /* ViewWalletScreen.swift */,
+				3AD34F512694D1D900206A9D /* ViewAddressScreen.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				3AB28A7A26939A8700E79DDE /* Router.swift in Sources */,
 				3AACFB8925A80DAB000F6409 /* ContentView.swift in Sources */,
 				3AB28A742693977B00E79DDE /* SystemObservable.swift in Sources */,
+				3AD34F522694D1D900206A9D /* ViewAddressScreen.swift in Sources */,
 				3AB28A7C26939D0400E79DDE /* ViewWalletScreen.swift in Sources */,
 				3AB28A702693971300E79DDE /* TransferItemView.swift in Sources */,
 				3AB28A6D26937F6E00E79DDE /* ActivityInidicator.swift in Sources */,

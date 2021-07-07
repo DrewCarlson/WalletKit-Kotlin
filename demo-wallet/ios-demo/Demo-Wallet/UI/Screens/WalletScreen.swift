@@ -16,8 +16,16 @@ struct WalletScreen: View {
     var body: some View {
         return AnyView(VStack(alignment:.leading) {
             Text("Wallets")
+                .fontWeight(.bold)
                 .frame(maxWidth:.infinity, alignment: .center)
                 .padding(4)
+            
+            if (observable.wallets.isEmpty) {
+                HStack(alignment: .center) {
+                    ActivityIndicator(shouldAnimate: Binding.constant(true))
+                    Text("Loading...")
+                }.frame(maxWidth: .infinity, alignment: .center)
+            }
             
             List(Array(zip(observable.wallets, observable.syncStates)), id: \.0) { wallet, syncing in
                 WalletItemView(wallet: wallet, syncing: syncing)

@@ -38,11 +38,14 @@ public actual class Wallet internal constructor(
         get() = memScoped {
             val count = alloc<ULongVar>()
             val coreTransfers = cryptoWalletGetTransfers(core, count.ptr)
-            checkNotNull(coreTransfers)
-            defer { cryptoMemoryFree(coreTransfers) }
+            if (coreTransfers == null) {
+                emptyList()
+            } else {
+                defer { cryptoMemoryFree(coreTransfers) }
 
-            List(count.value.toInt()) { i ->
-                Transfer(checkNotNull(coreTransfers[i]), this@Wallet, false)
+                List(count.value.toInt()) { i ->
+                    Transfer(checkNotNull(coreTransfers[i]), this@Wallet, false)
+                }
             }
         }
 

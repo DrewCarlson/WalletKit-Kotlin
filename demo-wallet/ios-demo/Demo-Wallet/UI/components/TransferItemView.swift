@@ -44,7 +44,7 @@ struct TransferItemView: View {
             amountColor = Color.purple
         }
         
-        return AnyView(VStack(alignment: HorizontalAlignment.leading) {
+        return AnyView(VStack(alignment: HorizontalAlignment.leading, spacing:0) {
             Text("Hash: \(transfer.txHash?.description() ?? "")")
                 .lineLimit(1)
             Text(description)
@@ -83,6 +83,9 @@ struct TransferItemView: View {
                     }
                 }
             }
+            Color.black
+                .opacity(0.5)
+                .frame(height: 1)
         }).padding(2)
             .onTapGesture {
                 UIPasteboard.general.string = transfer.txHash?.description() ?? ""

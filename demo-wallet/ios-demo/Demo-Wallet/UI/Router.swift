@@ -39,7 +39,7 @@ class Router: ObservableObject {
     }
     
     func replaceTop(_ route: Route) {
-        routeSubject.send(StackEvent.push(route: route))
+        routeSubject.send(StackEvent.replaceTop(route: route))
     }
     
     func replaceStack(_ routes: [Route]) {

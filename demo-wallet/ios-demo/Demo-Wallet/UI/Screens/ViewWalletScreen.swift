@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CoreImage
 import SwiftUI
 import DemoWalletKotlin
 
@@ -21,97 +20,73 @@ struct ViewWalletScreen: View {
     init(wallet: Wallet) {
         self.wallet = wallet
         self.manager = wallet.manager
+        DispatchQueue.global().async {
+            _ = ViewAddressScreen.getQRCodeData(text: "")
+        }
     }
     
     var body: some View {
-        let scheme: AddressScheme
-        if (wallet.manager.network.supportsAddressScheme(addressScheme: AddressScheme.btclegacy)) {
-            scheme = AddressScheme.btclegacy
-        } else {
-            scheme = AddressScheme.native
-        }
-        let address = wallet.getTargetForScheme(scheme: scheme).description()
-        
         return AnyView(ZStack {
-            VStack {
+            VStack(spacing:0) {
                 ZStack {
                     HStack {
                         Button(action: { router.popCurrentRoute() }) { Text("Back") }
+                            .padding(4)
                         Spacer()
                     }
                     
                     Text(wallet.name)
                         .fontWeight(.bold)
                         .frame(maxWidth:.infinity)
-                }.frame(maxWidth:.infinity)
-                .padding(4)
-                
-                HStack {
-                    Text("Manager State:")
-                    Spacer()
-                    Text(manager.state.description)
                 }.padding(4)
+                .frame(maxWidth:.infinity)
                 
-                HStack {
-                    Text("Height:")
-                    Spacer()
-                    Text(wallet.manager.network.height.description)
-                }.padding(4)
-                
-                HStack {
-                    Text("Balance:")
-                    Spacer()
-                    Text(wallet.balance.asString(unit: wallet.unit) ?? "")
-                }.padding(4)
+                VStack(spacing:0) {
+                    HStack {
+                        Text("Manager State:")
+                        Spacer()
+                        Text(manager.state.description)
+                    }
+                    
+                    HStack {
+                        Text("Height:")
+                        Spacer()
+                        Text(manager.network.height.description)
+                    }
+                    
+                    HStack {
+                        Text("Balance:")
+                        Spacer()
+                        Text(wallet.balance.asString(unit: wallet.unit) ?? "")
+                    }
+                    
+                    HStack {
+                        Text("Mode:")
+                        Spacer()
+                        Text(manager.mode.description())
+                    }
+                }.padding(.horizontal, 8)
 
-                
-                Text("Transfers")
+                Text("(\(wallet.transfers.count)) Transfers")
                 ScrollView {
                     LazyVStack(spacing:4) {
                         ForEach(observable.transfers[wallet]?.reversed() ?? [], id: \.self) { transfer in
                             TransferItemView(transfer: transfer)
-                                .padding(4)
+                                .padding(.horizontal, 8)
                         }
                     }
                 }
                 
                 HStack {
                     Spacer()
-                    Button(action: { showReceive = true }) { Text("Receive") }
+                    Button(action: { router.pushRoute(Route.ViewAddress(wallet: wallet)) }) { Text("Receive") }
                     Spacer()
                     Button(action: {}) { Text("Send") }
                     Spacer()
-                }.padding(4)
+                }.padding(8)
             }.frame(maxHeight:.infinity)
-            
-            if (showReceive) {
-                VStack(spacing:0) {
-                    Color.black
-                        .opacity(0.7)
-                        .onTapGesture { showReceive = false }
-                        .frame(maxHeight:.infinity)
-                    VStack(spacing:0) {
-                        HStack {
-                            Spacer()
-                            Button(action: { showReceive = false }) {
-                                Text("Close")
-                            }
-                        }.padding(4)
-                        Text(address)
-                            .frame(maxWidth:.infinity)
-                            .padding(4)
-                        Image(uiImage: UIImage(data: getQRCodeData(text: address))!)
-                            .resizable()
-                            .frame(width: 200, height: 200)
-                            .padding(4)
-                    }.frame(alignment:.bottom)
-                    .background(Color.white)
-                    .onTapGesture {
-                        UIPasteboard.general.string = address
-                    }
-                }
-            }
-        }).onReceive(self.observable.$wallets.map { wallets in
+        }).frame(maxWidth: .infinity, maxHeight:.infinity)
+        .onReceive(self.observable.$wallets.map { wallets in
             wallets.first { $0 == wallet } ?? wallet
         }, perform: { wallet in
             self.wallet = wallet
@@ -120,16 +95,5 @@ struct ViewWalletScreen: View {
         }, perform: { manager in
             self.manager = manager
         })
-    }
-
-    func getQRCodeData(text: String) -> Data {
-        let filter = CIFilter(name: "CIQRCodeGenerator")!
-        let data = text.data(using: .ascii, allowLossyConversion: false)
-        filter.setValue(data, forKey: "inputMessage")
-        let ciimage = filter.outputImage!
-        let transform = CGAffineTransform(scaleX: 10, y: 10)
-        let scaledCIImage = ciimage.transformed(by: transform)
-        let uiimage = UIImage(ciImage: scaledCIImage)
-        return uiimage.pngData()!
     }
 }
