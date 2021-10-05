@@ -1,16 +1,16 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
+import walletkit.core.*
 import kotlinx.cinterop.toKStringFromUtf8
 import kotlin.native.concurrent.*
 
-public actual class WKUnit internal constructor(
-        core: BRCryptoUnit,
+public actual class UnitWK internal constructor(
+        core: WKUnit,
         take: Boolean
 ) : Closeable {
 
-    internal val core: BRCryptoUnit = if (take) {
-        checkNotNull(cryptoUnitTake(core))
+    internal val core: WKUnit = if (take) {
+        checkNotNull(wkUnitTake(core))
     } else core
 
     init {
@@ -18,34 +18,34 @@ public actual class WKUnit internal constructor(
     }
 
     public actual val currency: Currency
-        get() = Currency(checkNotNull(cryptoUnitGetCurrency(core)), false)
+        get() = Currency(checkNotNull(wkUnitGetCurrency(core)), false)
     internal actual val uids: String
-        get() = checkNotNull(cryptoUnitGetUids(core)).toKStringFromUtf8()
+        get() = checkNotNull(wkUnitGetUids(core)).toKStringFromUtf8()
     public actual val name: String
-        get() = checkNotNull(cryptoUnitGetName(core)).toKStringFromUtf8()
+        get() = checkNotNull(wkUnitGetName(core)).toKStringFromUtf8()
     public actual val symbol: String
-        get() = checkNotNull(cryptoUnitGetSymbol(core)).toKStringFromUtf8()
-    public actual val base: WKUnit
-        get() = WKUnit(checkNotNull(cryptoUnitGetBaseUnit(core)), false)
+        get() = checkNotNull(wkUnitGetSymbol(core)).toKStringFromUtf8()
+    public actual val base: UnitWK
+        get() = UnitWK(checkNotNull(wkUnitGetBaseUnit(core)), false)
     public actual val decimals: UInt
-        get() = cryptoUnitGetBaseDecimalOffset(core).toUInt()
+        get() = wkUnitGetBaseDecimalOffset(core).toUInt()
 
-    public actual fun isCompatible(unit: WKUnit): Boolean {
-        return CRYPTO_TRUE == cryptoUnitIsCompatible(core, unit.core)
+    public actual fun isCompatible(unit: UnitWK): Boolean {
+        return WK_TRUE == wkUnitIsCompatible(core, unit.core)
     }
 
     public actual fun hasCurrency(currency: Currency): Boolean {
-        return CRYPTO_TRUE == cryptoUnitHasCurrency(core, currency.core)
+        return WK_TRUE == wkUnitHasCurrency(core, currency.core)
     }
 
     actual override fun equals(other: Any?): Boolean {
-        return other is WKUnit && CRYPTO_TRUE == cryptoUnitIsIdentical(core, other.core)
+        return other is UnitWK && WK_TRUE == wkUnitIsIdentical(core, other.core)
     }
 
     actual override fun hashCode(): Int = uids.hashCode()
 
     override fun close() {
-        cryptoUnitGive(core)
+        wkUnitGive(core)
     }
 
     public actual companion object {
@@ -54,9 +54,9 @@ public actual class WKUnit internal constructor(
                 uids: String,
                 name: String,
                 symbol: String
-        ) = WKUnit(
+        ) = UnitWK(
                 core = checkNotNull(
-                        cryptoUnitCreateAsBase(
+                        wkUnitCreateAsBase(
                                 currency.core,
                                 uids,
                                 name,
@@ -71,11 +71,11 @@ public actual class WKUnit internal constructor(
                 uids: String,
                 name: String,
                 symbol: String,
-                base: WKUnit,
+                base: UnitWK,
                 decimals: UInt
-        ) = WKUnit(
+        ) = UnitWK(
                 core = checkNotNull(
-                        cryptoUnitCreate(
+                        wkUnitCreate(
                                 currency.core,
                                 uids,
                                 name,

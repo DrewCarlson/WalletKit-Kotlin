@@ -1,12 +1,12 @@
 package drewcarlson.walletkit.common
 
+import com.blockset.walletkit.nativex.WKKey
 import drewcarlson.walletkit.Secret
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoKey
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import drewcarlson.walletkit.Closeable
 
 public actual class Key internal constructor(
-        internal val core: BRCryptoKey
+        internal val core: WKKey
 ) : Closeable {
 
     init {
@@ -17,7 +17,7 @@ public actual class Key internal constructor(
             secret: Secret
     ) : this(
             checkNotNull(
-                    BRCryptoKey.cryptoKeyCreateFromSecret(secret.u8).orNull()
+                    WKKey.cryptoKeyCreateFromSecret(secret.u8).orNull()
             )
     )
 
@@ -49,41 +49,41 @@ public actual class Key internal constructor(
             @Synchronized set
 
         public actual fun isProtectedPrivateKey(privateKey: String): Boolean =
-                BRCryptoKey.isProtectedPrivateKeyString(privateKey.toByteArray())
+                WKKey.isProtectedPrivateKeyString(privateKey.toByteArray())
 
         public actual fun createFromPhrase(phrase: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
-                else BRCryptoKey.createFromPhrase(phrase.toByteArray(), words)
+                else WKKey.createFromPhrase(phrase.toByteArray(), words)
                         .orNull()
                         ?.run(::Key)
 
         public actual fun createFromProtectedPrivateKey(privateKey: String, passphrase: String): Key? =
-                BRCryptoKey.createFromPrivateKeyString(privateKey.toByteArray(), passphrase.toByteArray())
+                WKKey.createFromPrivateKeyString(privateKey.toByteArray(), passphrase.toByteArray())
                         .orNull()
                         ?.run(::Key)
 
         public actual fun createFromPrivateKey(privateKey: String): Key? =
-                BRCryptoKey.createFromPrivateKeyString(privateKey.toByteArray())
+                WKKey.createFromPrivateKeyString(privateKey.toByteArray())
                         .orNull()
                         ?.run(::Key)
 
         public actual fun createFromPublicKey(string: String): Key? =
-                BRCryptoKey.createFromPublicKeyString(string.toByteArray())
+                WKKey.createFromPublicKeyString(string.toByteArray())
                         .orNull()
                         ?.run(::Key)
 
         public actual fun createForPigeonFromKey(key: Key, nonce: ByteArray): Key? =
-                BRCryptoKey.createForPigeon(key.core, nonce).orNull()?.run(::Key)
+                WKKey.createForPigeon(key.core, nonce).orNull()?.run(::Key)
 
         public actual fun createForBIP32ApiAuth(phrase: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
-                else BRCryptoKey.createForBIP32ApiAuth(phrase.toByteArray(), words)
+                else WKKey.createForBIP32ApiAuth(phrase.toByteArray(), words)
                         .orNull()
                         ?.run(::Key)
 
         public actual fun createForBIP32BitID(phrase: String, index: Int, uri: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
-                else BRCryptoKey.createForBIP32BitID(phrase.toByteArray(), index, uri, words)
+                else WKKey.createForBIP32BitID(phrase.toByteArray(), index, uri, words)
                         .orNull()
                         ?.run(::Key)
     }

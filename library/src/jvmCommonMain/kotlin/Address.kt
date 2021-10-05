@@ -1,10 +1,10 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoAddress
+import com.blockset.walletkit.nativex.WKAddress
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 
 public actual class Address internal constructor(
-        internal val core: BRCryptoAddress
+        internal val core: WKAddress
 ) : Closeable {
 
     init {
@@ -23,7 +23,7 @@ public actual class Address internal constructor(
 
     public actual companion object {
         public actual fun create(string: String, network: Network): Address? {
-            return BRCryptoAddress.create(string, network.core)
+            return WKAddress.create(string, network.core)
                     ?.orNull()
                     ?.run(::Address)
         }

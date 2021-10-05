@@ -1,9 +1,6 @@
 # WalletKit Kotlin
 
-![Bintray](https://img.shields.io/bintray/v/drewcarlson/WalletKit-Kotlin/WalletKit-Kotlin?color=blue)
-![](https://img.shields.io/maven-metadata/v?label=artifactory&logoColor=lightgrey&metadataUrl=https%3A%2F%2Foss.jfrog.org%2Fartifactory%2Foss-snapshot-local%2Fdrewcarlson%2Fwalletkit%2Fwalletkit%2Fmaven-metadata.xml&color=lightgrey)
-![](https://github.com/DrewCarlson/WalletKit-Kotlin/workflows/Jvm/badge.svg)
-![](https://github.com/DrewCarlson/WalletKit-Kotlin/workflows/Native/badge.svg)
+![](https://github.com/DrewCarlson/WalletKit-Kotlin/workflows/Tests/badge.svg)
 
 Multiplatform [WalletKit](https://github.com/blockset-corp/walletkit) Kotlin SDK implementation, providing cryptocurrency wallet features for various blockchains.
 

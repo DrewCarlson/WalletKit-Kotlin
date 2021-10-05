@@ -3,7 +3,6 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
     }
 }
 
@@ -19,12 +18,14 @@ include(":demo-wallet")
     ":libs:sqlite3"
 )*/
 
+project(":library").name = "walletkit"
+
 includeBuild("walletkit/WalletKitJava") {
     dependencySubstitution {
-//        substitute(module("com.breadwallet.core:corenative-android"))
-//            .using(project(":corenative-android"))
-        substitute(module("com.breadwallet.core:corenative-jre"))
-            .using(project(":corenative-jre"))
+        substitute(module("com.blockset.walletkit:WalletKitNative-JRE"))
+                .using(project(":WalletKitNative-JRE"))
+        substitute(module("com.blockset.walletkit:WalletKitNative-Android"))
+                .using(project(":WalletKitNative-Android"))
     }
 }
 

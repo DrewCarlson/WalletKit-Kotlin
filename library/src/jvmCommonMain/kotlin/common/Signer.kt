@@ -1,11 +1,11 @@
 package drewcarlson.walletkit.common
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoSigner
+import com.blockset.walletkit.nativex.WKSigner
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import drewcarlson.walletkit.Closeable
 
 public actual class Signer internal constructor(
-        internal val core: BRCryptoSigner
+        internal val core: WKSigner
 ) : Closeable {
 
     init {
@@ -25,9 +25,9 @@ public actual class Signer internal constructor(
     public actual companion object {
         public actual fun createForAlgorithm(algorithm: SignerAlgorithm): Signer =
                 when (algorithm) {
-                    SignerAlgorithm.COMPACT -> BRCryptoSigner.createCompact().orNull()
-                    SignerAlgorithm.BASIC_DER -> BRCryptoSigner.createBasicDer().orNull()
-                    SignerAlgorithm.BASIC_JOSE -> BRCryptoSigner.createBasicJose().orNull()
+                    SignerAlgorithm.COMPACT -> WKSigner.createCompact().orNull()
+                    SignerAlgorithm.BASIC_DER -> WKSigner.createBasicDer().orNull()
+                    SignerAlgorithm.BASIC_JOSE -> WKSigner.createBasicJose().orNull()
                 }.let { coreSigner -> Signer(checkNotNull(coreSigner)) }
     }
 }

@@ -1,11 +1,11 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoUnit
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
+import com.blockset.walletkit.nativex.WKUnit as CoreUnit
 import com.google.common.primitives.UnsignedInteger
 
-public actual class WKUnit internal constructor(
-        internal val core: BRCryptoUnit
+public actual class UnitWK internal constructor(
+        internal val core: CoreUnit
 ) : Closeable {
 
     init {
@@ -20,19 +20,19 @@ public actual class WKUnit internal constructor(
         get() = core.name
     public actual val symbol: String
         get() = core.symbol
-    public actual val base: WKUnit
-        get() = WKUnit(core.baseUnit)
+    public actual val base: UnitWK
+        get() = UnitWK(core.baseUnit)
     public actual val decimals: UInt
         get() = core.decimals.toByte().toUInt()
 
-    public actual fun isCompatible(unit: WKUnit): Boolean =
+    public actual fun isCompatible(unit: UnitWK): Boolean =
             core.isCompatible(unit.core)
 
     public actual fun hasCurrency(currency: Currency): Boolean =
             core.hasCurrency(currency.core)
 
     actual override fun equals(other: Any?): Boolean =
-            other is WKUnit && core.isIdentical(other.core)
+            other is UnitWK && core.isIdentical(other.core)
 
     actual override fun hashCode(): Int = uids.hashCode()
 
@@ -46,9 +46,9 @@ public actual class WKUnit internal constructor(
                 uids: String,
                 name: String,
                 symbol: String
-        ) = WKUnit(
+        ) = UnitWK(
                 core = checkNotNull(
-                        BRCryptoUnit.createAsBase(
+                        CoreUnit.createAsBase(
                                 currency.core,
                                 uids,
                                 name,
@@ -62,11 +62,11 @@ public actual class WKUnit internal constructor(
                 uids: String,
                 name: String,
                 symbol: String,
-                base: WKUnit,
+                base: UnitWK,
                 decimals: UInt
-        ) = WKUnit(
+        ) = UnitWK(
                 core = checkNotNull(
-                        BRCryptoUnit.create(
+                        CoreUnit.create(
                                 currency.core,
                                 uids,
                                 name,

@@ -15,7 +15,6 @@ buildscript {
         jcenter()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         google()
-        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
     }
 }
 
@@ -25,7 +24,6 @@ allprojects {
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
         google()
         jcenter()
-        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
     }
 }
 

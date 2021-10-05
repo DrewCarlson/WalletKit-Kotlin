@@ -1,16 +1,16 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
+import walletkit.core.*
 import kotlin.native.concurrent.*
 
 public actual class Address(
-        core: BRCryptoAddress,
+        core: WKAddress,
         take: Boolean
 ) : Closeable {
 
-    internal val core: BRCryptoAddress =
-            if (take) checkNotNull(cryptoAddressTake(core))
+    internal val core: WKAddress =
+            if (take) checkNotNull(wkAddressTake(core))
             else core
 
     init {
@@ -18,20 +18,20 @@ public actual class Address(
     }
 
     actual override fun equals(other: Any?): Boolean =
-            other is Address && CRYPTO_TRUE == cryptoAddressIsIdentical(core, other.core)
+            other is Address && WK_TRUE == wkAddressIsIdentical(core, other.core)
 
     actual override fun hashCode(): Int = toString().hashCode()
 
     actual override fun toString(): String =
-            checkNotNull(cryptoAddressAsString(core)).toKStringFromUtf8()
+            checkNotNull(wkAddressAsString(core)).toKStringFromUtf8()
 
     actual override fun close() {
-        cryptoAddressGive(core)
+        wkAddressGive(core)
     }
 
     public actual companion object {
         public actual fun create(string: String, network: Network): Address? {
-            val core = cryptoNetworkCreateAddress(network.core, string)
+            val core = wkNetworkCreateAddress(network.core, string)
             return if (core != null) {
                 Address(core, false)
             } else null

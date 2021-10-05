@@ -1,47 +1,47 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
-import brcrypto.BRCryptoComparison.*
 import kotlinx.cinterop.*
 import platform.Foundation.*
+import walletkit.core.*
+import walletkit.core.WKComparison.*
 import kotlin.native.concurrent.*
 
 public actual class Amount internal constructor(
-        core: BRCryptoAmount,
+        core: WKAmount,
         take: Boolean
 ) : Comparable<Amount>, Closeable {
 
-    internal val core: BRCryptoAmount = if (take) {
-        checkNotNull(cryptoAmountTake(core))
+    internal val core: WKAmount = if (take) {
+        checkNotNull(wkAmountTake(core))
     } else core
 
     init {
         freeze()
     }
 
-    public actual val unit: WKUnit
-        get() = WKUnit(checkNotNull(cryptoAmountGetUnit(core)), false)
+    public actual val unit: UnitWK
+        get() = UnitWK(checkNotNull(wkAmountGetUnit(core)), false)
     public actual val currency: Currency
         get() = unit.currency
     public actual val isNegative: Boolean
-        get() = CRYPTO_TRUE == cryptoAmountIsNegative(core)
+        get() = WK_TRUE == wkAmountIsNegative(core)
     public actual val negate: Amount
-        get() = Amount(checkNotNull(cryptoAmountNegate(core)), false)
+        get() = Amount(checkNotNull(wkAmountNegate(core)), false)
     public actual val isZero: Boolean
-        get() = CRYPTO_TRUE == cryptoAmountIsZero(core)
+        get() = WK_TRUE == wkAmountIsZero(core)
 
-    public actual fun asDouble(unit: WKUnit): Double? = memScoped {
-        val overflow = alloc<BRCryptoBooleanVar>().apply {
-            value = CRYPTO_FALSE
+    public actual fun asDouble(unit: UnitWK): Double? = memScoped {
+        val overflow = alloc<WKBooleanVar>().apply {
+            value = WK_FALSE
         }
-        val value = cryptoAmountGetDouble(core, unit.core, overflow.ptr)
+        val value = wkAmountGetDouble(core, unit.core, overflow.ptr)
         when (overflow.value) {
-            CRYPTO_TRUE -> null
+            WK_TRUE -> null
             else -> value
         }
     }
 
-    public actual fun asString(unit: WKUnit): String? {
+    public actual fun asString(unit: UnitWK): String? {
         val amountDouble = asDouble(unit) ?: return null
         return formatterWithUnit(unit).stringFromNumber(NSNumber(amountDouble))
     }
@@ -51,33 +51,33 @@ public actual class Amount internal constructor(
     }
 
     public actual fun asString(base: Int, preface: String): String? {
-        val chars = checkNotNull(cryptoAmountGetStringPrefaced(core, base, preface))
+        val chars = checkNotNull(wkAmountGetStringPrefaced(core, base, preface))
         return chars.toKStringFromUtf8()
     }
 
     public actual operator fun plus(that: Amount): Amount {
         require(isCompatible(that))
-        return Amount(checkNotNull(cryptoAmountAdd(core, that.core)), false)
+        return Amount(checkNotNull(wkAmountAdd(core, that.core)), false)
     }
 
     public actual operator fun minus(that: Amount): Amount {
         require(isCompatible(that))
-        return Amount(checkNotNull(cryptoAmountSub(core, that.core)), false)
+        return Amount(checkNotNull(wkAmountSub(core, that.core)), false)
     }
 
-    public actual fun convert(unit: WKUnit): Amount? {
-        val converted = cryptoAmountConvertToUnit(core, unit.core) ?: return null
+    public actual fun convert(unit: UnitWK): Amount? {
+        val converted = wkAmountConvertToUnit(core, unit.core) ?: return null
         return Amount(converted, false)
     }
 
     public actual fun isCompatible(amount: Amount): Boolean =
-            CRYPTO_TRUE == cryptoAmountIsCompatible(core, amount.core)
+            WK_TRUE == wkAmountIsCompatible(core, amount.core)
 
     public actual fun hasCurrency(currency: Currency): Boolean =
-            CRYPTO_TRUE == cryptoAmountHasCurrency(core, currency.core)
+            WK_TRUE == wkAmountHasCurrency(core, currency.core)
 
     override fun close() {
-        cryptoAmountGive(core)
+        wkAmountGive(core)
     }
 
     actual override fun toString(): String =
@@ -90,13 +90,14 @@ public actual class Amount internal constructor(
     actual override fun hashCode(): Int = core.hashCode()
 
     actual override operator fun compareTo(other: Amount): Int =
-            when (cryptoAmountCompare(core, other.core)) {
-                CRYPTO_COMPARE_EQ -> 0
-                CRYPTO_COMPARE_GT -> 1
-                CRYPTO_COMPARE_LT -> -1
+            when (wkAmountCompare(core, other.core)) {
+                WK_COMPARE_EQ -> 0
+                WK_COMPARE_GT -> 1
+                WK_COMPARE_LT -> -1
+                else -> error("Unknown wkAmountCompare result")
             }
 
-    private fun formatterWithUnit(unit: WKUnit) =
+    private fun formatterWithUnit(unit: UnitWK) =
             NSNumberFormatter().apply {
                 locale = NSLocale.currentLocale
                 numberStyle = NSNumberFormatterCurrencyStyle
@@ -106,14 +107,14 @@ public actual class Amount internal constructor(
             }
 
     public actual companion object {
-        public actual fun create(double: Double, unit: WKUnit): Amount =
-            Amount(checkNotNull(cryptoAmountCreateDouble(double, unit.core)), false)
+        public actual fun create(double: Double, unit: UnitWK): Amount =
+            Amount(checkNotNull(wkAmountCreateDouble(double, unit.core)), false)
 
-        public actual fun create(long: Long, unit: WKUnit): Amount =
-            Amount(checkNotNull(cryptoAmountCreateInteger(long, unit.core)), false)
+        public actual fun create(long: Long, unit: UnitWK): Amount =
+            Amount(checkNotNull(wkAmountCreateInteger(long, unit.core)), false)
 
-        public actual fun create(string: String, unit: WKUnit, isNegative: Boolean): Amount? {
-            val cryptoAmount = cryptoAmountCreateString(string, isNegative.toCryptoBoolean(), unit.core)
+        public actual fun create(string: String, unit: UnitWK, isNegative: Boolean): Amount? {
+            val cryptoAmount = wkAmountCreateString(string, isNegative.toCryptoBoolean(), unit.core)
             return Amount(cryptoAmount ?: return null, false)
         }
     }

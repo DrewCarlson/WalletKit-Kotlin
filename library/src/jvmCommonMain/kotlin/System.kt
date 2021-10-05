@@ -1,8 +1,8 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.*
-import com.breadwallet.corenative.crypto.*
-import com.breadwallet.corenative.utility.*
+import com.blockset.walletkit.nativex.*
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
+import com.blockset.walletkit.nativex.utility.Cookie
 import com.google.common.primitives.*
 import drewcarlson.blockset.*
 import drewcarlson.blockset.model.*
@@ -20,15 +20,15 @@ internal val listenerScope = CoroutineScope(
     })
 
 public actual class System internal constructor(
-    private val dispatcher: CoroutineDispatcher,
-    private val listener: SystemListener,
-    public actual val account: Account,
-    internal actual val isMainnet: Boolean,
-    public actual val storagePath: String,
-    internal actual val query: BdbService,
-    private val context: Cookie,
-    private val cwmListener: BRCryptoListener,
-    private val cwmClient: BRCryptoClient
+        private val dispatcher: CoroutineDispatcher,
+        private val listener: SystemListener,
+        public actual val account: Account,
+        internal actual val isMainnet: Boolean,
+        public actual val storagePath: String,
+        internal actual val query: BdbService,
+        private val context: Cookie,
+        private val cwmListener: WKListener,
+        private val cwmClient: WKClient
 ) {
 
     internal val scope = CoroutineScope(
@@ -36,7 +36,7 @@ public actual class System internal constructor(
             throwable.printStackTrace(java.lang.System.err)
         })
 
-    private val core: BRCryptoSystem = BRCryptoSystem.create(
+    private val core: WKSystem = WKSystem.create(
         cwmClient,
         cwmListener,
         account.core,
@@ -76,8 +76,8 @@ public actual class System internal constructor(
         return core.createManager(
             core,
             network.core,
-            BRCryptoSyncMode.fromCore(mode.core.toInt()),
-            BRCryptoAddressScheme.fromCore(addressScheme.core.toInt()),
+            WKSyncMode.fromCore(mode.core.toInt()),
+            WKAddressScheme.fromCore(addressScheme.core.toInt()),
             currencies.map(Currency::core)
         ).orNull() != null
     }
@@ -86,7 +86,7 @@ public actual class System internal constructor(
         val hasManager = walletManagers.any { it.network == network }
 
         if (!hasManager) {
-            BRCryptoWalletManager.wipe(network.core, storagePath)
+            WKWalletManager.wipe(network.core, storagePath)
         }
     }
 
@@ -145,14 +145,14 @@ public actual class System internal constructor(
             emptyList()
         }.map { bdbCurrency ->
             val denominations = bdbCurrency.denominations.map {
-                BRCryptoClientCurrencyDenominationBundle.create(
+                WKClientCurrencyDenominationBundle.create(
                     it.name,
                     it.code,
                     it.getSymbolSafe(),
                     UnsignedInteger.valueOf(it.decimals.toLong())
                 )
             }
-            BRCryptoClientCurrencyBundle.create(
+            WKClientCurrencyBundle.create(
                 bdbCurrency.currencyId,
                 bdbCurrency.name,
                 bdbCurrency.code,
@@ -166,7 +166,7 @@ public actual class System internal constructor(
 
         if (currencyBundles.isNotEmpty()) {
             core.announceCurrencies(currencyBundles)
-            currencyBundles.forEach(BRCryptoClientCurrencyBundle::release)
+            currencyBundles.forEach(WKClientCurrencyBundle::release)
         }
     }
 
@@ -212,20 +212,20 @@ public actual class System internal constructor(
         }
     }
 
-    internal fun createWalletManager(coreWalletManager: BRCryptoWalletManager): WalletManager =
+    internal fun createWalletManager(coreWalletManager: WKWalletManager): WalletManager =
         WalletManager(coreWalletManager.take(), this, scope)
 
-    internal fun getWalletManager(coreWalletManager: BRCryptoWalletManager): WalletManager? {
+    internal fun getWalletManager(coreWalletManager: WKWalletManager): WalletManager? {
         return if (core.hasManager(coreWalletManager)) {
             WalletManager(coreWalletManager.take(), this, scope)
         } else null
     }
 
-    internal fun getNetwork(coreNetwork: BRCryptoNetwork): Network? {
+    internal fun getNetwork(coreNetwork: WKNetwork): Network? {
         return if (core.hasNetwork(coreNetwork)) createNetwork(coreNetwork, true) else null
     }
 
-    private fun createNetwork(coreNetwork: BRCryptoNetwork, needTake: Boolean): Network {
+    private fun createNetwork(coreNetwork: WKNetwork, needTake: Boolean): Network {
         return Network(if (needTake) coreNetwork.take() else coreNetwork)
     }
 
@@ -266,7 +266,7 @@ public actual class System internal constructor(
             val id = SYSTEM_IDS.incrementAndGet()
             val context = Cookie(id)
 
-            val cwmListener = BRCryptoListener.create(
+            val cwmListener = WKListener.create(
                 context,
                 SystemEventCallback,
                 NetworkEventCallback,

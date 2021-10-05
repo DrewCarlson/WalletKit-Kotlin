@@ -1,18 +1,18 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoFeeBasis
+import com.blockset.walletkit.nativex.WKFeeBasis
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 
 public actual class TransferFeeBasis internal constructor(
-        internal val core: BRCryptoFeeBasis
+        internal val core: WKFeeBasis
 ) {
 
     init {
         ReferenceCleaner.register(core, core::give)
     }
 
-    public actual val unit: WKUnit
-        get() = WKUnit(core.pricePerCostFactorUnit)
+    public actual val unit: UnitWK
+        get() = UnitWK(core.pricePerCostFactorUnit)
 
     public actual val currency: Currency
         get() = unit.currency

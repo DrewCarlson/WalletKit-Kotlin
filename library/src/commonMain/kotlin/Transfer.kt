@@ -56,10 +56,10 @@ public expect class Transfer {
     public val hash: TransferHash?
 
     /** The unit for display of the transfer amount. */
-    public val unit: WKUnit
+    public val unit: UnitWK
 
     /** The unit for display of the transfer fee. */
-    public val unitForFee: WKUnit
+    public val unitForFee: UnitWK
 
     /** An optional confirmation. */
     public val confirmation: TransferConfirmation?

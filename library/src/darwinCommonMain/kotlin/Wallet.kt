@@ -1,21 +1,21 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
-import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_CREATED
-import brcrypto.BRCryptoWalletState.CRYPTO_WALLET_STATE_DELETED
+import walletkit.core.*
+import walletkit.core.WKWalletState.WK_WALLET_STATE_CREATED
+import walletkit.core.WKWalletState.WK_WALLET_STATE_DELETED
 import kotlinx.cinterop.*
 import kotlinx.coroutines.CoroutineScope
 import kotlin.native.concurrent.*
 
 public actual class Wallet internal constructor(
-        core: BRCryptoWallet,
+        core: WKWallet,
         public actual val manager: WalletManager,
         public actual val scope: CoroutineScope,
         take: Boolean
 ) {
 
-    internal val core: BRCryptoWallet =
-            if (take) checkNotNull(cryptoWalletTake(core))
+    internal val core: WKWallet =
+            if (take) checkNotNull(wkWalletTake(core))
             else core
 
     init {
@@ -25,23 +25,23 @@ public actual class Wallet internal constructor(
     public actual val system: System
         get() = manager.system
 
-    public actual val unit: WKUnit
-        get() = WKUnit(checkNotNull(cryptoWalletGetUnit(core)), false)
+    public actual val unit: UnitWK
+        get() = UnitWK(checkNotNull(wkWalletGetUnit(core)), false)
 
-    public actual val unitForFee: WKUnit
-        get() = WKUnit(checkNotNull(cryptoWalletGetUnitForFee(core)), false)
+    public actual val unitForFee: UnitWK
+        get() = UnitWK(checkNotNull(wkWalletGetUnitForFee(core)), false)
 
     public actual val balance: Amount
-        get() = Amount(checkNotNull(cryptoWalletGetBalance(core)), false)
+        get() = Amount(checkNotNull(wkWalletGetBalance(core)), false)
 
     public actual val transfers: List<Transfer>
         get() = memScoped {
             val count = alloc<ULongVar>()
-            val coreTransfers = cryptoWalletGetTransfers(core, count.ptr)
+            val coreTransfers = wkWalletGetTransfers(core, count.ptr)
             if (coreTransfers == null) {
                 emptyList()
             } else {
-                defer { cryptoMemoryFree(coreTransfers) }
+                defer { wkMemoryFree(coreTransfers) }
 
                 List(count.value.toInt()) { i ->
                     Transfer(checkNotNull(coreTransfers[i]), this@Wallet, false)
@@ -56,31 +56,32 @@ public actual class Wallet internal constructor(
         get() = getTargetForScheme(manager.addressScheme)
 
     public actual fun getTargetForScheme(scheme: AddressScheme): Address {
-        val coreAddress = checkNotNull(cryptoWalletGetAddress(core, scheme.toCore()))
+        val coreAddress = checkNotNull(wkWalletGetAddress(core, scheme.toCore()))
         return Address(coreAddress, false)
     }
 
     public actual val currency: Currency
-        get() = Currency(checkNotNull(cryptoWalletGetCurrency(core)), false)
+        get() = Currency(checkNotNull(wkWalletGetCurrency(core)), false)
 
     public actual val name: String
         get() = unit.currency.name
 
     public actual val state: WalletState
-        get() = when (cryptoWalletGetState(core)) {
-            CRYPTO_WALLET_STATE_CREATED -> WalletState.CREATED
-            CRYPTO_WALLET_STATE_DELETED -> WalletState.DELETED
+        get() = when (wkWalletGetState(core)) {
+            WK_WALLET_STATE_CREATED -> WalletState.CREATED
+            WK_WALLET_STATE_DELETED -> WalletState.DELETED
+            else -> error("Unknown wkWalletGetState result")
         }
 
     public actual fun hasAddress(address: Address): Boolean {
-        return cryptoWalletHasAddress(core, address.core)
+        return wkWalletHasAddress(core, address.core)
     }
 
     /*internal actual fun createTransferFeeBasis(
             pricePerCostFactor: Amount,
             costFactor: Double
     ): TransferFeeBasis? {
-        val coreFeeBasis = cryptoWalletCreateFeeBasis(core, pricePerCostFactor.core, costFactor)
+        val coreFeeBasis = wkWalletCreateFeeBasis(core, pricePerCostFactor.core, costFactor)
         return TransferFeeBasis(coreFeeBasis ?: return null, false)
     }*/
 
@@ -92,17 +93,17 @@ public actual class Wallet internal constructor(
     ): Transfer? = memScoped {
         val attrs = transferAttributes.map(TransferAttribute::core).toCValues()
         val count = attrs.size.toULong()
-        val coreTransfer = cryptoWalletCreateTransfer(core, target.core, amount.core, estimatedFeeBasis.core, count, attrs)
+        val coreTransfer = wkWalletCreateTransfer(core, target.core, amount.core, estimatedFeeBasis.core, count, attrs)
         Transfer(coreTransfer ?: return null, this@Wallet, false)
     }
 
-    internal fun transferBy(core: BRCryptoTransfer): Transfer? {
-        return if (CRYPTO_TRUE == cryptoWalletHasTransfer(this.core, core)) {
+    internal fun transferBy(core: WKTransfer): Transfer? {
+        return if (WK_TRUE == wkWalletHasTransfer(this.core, core)) {
             Transfer(core, this, true)
         } else null
     }
 
-    internal fun transferByCoreOrCreate(core: BRCryptoTransfer): Transfer? {
+    internal fun transferByCoreOrCreate(core: WKTransfer): Transfer? {
         return transferBy(core) ?: Transfer(core, this, true)
     }
 
@@ -114,7 +115,7 @@ public actual class Wallet internal constructor(
     ): TransferFeeBasis {
         val attrsLength = 0uL
         val attrs = attributes.map { it.core }.toCValues()
-        cryptoWalletManagerEstimateFeeBasis(
+        wkWalletManagerEstimateFeeBasis(
             manager.core, core, null, target.core, amount.core, fee.core, attrsLength, attrs)
 
         TODO("Not implemented")
@@ -129,12 +130,12 @@ public actual class Wallet internal constructor(
     }
 
     actual override fun equals(other: Any?): Boolean =
-            other is Wallet && CRYPTO_TRUE == cryptoWalletEqual(core, other.core)
+            other is Wallet && WK_TRUE == wkWalletEqual(core, other.core)
 
     actual override fun hashCode(): Int = core.hashCode()
 
-    internal fun getTransfer(coreTransfer: BRCryptoTransfer): Transfer? {
-        return if (cryptoWalletHasTransfer(core, coreTransfer) == CRYPTO_TRUE) {
+    internal fun getTransfer(coreTransfer: WKTransfer): Transfer? {
+        return if (wkWalletHasTransfer(core, coreTransfer) == WK_TRUE) {
             Transfer(coreTransfer, this, true)
         } else null
     }

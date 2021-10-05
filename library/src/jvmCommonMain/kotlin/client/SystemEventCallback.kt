@@ -1,32 +1,32 @@
 package drewcarlson.walletkit.client
 
-import com.breadwallet.corenative.crypto.*
-import com.breadwallet.corenative.utility.*
+import com.blockset.walletkit.nativex.*
+import com.blockset.walletkit.nativex.utility.Cookie
 import drewcarlson.walletkit.*
 import drewcarlson.walletkit.System.Companion.system
 import kotlinx.coroutines.*
 
-internal val SystemEventCallback = BRCryptoListener.SystemEventCallback { context, coreSystem, event ->
+internal val SystemEventCallback = WKListener.SystemEventCallback { context, coreSystem, event ->
     listenerScope.launch {
         try {
             //com.breadwallet.corecrypto.System.Log.log(Level.FINE, "SystemEventCallback")
             when (event.type()) {
-                BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_CREATED ->
+                WKSystemEventType.CREATED ->
                     handleSystemCreated(context, coreSystem)
-                BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_CHANGED ->
+                WKSystemEventType.CHANGED ->
                     handleSystemChanged(context, coreSystem, event)
-                BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_DELETED ->
+                WKSystemEventType.DELETED ->
                     handleSystemDeleted(context, coreSystem)
-                BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_NETWORK_ADDED ->
+                WKSystemEventType.NETWORK_ADDED ->
                     handleSystemNetworkAdded(context, coreSystem, event)
-                BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_MANAGER_ADDED ->
+                WKSystemEventType.MANAGER_ADDED ->
                     handleSystemManagerAdded(context, coreSystem, event)
-                BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_DISCOVERED_NETWORKS ->
+                WKSystemEventType.DISCOVERED_NETWORKS ->
                     handleSystemDiscoveredNetworks(context, coreSystem)
-                //BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_NETWORK_CHANGED -> TODO()
-                //BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_NETWORK_DELETED -> TODO()
-                //BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_MANAGER_CHANGED -> TODO()
-                //BRCryptoSystemEventType.CRYPTO_SYSTEM_EVENT_MANAGER_DELETED -> TODO()
+                //WKSystemEventType.NETWORK_CHANGED -> TODO()
+                //WKSystemEventType.NETWORK_DELETED -> TODO()
+                //WKSystemEventType.MANAGER_CHANGED -> TODO()
+                //WKSystemEventType.MANAGER_DELETED -> TODO()
             }
         } finally {
             coreSystem.give()
@@ -35,7 +35,7 @@ internal val SystemEventCallback = BRCryptoListener.SystemEventCallback { contex
 }
 
 
-private fun handleSystemCreated(context: Cookie, coreSystem: BRCryptoSystem) {
+private fun handleSystemCreated(context: Cookie, coreSystem: WKSystem) {
     val system = context.system
     if (system == null) {
         // todo: log
@@ -44,7 +44,7 @@ private fun handleSystemCreated(context: Cookie, coreSystem: BRCryptoSystem) {
     }
 }
 
-private fun handleSystemChanged(context: Cookie, coreSystem: BRCryptoSystem, event: BRCryptoSystemEvent) {
+private fun handleSystemChanged(context: Cookie, coreSystem: WKSystem, event: WKSystemEvent) {
     val oldState = event.u.state.oldState().toSystemState()
     val newState = event.u.state.newState().toSystemState()
 
@@ -56,7 +56,7 @@ private fun handleSystemChanged(context: Cookie, coreSystem: BRCryptoSystem, eve
     }
 }
 
-private fun handleSystemDeleted(context: Cookie, coreSystem: BRCryptoSystem) {
+private fun handleSystemDeleted(context: Cookie, coreSystem: WKSystem) {
     val system = context.system
     if (system == null) {
         // todo: log
@@ -65,7 +65,7 @@ private fun handleSystemDeleted(context: Cookie, coreSystem: BRCryptoSystem) {
     }
 }
 
-private fun handleSystemNetworkAdded(context: Cookie, coreSystem: BRCryptoSystem, event: BRCryptoSystemEvent) {
+private fun handleSystemNetworkAdded(context: Cookie, coreSystem: WKSystem, event: WKSystemEvent) {
     val system = context.system
     if (system == null) {
         // todo: log
@@ -79,7 +79,7 @@ private fun handleSystemNetworkAdded(context: Cookie, coreSystem: BRCryptoSystem
     }
 }
 
-private fun handleSystemManagerAdded(context: Cookie, coreSystem: BRCryptoSystem, event: BRCryptoSystemEvent) {
+private fun handleSystemManagerAdded(context: Cookie, coreSystem: WKSystem, event: WKSystemEvent) {
     val system = context.system
     if (system == null) {
         // todo: log
@@ -93,7 +93,7 @@ private fun handleSystemManagerAdded(context: Cookie, coreSystem: BRCryptoSystem
     }
 }
 
-private fun handleSystemDiscoveredNetworks(context: Cookie, coreSystem: BRCryptoSystem) {
+private fun handleSystemDiscoveredNetworks(context: Cookie, coreSystem: WKSystem) {
     val system = context.system
     if (system == null) {
         // todo: log
@@ -103,9 +103,9 @@ private fun handleSystemDiscoveredNetworks(context: Cookie, coreSystem: BRCrypto
 }
 
 
-private fun BRCryptoSystemState.toSystemState(): SystemState {
+private fun WKSystemState.toSystemState(): SystemState {
     return when (this) {
-        BRCryptoSystemState.CRYPTO_SYSTEM_STATE_CREATED -> SystemState.Created
-        BRCryptoSystemState.CRYPTO_SYSTEM_STATE_DELETED -> SystemState.Deleted
+        WKSystemState.CREATED -> SystemState.Created
+        WKSystemState.DELETED -> SystemState.Deleted
     }
 }

@@ -1,12 +1,12 @@
 package drewcarlson.walletkit
 
+import com.blockset.walletkit.nativex.*
 import drewcarlson.walletkit.common.Key
-import com.breadwallet.corenative.crypto.*
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
 public actual class WalletManager(
-        internal val core: BRCryptoWalletManager,
+        internal val core: WKWalletManager,
         public actual val system: System,
         private val scope: CoroutineScope
 ) {
@@ -15,14 +15,14 @@ public actual class WalletManager(
 
     public actual val network: Network = Network(core.network)
 
-    internal actual val unit: WKUnit =
+    internal actual val unit: UnitWK =
             checkNotNull(network.defaultUnitFor(network.currency))
 
     public actual var mode: WalletManagerMode
         get() = WalletManagerMode.fromCoreInt(core.mode.toCore().toUInt())
         set(value) {
             require(network.supportsWalletManagerMode(value))
-            core.mode = BRCryptoSyncMode.fromCore(value.core.toInt())
+            core.mode = WKSyncMode.fromCore(value.core.toInt())
         }
 
     public actual val path: String = core.path
@@ -45,9 +45,9 @@ public actual class WalletManager(
 
     public actual val name: String = currency.code
 
-    public actual val baseUnit: WKUnit = checkNotNull(network.baseUnitFor(network.currency))
+    public actual val baseUnit: UnitWK = checkNotNull(network.baseUnitFor(network.currency))
 
-    public actual val defaultUnit: WKUnit = checkNotNull(network.defaultUnitFor(network.currency))
+    public actual val defaultUnit: UnitWK = checkNotNull(network.defaultUnitFor(network.currency))
 
     public actual val isActive: Boolean
         get() = when (state) {
@@ -61,7 +61,7 @@ public actual class WalletManager(
     public actual var addressScheme: AddressScheme
         get() = AddressScheme.fromCoreInt(core.addressScheme.toCore().toUInt())
         set(value) {
-            core.addressScheme = BRCryptoAddressScheme.fromCore(value.core.toInt())
+            core.addressScheme = WKAddressScheme.fromCore(value.core.toInt())
         }
 
     public actual fun connect(peer: NetworkPeer?) {
@@ -81,7 +81,7 @@ public actual class WalletManager(
     }
 
     public actual fun syncToDepth(depth: WalletManagerSyncDepth) {
-        core.syncToDepth(BRCryptoSyncDepth.fromCore(depth.toSerialization().toInt()))
+        core.syncToDepth(WKSyncDepth.fromCore(depth.toSerialization().toInt()))
     }
 
     public actual fun submit(transfer: Transfer, phraseUtf8: ByteArray) {
@@ -102,7 +102,7 @@ public actual class WalletManager(
         TODO("not implemented")
     }
 
-    internal fun getWallet(coreWallet: BRCryptoWallet): Wallet? =
+    internal fun getWallet(coreWallet: WKWallet): Wallet? =
             if (core.containsWallet(coreWallet))
                 Wallet(coreWallet.take(), this, scope)
             else null
@@ -114,7 +114,7 @@ public actual class WalletManager(
     override fun equals(other: Any?): Boolean =
             other is WalletManager && core == other.core
 
-    internal fun createWallet(coreWallet: BRCryptoWallet): Wallet {
+    internal fun createWallet(coreWallet: WKWallet): Wallet {
         return Wallet(coreWallet.take(), this, scope)
     }
 }

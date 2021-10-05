@@ -32,6 +32,7 @@ def iosClangCompilerArgs = { args, sdk, arch ->
     args << "-stdlib=libc++"
     args << "-fembed-bitcode"
     args << "-O0"
+    args << "-L${sdk}/usr/lib"
     args << "-F${sdk}/System/Library/Frameworks"
     args << "-I${sdk}/usr/include"
 }
@@ -48,6 +49,7 @@ def cppSqliteSrcDir = "$corePath/vendor/sqlite3"
 def cppEd25519SrcDir = "$corePath/vendor/ed25519"
 def cppblake2SrcDir = "$corePath/vendor/blake2"
 def cppCryptoSrcDirs = [
+        "walletkit",
         "bcash",
         "bitcoin",
         "crypto",
@@ -57,6 +59,9 @@ def cppCryptoSrcDirs = [
         "ripple",
         "bsv",
         "tezos",
+        "dogecoin",
+        "litecoin",
+        "stellar",
         "support"
 ].collect { "$corePath/src/$it" }
 
@@ -78,6 +83,10 @@ model {
                 cCompiler.withArguments { args ->
                     iosClangCompilerArgs(args, macosSdk, "x86_64")
                 }
+                linker.withArguments { args ->
+                    args.add("-v")
+                    args.add("-isysroot${macosSdk}")
+                }
             }
             target("iosX64") {
                 path clangPath
@@ -89,9 +98,7 @@ model {
                 linker.withArguments { args ->
                     args.add("-v")
                     args.add("-isysroot${iphoneSimSdk}")
-                    // TODO: Can this code be removed gracefully?
-                    //  Why are these args here if they fail?
-                    args.remove("-Wl,-soname,libcorecrypto.so")
+                    args.remove("-Wl,-soname,libWalletKitCore.so")
                     args.remove("-Wl,-soname,libsqlite3.so")
                     args.remove("-Wl,-soname,libed25519.so")
                     args.remove("-Wl,-soname,libblake2.so")
@@ -107,9 +114,7 @@ model {
                 linker.withArguments { args ->
                     args.add("-v")
                     args.add("-isysroot${iphoneOsSdk}")
-                    // TODO: Can this code be removed gracefully?
-                    //  Why are these args here if they fail?
-                    args.remove("-Wl,-soname,libcorecrypto.so")
+                    args.remove("-Wl,-soname,libWalletKitCore.so")
                     args.remove("-Wl,-soname,libsqlite3.so")
                     args.remove("-Wl,-soname,libed25519.so")
                     args.remove("-Wl,-soname,libblake2.so")
@@ -123,12 +128,12 @@ model {
             architecture "x86_64"
         }
         iosArm64 {
-            architecture "x86_64"
             operatingSystem "ios"
+            architecture "x86_64"
         }
         iosX64 {
-            architecture "x86_64"
             operatingSystem "ios"
+            architecture "x86_64"
         }
     }
     components {
@@ -147,9 +152,6 @@ model {
                 }
             }
             binaries {
-                all {
-                    linker.args.remove("-lc++")
-                }
                 withType(SharedLibraryBinarySpec) {
                     buildable = false
                 }
@@ -195,15 +197,12 @@ model {
                     // TODO(fix): Do we want to use this approach (config.h)?
                     cCompiler.define "_HAVE_SQLITE_CONFIG_H"
                 }
-                withType(StaticLibraryBinarySpec) {
-                    //buildable = false
-                }
                 withType(SharedLibraryBinarySpec) {
-                    //buildable = false
+                    buildable = false
                 }
             }
         }
-        corecrypto(NativeLibrarySpec) {
+        WalletKitCore(NativeLibrarySpec) {
             if (kotlin.targets.macos.publishable) {
                 targetPlatform "macos"
                 targetPlatform "iosArm64"
@@ -227,16 +226,9 @@ model {
                     lib library: "sqlite3", linkage: "static"
                     lib library: "ed25519", linkage: "static"
                     lib library: "blake2", linkage: "static"
-
-                    //linker.withArguments { args ->
-                        linker.args.remove("-lc++")
-                        //linker.args.add("-framework")
-                        //linker.args.add("Security")
-                        linker.args.add("-lresolv")
-                    //}
                 }
                 withType(SharedLibraryBinarySpec) {
-                    //buildable = false
+                    buildable = false
                     def os = targetPlatform.operatingSystem.name
                     if (os == "osx" || os == "ios") {
                         linker.args "-framework", "Security"
@@ -244,8 +236,6 @@ model {
                     }
                 }
                 withType(StaticLibraryBinarySpec) {
-                    //buildable = false
-
                     def os = targetPlatform.operatingSystem.name
                     if (os == "osx" || os == "ios") {
                         linker.args "-framework", "Security"

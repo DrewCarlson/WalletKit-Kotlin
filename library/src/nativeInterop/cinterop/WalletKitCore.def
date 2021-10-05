@@ -1,0 +1,1 @@
+noStringConversion = wkWalletManagerSubmit wkAccountCreate wkAccountValidatePaperKey wkKeyEncodePrivate wkKeyEncodePublic

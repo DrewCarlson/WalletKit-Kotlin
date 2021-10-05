@@ -1,12 +1,12 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoNetworkFee
+import com.blockset.walletkit.nativex.WKNetworkFee
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import com.google.common.primitives.UnsignedLong
 import java.util.*
 
 public actual class NetworkFee(
-        internal val core: BRCryptoNetworkFee
+        internal val core: WKNetworkFee
 ) : Closeable {
 
     init {
@@ -17,7 +17,7 @@ public actual class NetworkFee(
             timeIntervalInMilliseconds: ULong,
             pricePerCostFactor: Amount
     ) : this(
-            BRCryptoNetworkFee.create(
+            WKNetworkFee.create(
                     UnsignedLong.valueOf(timeIntervalInMilliseconds.toLong()),
                     pricePerCostFactor.core,
                     pricePerCostFactor.unit.core

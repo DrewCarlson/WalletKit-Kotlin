@@ -28,9 +28,9 @@ package drewcarlson.walletkit
  */
 public data class CurrencyPair(
         /** In EUR/USD=1.2500, the `baseCurrency` is EUR. */
-        val baseUnit: WKUnit,
+        val baseUnit: UnitWK,
         /** In EUR/USD=1.250, the `quoteCurrency` is USD. */
-        val quoteUnit: WKUnit,
+        val quoteUnit: UnitWK,
         /**
          * In EUR/USD=1.2500, the `exchangeRate` is 1.2500 which represents
          * the number of USD that one EUR can be exchanged for.

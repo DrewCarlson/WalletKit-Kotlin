@@ -28,7 +28,7 @@ public expect class WalletManager {
 
 
     /** The default unit - as the networks default unit */
-    internal val unit: WKUnit
+    internal val unit: UnitWK
 
     /** The mode determines how the manager manages the account and wallets on network. */
     public var mode: WalletManagerMode
@@ -63,10 +63,10 @@ public expect class WalletManager {
     public val name: String
 
     /** The baseUnit for the network's currency. */
-    public val baseUnit: WKUnit
+    public val baseUnit: UnitWK
 
     /** The defaultUnit for the network's currency. */
-    public val defaultUnit: WKUnit
+    public val defaultUnit: UnitWK
 
     /** A manager `isActive` if connected or syncing */
     public val isActive: Boolean

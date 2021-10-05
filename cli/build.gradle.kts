@@ -44,13 +44,12 @@ kotlin {
     sourceSets {
         all {
             languageSettings.apply {
-                useExperimentalAnnotation("kotlinx.cli.ExperimentalCli")
-                enableLanguageFeature("InlineClasses")
+                optIn("kotlinx.cli.ExperimentalCli")
             }
         }
         named("commonMain") {
             dependencies {
-                implementation(project(":library"))
+                implementation(project(":walletkit"))
                 implementation("org.jetbrains.kotlinx:kotlinx-cli:$KOTLIN_CLI_VERSION")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION")
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")

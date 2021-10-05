@@ -3,57 +3,26 @@ import com.android.build.gradle.LibraryExtension
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
-    id("org.jetbrains.dokka")
 }
 
 val ideaActive = System.getProperty("idea.active") == "true"
-val hasAndroid = false// TODO: fixme System.getProperty("sdk.dir") != null || System.getenv("ANDROID_HOME") != null
+val hasAndroid = System.getProperty("sdk.dir") != null || System.getenv("ANDROID_HOME") != null
 
+apply(from = "$rootDir/gradle/publishing.gradle.kts")
+apply(from = "../gradle/native-model.gradle")
 apply(plugin = "kotlinx-atomicfu")
 
 val corePath = rootProject.file("walletkit/WalletKitCore").absolutePath
-val coreLibPath = rootProject.file("libs/corecrypto/build/lib/main").absolutePath
-val sqliteLibPath = rootProject.file("libs/sqlite3/build/lib/main").absolutePath
-val ed25519LibPath = rootProject.file("libs/ed25519/build/lib/main").absolutePath
-val blake2LibPath = rootProject.file("libs/blake2/build/lib/main").absolutePath
-
 val cppCryptoSrcDir = "$corePath/src"
 val cppCryptoIncludeDir = "$corePath/include"
-val cppCryptoSrcDirs = listOf(
-        "bcash",
-        "bitcoin",
-        "bsv",
-        "crypto",
-        "ethereum",
-        "generic",
-        "hedera",
-        "ripple",
-        "tezos",
-        "support",
-        "version"
-).map { "$corePath/src/$it" }
-
-val cppCryptoIncDirs = cppCryptoSrcDirs + listOf(
-        "src",
-        "src/support",
-        "include",
-        "vendor",
-        "vendor/secp256k1",
-        "vendor/ed25519",
-        "vendor/sqlite3"
-).map { "$corePath/$it" }
 
 if (hasAndroid) {
     apply(plugin = "com.android.library")
     configure<LibraryExtension> {
-        compileSdkVersion(28)
+        compileSdk = 28
         defaultConfig {
-            minSdkVersion(23)
-            targetSdkVersion(28)
-        }
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
+            minSdk = 23
+            targetSdk = 28
         }
     }
 }
@@ -66,13 +35,20 @@ val privateApiHeaders = (file("$corePath/src/crypto").listFiles() ?: emptyArray(
 kotlin {
     ios()
     jvm {
-        withJava()
+        compilations.all {
+            // TODO: Build with native-model.gradle tasks
+            val wkn = gradle.includedBuild("WalletKitJava")
+            compileKotlinTask
+                    .dependsOn(wkn.task(":WalletKitNative-JRE:blake2SharedLibrary"))
+                    .dependsOn(wkn.task(":WalletKitNative-JRE:ed25519SharedLibrary"))
+                    .dependsOn(wkn.task(":WalletKitNative-JRE:sqlite3SharedLibrary"))
+                    .dependsOn(wkn.task(":WalletKitNative-JRE:WalletKitCoreSharedLibrary"))
+        }
     }
     if (hasAndroid) {
-        android { publishAllLibraryVariants() }
+        android()
     }
 
-    // TODO: Add other native targets
     val nativeTargets = listOf(
             macosX64("macos"),
             iosX64(),
@@ -81,34 +57,25 @@ kotlin {
 
     configure(nativeTargets) {
         // TODO: Resolve linking paths from native build plugin
-        //val coreStaticPath = file("$coreLibPath/debug/static/$name").absolutePath
-        //val sqliteStaticPath = file("$sqliteLibPath/debug/static/$name").absolutePath
-        //val ed25519StaticPath = file("$ed25519LibPath/debug/static/$name").absolutePath
-        //val blake2StaticPath = file("$blake2LibPath/debug/static/$name").absolutePath
-        val coreStaticPath = file("build/libs/corecrypto/static/$name").absolutePath
+        val coreStaticPath = file("build/libs/walletKitCore/static/$name").absolutePath
         val sqliteStaticPath = file("build/libs/sqlite3/static/$name").absolutePath
         val ed25519StaticPath = file("build/libs/ed25519/static/$name").absolutePath
         val blake2StaticPath = file("build/libs/blake2/static/$name").absolutePath
-        binaries {
-            getTest(DEBUG).linkerOpts(
-                    "-L$coreStaticPath",
-                    "-L$sqliteStaticPath",
-                    "-L$ed25519StaticPath",
-                    "-L$blake2StaticPath",
-                    "-framework", "Security"
-            )
+        val darwinLinkerOpts = listOf(
+                "-L$coreStaticPath",
+                "-L$sqliteStaticPath",
+                "-L$ed25519StaticPath",
+                "-L$blake2StaticPath",
+                "-framework", "Security",
+        )
+        binaries.getTest(DEBUG).apply {
+            linkerOpts(darwinLinkerOpts)
         }
 
-        if (name.startsWith("ios")) {
+        if (name.startsWith("ios") || name.startsWith("macos")) {
             // Create .frameworks for use in Obj-c/Swift projects
             binaries.framework {
-                linkerOpts(
-                        "-L$coreStaticPath",
-                        "-L$sqliteStaticPath",
-                        "-L$ed25519StaticPath",
-                        "-L$blake2StaticPath",
-                        "-framework", "Security"
-                )
+                linkerOpts(darwinLinkerOpts)
             }
         }
 
@@ -123,7 +90,7 @@ kotlin {
             }*/
             kotlinOptions {
                 freeCompilerArgs += listOf(
-                        "-include-binary", "$coreStaticPath/libcorecrypto.a",
+                        "-include-binary", "$coreStaticPath/libWalletKitCore.a",
                         "-include-binary", "$sqliteStaticPath/libsqlite3.a",
                         "-include-binary", "$ed25519StaticPath/libed25519.a",
                         "-include-binary", "$blake2StaticPath/libblake2.a",
@@ -131,8 +98,8 @@ kotlin {
                         "-Xallocator=mimalloc"
                 )
             }
-            val BRCrypto by cinterops.creating {
-                packageName = "brcrypto"
+            val WalletKitCore by cinterops.creating {
+                packageName = "walletkit.core"
                 headers(publicApiHeaders)
                 headers(privateApiHeaders)
                 includeDirs(cppCryptoSrcDir, cppCryptoIncludeDir)
@@ -143,8 +110,7 @@ kotlin {
     sourceSets {
         all {
             languageSettings.apply {
-                enableLanguageFeature("InlineClasses")
-                useExperimentalAnnotation("kotlin.RequiresOptIn")
+                optIn("kotlin.RequiresOptIn")
                 explicitApi()
             }
         }
@@ -174,9 +140,7 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:$KTOR_VERSION")
 
-                if (ideaActive) {
-                    implementation("com.breadwallet.core:corenative-jre")
-                }
+                compileOnly("com.blockset.walletkit:WalletKitNative-JRE")
 
                 // TODO(fix): Guava is missing from the published corenative-jre pom
                 implementation("com.google.guava:guava:28.1-jre")
@@ -190,12 +154,14 @@ kotlin {
         val jvmMain by getting {
             dependsOn(jvmCommonMain)
             dependencies {
-                implementation("com.breadwallet.core:corenative-jre")
+                implementation("com.blockset.walletkit:WalletKitNative-JRE")
             }
         }
 
         val jvmTest by getting {
             dependsOn(jvmCommonTest)
+            // TODO: Link jvm compile step to native-model.gradle task output
+            resources.srcDirs("../walletkit/WalletKitJava/WalletKitNative-JRE/build/resources/main")
             dependencies {
                 implementation("org.jetbrains.kotlin:kotlin-test:$KOTLIN_VERSION")
                 implementation("org.jetbrains.kotlin:kotlin-test-junit:$KOTLIN_VERSION")
@@ -203,14 +169,14 @@ kotlin {
         }
 
         if (hasAndroid) {
-            named("androidMain") {
+            val androidMain by getting {
                 dependsOn(jvmCommonMain)
                 dependencies {
-                    implementation("com.breadwallet.core:corenative-android")
+                    implementation("com.blockset.walletkit:WalletKitNative-Android")
                 }
             }
 
-            named("androidTest") {
+            val androidTest by getting {
                 dependsOn(jvmCommonTest)
             }
         }
@@ -238,8 +204,3 @@ kotlin {
     }
 }
 
-apply(from = "../gradle/native-model.gradle")
-
-dependencies {
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:$DOKKA_VERSION")
-}

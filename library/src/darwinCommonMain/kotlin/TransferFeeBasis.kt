@@ -1,38 +1,38 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
+import walletkit.core.*
 import kotlin.native.concurrent.*
 
 public actual class TransferFeeBasis internal constructor(
-        core: BRCryptoFeeBasis,
+        core: WKFeeBasis,
         take: Boolean
 ) {
 
-    internal val core: BRCryptoFeeBasis =
-            if (take) checkNotNull(cryptoFeeBasisTake(core))
+    internal val core: WKFeeBasis =
+            if (take) checkNotNull(wkFeeBasisTake(core))
             else core
 
     init {
         freeze()
     }
 
-    public actual val unit: WKUnit
+    public actual val unit: UnitWK
         get() = pricePerCostFactor.unit
 
     public actual val currency: Currency
         get() = unit.currency
 
     public actual val pricePerCostFactor: Amount
-        get() = Amount(checkNotNull(cryptoFeeBasisGetPricePerCostFactor(core)), false)
+        get() = Amount(checkNotNull(wkFeeBasisGetPricePerCostFactor(core)), false)
 
     public actual val costFactor: Double
-        get() = cryptoFeeBasisGetCostFactor(core)
+        get() = wkFeeBasisGetCostFactor(core)
 
     public actual val fee: Amount
-        get() = Amount(checkNotNull(cryptoFeeBasisGetFee(core)), false)
+        get() = Amount(checkNotNull(wkFeeBasisGetFee(core)), false)
 
     actual override fun equals(other: Any?): Boolean =
-            other is TransferFeeBasis && cryptoFeeBasisIsEqual(core, other.core).toBoolean()
+            other is TransferFeeBasis && wkFeeBasisIsEqual(core, other.core).toBoolean()
 
     actual override fun hashCode(): Int {
         return unit.hashCode() + currency.hashCode() + fee.hashCode() +

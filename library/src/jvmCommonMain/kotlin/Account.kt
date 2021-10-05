@@ -1,12 +1,12 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoAccount
+import com.blockset.walletkit.nativex.WKAccount
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import com.google.common.primitives.UnsignedLong
 
 
 public actual class Account(
-        internal val core: BRCryptoAccount
+        internal val core: WKAccount
 ) : Closeable {
 
     init {
@@ -44,19 +44,19 @@ public actual class Account(
                 phrase: ByteArray,
                 timestamp: Long,
                 uids: String
-        ): Account? = BRCryptoAccount.createFromPhrase(
+        ): Account? = WKAccount.createFromPhrase(
                 phrase,
                 UnsignedLong.valueOf(timestamp),
                 uids
         ).orNull()?.run(::Account)
 
         public actual fun createFromSerialization(serialization: ByteArray, uids: String): Account? =
-                BRCryptoAccount.createFromSerialization(serialization, uids).orNull()?.run(::Account)
+                WKAccount.createFromSerialization(serialization, uids).orNull()?.run(::Account)
 
         public actual fun generatePhrase(words: List<String>): ByteArray? =
-                runCatching { BRCryptoAccount.generatePhrase(words) }.getOrNull()
+                runCatching { WKAccount.generatePhrase(words) }.getOrNull()
 
         public actual fun validatePhrase(phrase: ByteArray, words: List<String>): Boolean =
-                BRCryptoAccount.validatePhrase(phrase, words)
+                WKAccount.validatePhrase(phrase, words)
     }
 }

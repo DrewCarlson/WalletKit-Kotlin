@@ -14,9 +14,9 @@ public expect class Wallet {
     public val scope: CoroutineScope
 
     /** The unit for display of the wallet's balance */
-    public val unit: WKUnit
+    public val unit: UnitWK
 
-    public val unitForFee: WKUnit
+    public val unitForFee: UnitWK
 
     /** The current balance for currency */
     public val balance: Amount

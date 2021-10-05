@@ -1,10 +1,10 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoHash
+import com.blockset.walletkit.nativex.WKHash
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 
 public actual class TransferHash(
-        internal val core: BRCryptoHash
+        internal val core: WKHash
 ) : Closeable {
 
     init {

@@ -41,7 +41,7 @@ kotlin {
         binaries {
             framework {
                 baseName = "DemoWalletKotlin"
-                export(project(":library"))
+                export(project(":walletkit"))
                 export("org.drewcarlson:blockset:$BLOCKSET_VERSION")
                 isStatic = true
                 linkerOpts.addAll(listOf("-framework", "Security"))
@@ -59,7 +59,7 @@ kotlin {
         named("commonMain") {
             kotlin.srcDir(genSrcFile)
             dependencies {
-                api(project(":library"))
+                api(project(":walletkit"))
                 api("org.drewcarlson:blockset:$BLOCKSET_VERSION")
                 implementation("io.ktor:ktor-client-core:$KTOR_VERSION")
             }

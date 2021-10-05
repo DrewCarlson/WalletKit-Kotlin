@@ -1,6 +1,6 @@
 package drewcarlson.walletkit.common
 
-import brcrypto.*
+import walletkit.core.*
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.usePinned
@@ -8,7 +8,7 @@ import drewcarlson.walletkit.Closeable
 import kotlin.native.concurrent.*
 
 public actual class Cipher internal constructor(
-        internal val core: BRCryptoCipher
+        internal val core: WKCipher
 ) : Closeable {
 
     init {
@@ -19,14 +19,14 @@ public actual class Cipher internal constructor(
         val inputBytes = data.asUByteArray().toCValues()
         val inputLength = inputBytes.size.toULong()
 
-        val outputLength = cryptoCipherEncryptLength(core, inputBytes, inputLength)
+        val outputLength = wkCipherEncryptLength(core, inputBytes, inputLength)
         if (outputLength == 0uL) return null
         val output = UByteArray(outputLength.toInt())
 
         val result = output.usePinned {
-            cryptoCipherEncrypt(core, it.addressOf(0), outputLength, inputBytes, inputLength)
+            wkCipherEncrypt(core, it.addressOf(0), outputLength, inputBytes, inputLength)
         }
-        return if (result == CRYPTO_TRUE) {
+        return if (result == WK_TRUE) {
             output.toByteArray()
         } else null
     }
@@ -35,27 +35,27 @@ public actual class Cipher internal constructor(
         val inputBytes = data.asUByteArray().toCValues()
         val inputLength = inputBytes.size.toULong()
 
-        val outputLength = cryptoCipherDecryptLength(core, inputBytes, inputLength)
+        val outputLength = wkCipherDecryptLength(core, inputBytes, inputLength)
         if (outputLength == 0uL) return null
         val output = UByteArray(outputLength.toInt())
 
         val result = output.usePinned {
-            cryptoCipherDecrypt(core, it.addressOf(0), outputLength, inputBytes, inputLength)
+            wkCipherDecrypt(core, it.addressOf(0), outputLength, inputBytes, inputLength)
         }
-        return if (result == CRYPTO_TRUE) {
+        return if (result == WK_TRUE) {
             output.toByteArray()
         } else null
     }
 
     actual override fun close() {
-        cryptoCipherGive(core)
+        wkCipherGive(core)
     }
 
     public actual companion object {
         public actual fun createForAesEcb(key: ByteArray): Cipher {
             val keyBytes = key.asUByteArray().toCValues()
             val keyLength = keyBytes.size.toULong()
-            val coreCipher = cryptoCipherCreateForAESECB(keyBytes, keyLength)
+            val coreCipher = wkCipherCreateForAESECB(keyBytes, keyLength)
             return Cipher(checkNotNull(coreCipher))
         }
 
@@ -64,14 +64,14 @@ public actual class Cipher internal constructor(
             val nonceLength = nonceBytes.size.toULong()
             val dataBytes = ad.asUByteArray().toCValues()
             val dataLength = ad.size.toULong()
-            val coreCipher = cryptoCipherCreateForChacha20Poly1305(key.core, nonceBytes, nonceLength, dataBytes, dataLength)
+            val coreCipher = wkCipherCreateForChacha20Poly1305(key.core, nonceBytes, nonceLength, dataBytes, dataLength)
             return Cipher(checkNotNull(coreCipher))
         }
 
         public actual fun createForPigeon(privKey: Key, pubKey: Key, nonce12: ByteArray): Cipher {
             val nonceBytes = nonce12.asUByteArray().toCValues()
             val nonceLength = nonceBytes.size.toULong()
-            val coreCipher = cryptoCipherCreateForPigeon(privKey.core, pubKey.core, nonceBytes, nonceLength)
+            val coreCipher = wkCipherCreateForPigeon(privKey.core, pubKey.core, nonceBytes, nonceLength)
             return Cipher(checkNotNull(coreCipher))
         }
     }

@@ -1,18 +1,18 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
-import brcrypto.BRCryptoTransferDirection.*
+import walletkit.core.*
+import walletkit.core.WKTransferDirection.*
 import kotlinx.cinterop.*
 import kotlin.native.concurrent.*
 
 public actual class Transfer internal constructor(
-    core: BRCryptoTransfer,
+    core: WKTransfer,
     public actual val wallet: Wallet,
     take: Boolean
 ) {
 
-    internal val core: BRCryptoTransfer =
-        if (take) checkNotNull(cryptoTransferTake(core))
+    internal val core: WKTransfer =
+        if (take) checkNotNull(wkTransferTake(core))
         else core
 
     init {
@@ -20,20 +20,20 @@ public actual class Transfer internal constructor(
     }
 
     public actual val source: Address?
-        get() = cryptoTransferGetSourceAddress(core)?.let { coreAddress ->
+        get() = wkTransferGetSourceAddress(core)?.let { coreAddress ->
             Address(coreAddress, false)
         }
 
     public actual val target: Address?
-        get() = cryptoTransferGetTargetAddress(core)?.let { coreAddress ->
+        get() = wkTransferGetTargetAddress(core)?.let { coreAddress ->
             Address(coreAddress, false)
         }
 
     public actual val amount: Amount
-        get() = Amount(checkNotNull(cryptoTransferGetAmount(core)), false)
+        get() = Amount(checkNotNull(wkTransferGetAmount(core)), false)
 
     public actual val amountDirected: Amount
-        get() = Amount(checkNotNull(cryptoTransferGetAmountDirected(core)), false)
+        get() = Amount(checkNotNull(wkTransferGetAmountDirected(core)), false)
 
     public actual val fee: Amount
         get() = checkNotNull(confirmedFeeBasis?.fee ?: estimatedFeeBasis?.fee) {
@@ -41,35 +41,36 @@ public actual class Transfer internal constructor(
         }
 
     public actual val estimatedFeeBasis: TransferFeeBasis?
-        get() = cryptoTransferGetEstimatedFeeBasis(core)?.let { feeBasis ->
+        get() = wkTransferGetEstimatedFeeBasis(core)?.let { feeBasis ->
             TransferFeeBasis(feeBasis, false)
         }
 
     public actual val confirmedFeeBasis: TransferFeeBasis?
-        get() = cryptoTransferGetConfirmedFeeBasis(core)?.let { feeBasis ->
+        get() = wkTransferGetConfirmedFeeBasis(core)?.let { feeBasis ->
             TransferFeeBasis(feeBasis, false)
         }
 
     public actual val direction: TransferDirection
-        get() = when (cryptoTransferGetDirection(core)) {
-            CRYPTO_TRANSFER_SENT -> TransferDirection.SENT
-            CRYPTO_TRANSFER_RECEIVED -> TransferDirection.RECEIVED
-            CRYPTO_TRANSFER_RECOVERED -> TransferDirection.RECOVERED
+        get() = when (wkTransferGetDirection(core)) {
+            WK_TRANSFER_SENT -> TransferDirection.SENT
+            WK_TRANSFER_RECEIVED -> TransferDirection.RECEIVED
+            WK_TRANSFER_RECOVERED -> TransferDirection.RECOVERED
+            else -> error("Unknown wkTransferGetDirection result")
         }
 
     public actual val hash: TransferHash?
-        get() = cryptoTransferGetHash(core)?.let { coreHash ->
+        get() = wkTransferGetHash(core)?.let { coreHash ->
             TransferHash(coreHash, false)
         }
 
     // NOTE: Added for Swift interop to avoid `hash` naming conflict
     public val txHash: TransferHash? get() = hash
 
-    public actual val unit: WKUnit
-        get() = WKUnit(checkNotNull(cryptoTransferGetUnitForAmount(core)), false)
+    public actual val unit: UnitWK
+        get() = UnitWK(checkNotNull(wkTransferGetUnitForAmount(core)), false)
 
-    public actual val unitForFee: WKUnit
-        get() = WKUnit(checkNotNull(cryptoTransferGetUnitForFee(core)), false)
+    public actual val unitForFee: UnitWK
+        get() = UnitWK(checkNotNull(wkTransferGetUnitForFee(core)), false)
 
     public actual val confirmation: TransferConfirmation?
         get() = (state as? TransferState.INCLUDED)?.confirmation
@@ -79,8 +80,8 @@ public actual class Transfer internal constructor(
 
     public actual val state: TransferState
         get() {
-            val coreState = checkNotNull(cryptoTransferGetState(core))
-            return coreState.pointed.toTransferState()
+            val coreState = checkNotNull(wkTransferGetState(core))
+            return coreState.toTransferState()
         }
 
     public actual fun getConfirmationsAt(blockHeight: ULong): ULong? {
@@ -92,7 +93,7 @@ public actual class Transfer internal constructor(
     }
 
     actual override fun equals(other: Any?): Boolean =
-        other is Transfer && CRYPTO_TRUE == cryptoTransferEqual(core, other.core)
+        other is Transfer && WK_TRUE == wkTransferEqual(core, other.core)
 
     actual override fun hashCode(): Int = hash.hashCode()
 }

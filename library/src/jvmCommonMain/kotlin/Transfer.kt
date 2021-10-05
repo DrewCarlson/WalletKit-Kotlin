@@ -1,13 +1,14 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.*
-import com.breadwallet.corenative.crypto.*
-import com.breadwallet.corenative.crypto.BRCryptoTransferDirection.*
-import com.breadwallet.corenative.crypto.BRCryptoTransferStateType.*
+import com.blockset.walletkit.nativex.WKTransfer
+import com.blockset.walletkit.nativex.WKTransferDirection
+import com.blockset.walletkit.nativex.WKTransferStateType
+import com.blockset.walletkit.nativex.WKTransferSubmitErrorType
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import java.util.*
 
 public actual class Transfer internal constructor(
-    internal val core: BRCryptoTransfer,
+    internal val core: WKTransfer,
     public actual val wallet: Wallet
 ) {
 
@@ -40,9 +41,9 @@ public actual class Transfer internal constructor(
 
     public actual val direction: TransferDirection by lazy {
         when (core.direction) {
-            CRYPTO_TRANSFER_SENT -> TransferDirection.SENT
-            CRYPTO_TRANSFER_RECEIVED -> TransferDirection.RECEIVED
-            CRYPTO_TRANSFER_RECOVERED -> TransferDirection.RECOVERED
+            WKTransferDirection.SENT -> TransferDirection.SENT
+            WKTransferDirection.RECEIVED -> TransferDirection.RECEIVED
+            WKTransferDirection.RECOVERED -> TransferDirection.RECOVERED
             else -> error("Unknown core transfer direction (${core.direction})")
         }
     }
@@ -50,11 +51,11 @@ public actual class Transfer internal constructor(
     public actual val hash: TransferHash?
         get() = core.hash.orNull()?.run(::TransferHash)
 
-    public actual val unit: WKUnit
-        get() = WKUnit(core.unitForAmount)
+    public actual val unit: UnitWK
+        get() = UnitWK(core.unitForAmount)
 
-    public actual val unitForFee: WKUnit
-        get() = WKUnit(core.unitForFee)
+    public actual val unitForFee: UnitWK
+        get() = UnitWK(core.unitForFee)
 
     public actual val confirmation: TransferConfirmation?
         get() = (state as? TransferState.INCLUDED)?.confirmation
@@ -64,11 +65,11 @@ public actual class Transfer internal constructor(
 
     public actual val state: TransferState
         get() = when (core.state.type()) {
-            CRYPTO_TRANSFER_STATE_CREATED -> TransferState.CREATED
-            CRYPTO_TRANSFER_STATE_SIGNED -> TransferState.SIGNED
-            CRYPTO_TRANSFER_STATE_SUBMITTED -> TransferState.SUBMITTED
-            CRYPTO_TRANSFER_STATE_DELETED -> TransferState.DELETED
-            CRYPTO_TRANSFER_STATE_INCLUDED ->
+            WKTransferStateType.CREATED -> TransferState.CREATED
+            WKTransferStateType.SIGNED -> TransferState.SIGNED
+            WKTransferStateType.SUBMITTED -> TransferState.SUBMITTED
+            WKTransferStateType.DELETED -> TransferState.DELETED
+            WKTransferStateType.INCLUDED ->
                 core.state.included().let { included ->
                     TransferState.INCLUDED(
                         TransferConfirmation(
@@ -81,13 +82,12 @@ public actual class Transfer internal constructor(
                         )
                     )
                 }
-            CRYPTO_TRANSFER_STATE_ERRORED ->
+            WKTransferStateType.ERRORED ->
                 core.state.errored().let { coreError ->
                     TransferState.FAILED(
                         error = when (coreError.type()) {
-                            BRCryptoTransferSubmitErrorType.CRYPTO_TRANSFER_SUBMIT_ERROR_UNKNOWN ->
-                                TransferSubmitError.UNKNOWN
-                            BRCryptoTransferSubmitErrorType.CRYPTO_TRANSFER_SUBMIT_ERROR_POSIX ->
+                            WKTransferSubmitErrorType.UNKNOWN -> TransferSubmitError.UNKNOWN
+                            WKTransferSubmitErrorType.POSIX ->
                                 TransferSubmitError.POSIX(
                                     errNum = coreError.u.posix.errnum,
                                     errMessage = coreError.message.orNull()

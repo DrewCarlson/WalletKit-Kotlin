@@ -1,7 +1,7 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
-import brcrypto.BRCryptoTransferStateType.*
+import walletkit.core.*
+import walletkit.core.WKTransferStateType.*
 import drewcarlson.blockset.model.*
 import drewcarlson.walletkit.System.Companion.system
 import kotlinx.cinterop.*
@@ -15,8 +15,8 @@ private val fmt = NSISO8601DateFormatter()
 private val clientScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
 internal fun createCryptoClient(
-    c: BRCryptoClientContext
-) = nativeHeap.alloc<BRCryptoClient> {
+    c: WKClientContext
+) = nativeHeap.alloc<WKClient> {
     context = c
     funcGetBlockNumber = getBlockNumber
     funcGetTransactions = getTransactions
@@ -24,31 +24,31 @@ internal fun createCryptoClient(
     funcSubmitTransaction = submitTransaction
 }
 
-private val getBlockNumber: BRCryptoClientGetBlockNumberCallback =
+private val getBlockNumber: WKClientGetBlockNumberCallback =
     staticCFunction { context, cwm, sid ->
         clientScope.launch {
             memScoped {
                 checkNotNull(context) { "missing context" }
                 val system = context.system
                 checkNotNull(cwm)
-                defer { cryptoWalletManagerGive(cwm) }
+                defer { wkWalletManagerGive(cwm) }
                 val manager = checkNotNull(system.getWalletManager(cwm))
                 try {
                     val chain = system.query.getBlockchain(manager.network.uids)
 
-                    cryptoClientAnnounceBlockNumber(
+                    wkClientAnnounceBlockNumber(
                         cwm,
                         sid,
-                        CRYPTO_TRUE,
+                        WK_TRUE,
                         chain.blockHeight,
                         chain.verifiedBlockHash
                     )
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    cryptoClientAnnounceBlockNumber(
+                    wkClientAnnounceBlockNumber(
                         cwm,
                         sid,
-                        CRYPTO_FALSE,
+                        WK_FALSE,
                         0,
                         null
                     )
@@ -57,7 +57,7 @@ private val getBlockNumber: BRCryptoClientGetBlockNumberCallback =
         }
     }
 
-private val getTransactions: BRCryptoClientGetTransactionsCallback =
+private val getTransactions: WKClientGetTransactionsCallback =
     staticCFunction { context, cwm, sid, addrs, addrsCount, begBlockNumber, endBlockNumber ->
         checkNotNull(addrs)
         val addresses = List(addrsCount.toInt()) { i ->
@@ -76,23 +76,23 @@ private val getTransactions: BRCryptoClientGetTransactionsCallback =
                     if (endBlockNumber == BLOCK_HEIGHT_UNBOUND_VALUE) null else endBlockNumber,
                 )
                 val bundles = processTransactions(transactions)
-                cryptoClientAnnounceTransactions(
+                wkClientAnnounceTransactions(
                     cwm,
                     sid,
-                    CRYPTO_TRUE,
+                    WK_TRUE,
                     bundles.toCValues(),
                     bundles.size.toULong()
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
-                cryptoClientAnnounceTransactions(cwm, sid, CRYPTO_FALSE, null, 0)
+                wkClientAnnounceTransactions(cwm, sid, WK_FALSE, null, 0)
             } finally {
-                cryptoWalletManagerGive(cwm)
+                wkWalletManagerGive(cwm)
             }
         }
     }
 
-private val getTransfers: BRCryptoClientGetTransfersCallback =
+private val getTransfers: WKClientGetTransfersCallback =
     staticCFunction { context, cwm, sid, addrs, addrsCount, begBlockNumber, endBlockNumber ->
         checkNotNull(addrs)
         val addresses = List(addrsCount.toInt()) { i ->
@@ -121,9 +121,9 @@ private val getTransfers: BRCryptoClientGetTransfersCallback =
                         val blockTransactionIndex = bdbTx.index ?: 0u
                         val blockHash = bdbTx.blockHash
                         val status = when (bdbTx.status) {
-                            "confirmed" -> CRYPTO_TRANSFER_STATE_INCLUDED
-                            "submitted", "reverted" -> CRYPTO_TRANSFER_STATE_SUBMITTED
-                            "failed", "rejected" -> CRYPTO_TRANSFER_STATE_ERRORED
+                            "confirmed" -> WK_TRANSFER_STATE_INCLUDED
+                            "submitted", "reverted" -> WK_TRANSFER_STATE_SUBMITTED
+                            "failed", "rejected" -> WK_TRANSFER_STATE_ERRORED
                             else -> error("Unhandled Transaction status '${bdbTx.status}'")
                         }
                         mergeTransfers(bdbTx, addresses).map { (transfer, fee) ->
@@ -131,7 +131,7 @@ private val getTransfers: BRCryptoClientGetTransfersCallback =
                                 val metaKeysPtr = transfer.meta.keys.map { it.cstr.ptr }.toCValues()
                                 val metaValsPtr = transfer.meta.values.map { it.cstr.ptr }.toCValues()
 
-                                cryptoClientTransferBundleCreate(
+                                wkClientTransferBundleCreate(
                                     status,
                                     bdbTx.hash,
                                     bdbTx.identifier,
@@ -154,32 +154,32 @@ private val getTransfers: BRCryptoClientGetTransfersCallback =
                             }
                         }
                     }
-                    cryptoClientAnnounceTransfers(
+                    wkClientAnnounceTransfers(
                         cwm,
                         sid,
-                        CRYPTO_TRUE,
+                        WK_TRUE,
                         bundles.toCValues(),
                         bundles.size.toULong()
                     )
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    cryptoClientAnnounceTransfers(cwm, sid, CRYPTO_FALSE, null, 0uL)
+                    wkClientAnnounceTransfers(cwm, sid, WK_FALSE, null, 0uL)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                cryptoClientAnnounceTransfers(cwm, sid, CRYPTO_FALSE, null, 0uL)
+                wkClientAnnounceTransfers(cwm, sid, WK_FALSE, null, 0uL)
             } finally {
-                cryptoWalletManagerGive(cwm)
+                wkWalletManagerGive(cwm)
             }
         }
     }
 
-private val submitTransaction: BRCryptoClientSubmitTransactionCallback =
+private val submitTransaction: WKClientSubmitTransactionCallback =
     staticCFunction { context, cwm, sid, transactionBytes, transactionBytesLength, hashAsHex ->
         memScoped {
             checkNotNull(context)
             checkNotNull(cwm)
-            defer { cryptoWalletManagerGive(cwm) }
+            defer { wkWalletManagerGive(cwm) }
         }
     }
 
@@ -192,14 +192,14 @@ private fun processTransactions(transactions: List<BdbTransaction>) = memScoped 
                 ?: 0L
             val height = bdbTx.blockHeight ?: 0uL
             val status = when (bdbTx.status) {
-                "confirmed" -> CRYPTO_TRANSFER_STATE_INCLUDED
-                "submitted", "reverted" -> CRYPTO_TRANSFER_STATE_SUBMITTED
-                "failed", "rejected" -> CRYPTO_TRANSFER_STATE_ERRORED
+                "confirmed" -> WK_TRANSFER_STATE_INCLUDED
+                "submitted", "reverted" -> WK_TRANSFER_STATE_SUBMITTED
+                "failed", "rejected" -> WK_TRANSFER_STATE_ERRORED
                 else -> error("Unhandled Transaction status '${bdbTx.status}'")
             }
             bdbTx.raw?.let { data ->
                 val rawTxData = data.decodeBase64Bytes().asUByteArray()
-                cryptoClientTransactionBundleCreate(
+                wkClientTransactionBundleCreate(
                     status,
                     rawTxData.refTo(0),
                     rawTxData.size.toULong(),

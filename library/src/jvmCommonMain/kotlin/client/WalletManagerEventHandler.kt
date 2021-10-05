@@ -1,8 +1,8 @@
 package drewcarlson.walletkit.client
 
-import com.breadwallet.corenative.crypto.*
+import com.blockset.walletkit.nativex.WKListener
+import com.blockset.walletkit.nativex.WKWalletManagerEventType
 import drewcarlson.walletkit.System.Companion.system
-import com.breadwallet.corenative.crypto.BRCryptoWalletManagerEventType.*
 import com.google.common.primitives.UnsignedLong
 import drewcarlson.walletkit.WalletManagerEvent
 import drewcarlson.walletkit.WalletManagerSyncDepth
@@ -11,7 +11,7 @@ import drewcarlson.walletkit.asApiState
 import kotlinx.coroutines.launch
 
 internal val WalletManagerEventCallback =
-        BRCryptoListener.WalletManagerEventCallback { context, coreWalletManager, event ->
+        WKListener.WalletManagerEventCallback { context, coreWalletManager, event ->
             val system = context.system
             if (system == null) {
                 //Log.log(Level.SEVERE, "WalletManagerChanged: missed system");
@@ -23,12 +23,12 @@ internal val WalletManagerEventCallback =
 
                 try {
                     when (checkNotNull(event.type())) {
-                        CRYPTO_WALLET_MANAGER_EVENT_CREATED -> {
+                        WKWalletManagerEventType.CREATED -> {
                             // Log.log(Level.FINE, "WalletManagerCreated");
                             val walletManager = system.createWalletManager(coreWalletManager)
                             system.announceWalletManagerEvent(walletManager, WalletManagerEvent.Created)
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_CHANGED -> {
+                        WKWalletManagerEventType.CHANGED -> {
                             val oldState = event.u.state.oldValue.asApiState()
                             val newState = event.u.state.newValue.asApiState()
 
@@ -43,7 +43,7 @@ internal val WalletManagerEventCallback =
                                 // Log.log(Level.SEVERE, "WalletManagerChanged: missed wallet manager");
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_DELETED -> {
+                        WKWalletManagerEventType.DELETED -> {
                             // Log.log(Level.FINE, "WalletManagerDeleted");
 
                             val walletManager = system.getWalletManager(coreWalletManager)
@@ -53,7 +53,7 @@ internal val WalletManagerEventCallback =
                                 // Log.log(Level.SEVERE, "WalletManagerChanged: missed wallet manager");
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_WALLET_ADDED -> {
+                        WKWalletManagerEventType.WALLET_ADDED -> {
                             val coreWallet = event.u.wallet
                             try {
                                 // Log.log(Level.FINE, "WalletManagerWalletAdded");
@@ -72,7 +72,7 @@ internal val WalletManagerEventCallback =
                                 coreWallet.give()
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_WALLET_CHANGED -> {
+                        WKWalletManagerEventType.WALLET_CHANGED -> {
                             val coreWallet = event.u.wallet
                             try {
                                 // Log.log(Level.FINE, "WalletManagerWalletChanged");
@@ -91,7 +91,7 @@ internal val WalletManagerEventCallback =
                                 coreWallet.give()
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_WALLET_DELETED -> {
+                        WKWalletManagerEventType.WALLET_DELETED -> {
                             val coreWallet = event.u.wallet
                             try {
                                 // Log.log(Level.FINE, "WalletManagerWalletDeleted");
@@ -110,7 +110,7 @@ internal val WalletManagerEventCallback =
                                 coreWallet.give()
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_SYNC_STARTED -> {
+                        WKWalletManagerEventType.SYNC_STARTED -> {
                             // Log.log(Level.FINE, "WalletManagerSyncStarted");
 
                             val walletManager = system.getWalletManager(coreWalletManager)
@@ -120,7 +120,7 @@ internal val WalletManagerEventCallback =
                                 // Log.log(Level.SEVERE, "WalletManagerChanged: missed wallet manager");
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_SYNC_CONTINUES -> {
+                        WKWalletManagerEventType.SYNC_CONTINUES -> {
                             val percent = event.u.syncContinues.percentComplete
                             val timestamp = event.u.syncContinues.timestamp.let { if (0 == it) null else it.toLong() }
 
@@ -133,7 +133,7 @@ internal val WalletManagerEventCallback =
                                 // Log.log(Level.SEVERE, "WalletManagerChanged: missed wallet manager");
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_SYNC_STOPPED -> {
+                        WKWalletManagerEventType.SYNC_STOPPED -> {
                             val reason = event.u.syncStopped.reason.asApiReason()
 
                             // Log.log(Level.FINE, String.format("WalletManagerSyncStopped: (%s)", reason));
@@ -145,7 +145,7 @@ internal val WalletManagerEventCallback =
                                 // Log.log(Level.SEVERE, "WalletManagerChanged: missed wallet manager");
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_SYNC_RECOMMENDED -> {
+                        WKWalletManagerEventType.SYNC_RECOMMENDED -> {
                             val coreDepth = event.u.syncRecommended.depth().toCore().toUInt()
                             val depth = WalletManagerSyncDepth.fromSerialization(coreDepth)
 
@@ -158,7 +158,7 @@ internal val WalletManagerEventCallback =
                                 // Log.log(Level.SEVERE, "WalletManagerChanged: missed wallet manager");
                             }
                         }
-                        CRYPTO_WALLET_MANAGER_EVENT_BLOCK_HEIGHT_UPDATED -> {
+                        WKWalletManagerEventType.BLOCK_HEIGHT_UPDATED -> {
                             val blockHeight = UnsignedLong.fromLongBits(event.u.blockHeight).toLong().toULong()
 
                             // Log.log(Level.FINE, String.format("WalletManagerBlockHeightUpdated (%s)", blockHeight));

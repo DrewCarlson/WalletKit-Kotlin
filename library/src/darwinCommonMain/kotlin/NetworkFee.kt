@@ -1,10 +1,10 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
+import walletkit.core.*
 import kotlin.native.concurrent.*
 
 public actual class NetworkFee(
-        core: BRCryptoNetworkFee,
+        core: WKNetworkFee,
         take: Boolean
 ) : Closeable {
 
@@ -12,7 +12,7 @@ public actual class NetworkFee(
             timeIntervalInMilliseconds: ULong,
             pricePerCostFactor: Amount
     ) : this(
-            checkNotNull(cryptoNetworkFeeCreate(
+            checkNotNull(wkNetworkFeeCreate(
                     timeIntervalInMilliseconds,
                     pricePerCostFactor.core,
                     pricePerCostFactor.unit.core
@@ -20,14 +20,14 @@ public actual class NetworkFee(
             false
     )
 
-    internal val core: BRCryptoNetworkFee =
-            if (take) checkNotNull(cryptoNetworkFeeTake(core))
+    internal val core: WKNetworkFee =
+            if (take) checkNotNull(wkNetworkFeeTake(core))
             else core
 
     public actual val timeIntervalInMilliseconds: ULong =
-            cryptoNetworkFeeGetConfirmationTimeInMilliseconds(core)
+            wkNetworkFeeGetConfirmationTimeInMilliseconds(core)
     internal actual val pricePerCostFactor: Amount =
-            Amount(checkNotNull(cryptoNetworkFeeGetPricePerCostFactor(core)), false)
+            Amount(checkNotNull(wkNetworkFeeGetPricePerCostFactor(core)), false)
 
     init {
         freeze()
@@ -35,9 +35,9 @@ public actual class NetworkFee(
 
     actual override fun hashCode(): Int = core.hashCode()
     actual override fun equals(other: Any?): Boolean =
-            other is NetworkFee && CRYPTO_TRUE == cryptoNetworkFeeEqual(core, other.core)
+            other is NetworkFee && WK_TRUE == wkNetworkFeeEqual(core, other.core)
 
     actual override fun close() {
-        cryptoNetworkFeeGive(core)
+        wkNetworkFeeGive(core)
     }
 }

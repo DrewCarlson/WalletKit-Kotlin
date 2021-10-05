@@ -11,10 +11,10 @@ package drewcarlson.walletkit
 public expect class Amount : Comparable<Amount>, Closeable {
     public companion object {
         /** Create [Amount] from [double]. */
-        public fun create(double: Double, unit: WKUnit): Amount
+        public fun create(double: Double, unit: UnitWK): Amount
 
         /** Create [Amount] from [long] */
-        public fun create(long: Long, unit: WKUnit): Amount
+        public fun create(long: Long, unit: UnitWK): Amount
 
         /**
          * Parse [string] into an [Amount].
@@ -43,7 +43,7 @@ public expect class Amount : Comparable<Amount>, Closeable {
          */
         public fun create(
                 string: String,
-                unit: WKUnit,
+                unit: UnitWK,
                 isNegative: Boolean = false
         ): Amount?
     }
@@ -55,7 +55,7 @@ public expect class Amount : Comparable<Amount>, Closeable {
      * This property is only used in the [toString] function and to ascertain
      * the Amount's currency typically for consistency in [plus]/[minus] functions.
      */
-    public val unit: WKUnit
+    public val unit: UnitWK
 
     /** The currency */
     public val currency: Currency
@@ -76,7 +76,7 @@ public expect class Amount : Comparable<Amount>, Closeable {
      * ```
      * (the final three digits of '678' are rounded to '680')
      */
-    public fun asDouble(unit: WKUnit): Double?
+    public fun asDouble(unit: UnitWK): Double?
 
     /**
      * Convert [Amount] into [String] using [unit].
@@ -98,7 +98,7 @@ public expect class Amount : Comparable<Amount>, Closeable {
      *   For now this method will only use the default
      *   format defined in the Swift/Java implementations
      */
-    public fun asString(unit: WKUnit): String?
+    public fun asString(unit: UnitWK): String?
 
     /**
      * Return a 'raw string' (as an integer in self's base unit) using `base` and `preface`.
@@ -127,7 +127,7 @@ public expect class Amount : Comparable<Amount>, Closeable {
     public operator fun plus(that: Amount): Amount
     public operator fun minus(that: Amount): Amount
 
-    public fun convert(unit: WKUnit): Amount?
+    public fun convert(unit: UnitWK): Amount?
     public fun isCompatible(amount: Amount): Boolean
     public fun hasCurrency(currency: Currency): Boolean
 

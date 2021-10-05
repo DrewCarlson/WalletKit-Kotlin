@@ -1,11 +1,11 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoPeer
+import com.blockset.walletkit.nativex.WKPeer
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import com.google.common.primitives.UnsignedInteger
 
 public actual class NetworkPeer internal constructor(
-        internal val core: BRCryptoPeer
+        internal val core: WKPeer
 ) : Closeable {
 
     init {
@@ -19,7 +19,7 @@ public actual class NetworkPeer internal constructor(
             publicKey: String?
     ) : this(
             checkNotNull(
-                    BRCryptoPeer.create(
+                    WKPeer.create(
                             network.core,
                             address,
                             UnsignedInteger.valueOf(port.toLong()),

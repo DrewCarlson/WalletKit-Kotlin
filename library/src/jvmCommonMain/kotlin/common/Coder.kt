@@ -1,11 +1,11 @@
 package drewcarlson.walletkit.common
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoCoder
+import com.blockset.walletkit.nativex.WKCoder
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import drewcarlson.walletkit.Closeable
 
 public actual class Coder internal constructor(
-        internal val core: BRCryptoCoder
+        internal val core: WKCoder
 ) : Closeable {
 
     init {
@@ -25,9 +25,9 @@ public actual class Coder internal constructor(
     public actual companion object {
         public actual fun createForAlgorithm(algorithm: CoderAlgorithm): Coder =
                 when (algorithm) {
-                    CoderAlgorithm.HEX -> BRCryptoCoder.createHex().orNull()
-                    CoderAlgorithm.BASE58 -> BRCryptoCoder.createBase58().orNull()
-                    CoderAlgorithm.BASE58CHECK -> BRCryptoCoder.createBase58Check().orNull()
+                    CoderAlgorithm.HEX -> WKCoder.createHex().orNull()
+                    CoderAlgorithm.BASE58 -> WKCoder.createBase58().orNull()
+                    CoderAlgorithm.BASE58CHECK -> WKCoder.createBase58Check().orNull()
                 }.let { coreCoder -> Coder(checkNotNull(coreCoder)) }
     }
 }

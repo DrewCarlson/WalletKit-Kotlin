@@ -1,11 +1,14 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.crypto.*
+import com.blockset.walletkit.nativex.WKAddressScheme
+import com.blockset.walletkit.nativex.WKTransfer
+import com.blockset.walletkit.nativex.WKWallet
+import com.blockset.walletkit.nativex.WKWalletState
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
 public actual class Wallet internal constructor(
-        internal val core: BRCryptoWallet,
+        internal val core: WKWallet,
         public actual val manager: WalletManager,
         public actual val scope: CoroutineScope
 ) {
@@ -13,11 +16,11 @@ public actual class Wallet internal constructor(
     public actual val system: System
         get() = manager.system
 
-    public actual val unit: WKUnit
-        get() = WKUnit(core.unit)
+    public actual val unit: UnitWK
+        get() = UnitWK(core.unit)
 
-    public actual val unitForFee: WKUnit
-        get() = WKUnit(core.unitForFee)
+    public actual val unitForFee: UnitWK
+        get() = UnitWK(core.unitForFee)
 
     public actual val balance: Amount
         get() = core.balance.run(::Amount)
@@ -36,8 +39,8 @@ public actual class Wallet internal constructor(
 
     public actual val state: WalletState
         get() = when (core.state) {
-            BRCryptoWalletState.CRYPTO_WALLET_STATE_CREATED -> WalletState.CREATED
-            BRCryptoWalletState.CRYPTO_WALLET_STATE_DELETED -> WalletState.DELETED
+            WKWalletState.CREATED -> WalletState.CREATED
+            WKWalletState.DELETED -> WalletState.DELETED
             else -> error("Invalid core state (${core.state})")
         }
 
@@ -50,7 +53,7 @@ public actual class Wallet internal constructor(
 
     public actual fun getTargetForScheme(scheme: AddressScheme): Address {
         val coreInt = manager.addressScheme.core.toInt()
-        val coreScheme = BRCryptoAddressScheme.fromCore(coreInt)
+        val coreScheme = WKAddressScheme.fromCore(coreInt)
         return core.getTargetAddress(coreScheme).run(::Address)
     }
 
@@ -94,7 +97,7 @@ public actual class Wallet internal constructor(
 
     actual override fun hashCode(): Int = Objects.hash(core)
 
-    internal fun getTransfer(coreTransfer: BRCryptoTransfer): Transfer? {
+    internal fun getTransfer(coreTransfer: WKTransfer): Transfer? {
         return if (core.containsTransfer(coreTransfer)) {
             Transfer(coreTransfer.take(), this)
         } else null

@@ -1,10 +1,10 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoCurrency
+import com.blockset.walletkit.nativex.WKCurrency
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 
 public actual class Currency internal constructor(
-        internal val core: BRCryptoCurrency
+        internal val core: WKCurrency
 ) : Closeable {
 
     init {
@@ -48,7 +48,7 @@ public actual class Currency internal constructor(
                 type: String,
                 issuer: String?
         ): Currency = Currency(
-                BRCryptoCurrency.create(uids, name, code, type, issuer)
+                WKCurrency.create(uids, name, code, type, issuer)
         )
     }
 }

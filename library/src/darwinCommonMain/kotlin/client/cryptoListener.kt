@@ -1,6 +1,6 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
+import walletkit.core.*
 import drewcarlson.walletkit.client.*
 import kotlinx.cinterop.*
 import kotlinx.coroutines.*
@@ -9,8 +9,8 @@ import kotlinx.coroutines.*
 private val listenerScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
 internal fun createCryptoListener(
-    c: BRCryptoListenerContext
-) = cryptoListenerCreate(
+    c: WKListenerContext
+) = wkListenerCreate(
     c,
     staticCFunction { p1, p2, p3 ->
         listenerScope.launch { systemEventHandler(p1, p2, p3) }

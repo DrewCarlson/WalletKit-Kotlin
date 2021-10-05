@@ -1,15 +1,15 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoAddressScheme
-import com.breadwallet.corenative.crypto.BRCryptoNetwork
-import com.breadwallet.corenative.crypto.BRCryptoPeer
-import com.breadwallet.corenative.crypto.BRCryptoSyncMode
+import com.blockset.walletkit.nativex.WKAddressScheme
+import com.blockset.walletkit.nativex.WKNetwork
+import com.blockset.walletkit.nativex.WKPeer
+import com.blockset.walletkit.nativex.WKSyncMode
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import com.google.common.primitives.UnsignedInteger
 import com.google.common.primitives.UnsignedLong
 
 public actual class Network internal constructor(
-        internal val core: BRCryptoNetwork
+        internal val core: WKNetwork
 ) : Closeable {
 
     init {
@@ -45,7 +45,7 @@ public actual class Network internal constructor(
         get() = core.confirmationsUntilFinal.toByte().toUInt()
 
     public actual fun createPeer(address: String, port: UShort, publicKey: String?): NetworkPeer? =
-            BRCryptoPeer.create(
+            WKPeer.create(
                     core,
                     address,
                     UnsignedInteger.valueOf(port.toLong()),
@@ -76,11 +76,11 @@ public actual class Network internal constructor(
         get() = WalletManagerMode.fromCoreInt(core.defaultSyncMode.toCore().toUInt())
 
     public actual fun supportsWalletManagerMode(mode: WalletManagerMode): Boolean {
-        return core.supportsSyncMode(BRCryptoSyncMode.fromCore(mode.core.toInt()))
+        return core.supportsSyncMode(WKSyncMode.fromCore(mode.core.toInt()))
     }
 
     public actual fun supportsAddressScheme(addressScheme: AddressScheme): Boolean {
-        return core.supportsAddressScheme(BRCryptoAddressScheme.fromCore(addressScheme.core.toInt()))
+        return core.supportsAddressScheme(WKAddressScheme.fromCore(addressScheme.core.toInt()))
     }
 
     public actual fun currencyByCode(code: String): Currency? =
@@ -96,34 +96,34 @@ public actual class Network internal constructor(
     public actual fun hasCurrency(currency: Currency): Boolean =
             core.hasCurrency(currency.core)
 
-    public actual fun baseUnitFor(currency: Currency): WKUnit? {
+    public actual fun baseUnitFor(currency: Currency): UnitWK? {
         if (!hasCurrency(currency)) return null
         val cryptoUnit = core.getUnitAsBase(currency.core).orNull() ?: return null
-        return WKUnit(cryptoUnit)
+        return UnitWK(cryptoUnit)
     }
 
-    public actual fun defaultUnitFor(currency: Currency): WKUnit? {
+    public actual fun defaultUnitFor(currency: Currency): UnitWK? {
         if (!hasCurrency(currency)) return null
         val cryptoUnit = core.getUnitAsDefault(currency.core).orNull() ?: return null
-        return WKUnit(cryptoUnit)
+        return UnitWK(cryptoUnit)
     }
 
-    public actual fun unitsFor(currency: Currency): Set<WKUnit>? {
+    public actual fun unitsFor(currency: Currency): Set<UnitWK>? {
         if (!hasCurrency(currency)) return null
         return (0 until core.getUnitCount(currency.core).toLong())
                 .map { checkNotNull(core.getUnitAt(currency.core, UnsignedLong.valueOf(it)).orNull()) }
-                .map { WKUnit(it) }
+                .map { UnitWK(it) }
                 .toSet()
     }
 
-    public actual fun hasUnitFor(currency: Currency, unit: WKUnit): Boolean? =
+    public actual fun hasUnitFor(currency: Currency, unit: UnitWK): Boolean? =
             unitsFor(currency)?.contains(unit)
 
     public actual fun addressFor(string: String): Address? {
         return Address.create(string, this)
     }
 
-    public actual fun addCurrency(currency: Currency, baseUnit: WKUnit, defaultUnit: WKUnit) {
+    public actual fun addCurrency(currency: Currency, baseUnit: UnitWK, defaultUnit: UnitWK) {
         require(baseUnit.hasCurrency(currency))
         require(defaultUnit.hasCurrency(currency))
         if (!hasCurrency(currency)) {
@@ -131,7 +131,7 @@ public actual class Network internal constructor(
         }
     }
 
-    public actual fun addUnitFor(currency: Currency, unit: WKUnit) {
+    public actual fun addUnitFor(currency: Currency, unit: UnitWK) {
         require(unit.hasCurrency(currency))
         require(hasCurrency(currency))
         if (hasUnitFor(currency, unit) == null) {
@@ -151,9 +151,9 @@ public actual class Network internal constructor(
 
     public actual companion object {
         internal actual fun installBuiltins(): List<Network> =
-                BRCryptoNetwork.installBuiltins().map(::Network)
+                WKNetwork.installBuiltins().map(::Network)
 
         public actual fun findBuiltin(uids: String): Network? =
-                BRCryptoNetwork.findBuiltin(uids).orNull()?.run(::Network)
+                WKNetwork.findBuiltin(uids).orNull()?.run(::Network)
     }
 }

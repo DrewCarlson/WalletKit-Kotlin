@@ -1,16 +1,16 @@
 package drewcarlson.walletkit
 
-import brcrypto.*
 import kotlinx.cinterop.toKStringFromUtf8
+import walletkit.core.*
 import kotlin.native.concurrent.*
 
 public actual class NetworkPeer(
-        core: BRCryptoPeer,
+        core: WKPeer,
         take: Boolean = false
 ) : Closeable {
 
-    internal val core: BRCryptoPeer =
-            if (take) checkNotNull(cryptoPeerTake(core))
+    internal val core: WKPeer =
+            if (take) checkNotNull(wkPeerTake(core))
             else core
 
     internal actual constructor(
@@ -19,7 +19,7 @@ public actual class NetworkPeer(
             port: UShort,
             publicKey: String?
     ) : this(
-            checkNotNull(cryptoPeerCreate(
+            checkNotNull(wkPeerCreate(
                     network.core,
                     address,
                     port,
@@ -32,22 +32,22 @@ public actual class NetworkPeer(
     }
 
     public actual val network: Network
-        get() = Network(checkNotNull(cryptoPeerGetNetwork(core)), false)
+        get() = Network(checkNotNull(wkPeerGetNetwork(core)), false)
 
     public actual val address: String
-        get() = checkNotNull(cryptoPeerGetAddress(core)).toKStringFromUtf8()
+        get() = checkNotNull(wkPeerGetAddress(core)).toKStringFromUtf8()
 
     public actual val port: UShort
-        get() = cryptoPeerGetPort(core)
+        get() = wkPeerGetPort(core)
 
     public actual val publicKey: String?
-        get() = cryptoPeerGetPublicKey(core)?.toKStringFromUtf8()
+        get() = wkPeerGetPublicKey(core)?.toKStringFromUtf8()
 
     actual override fun hashCode(): Int = core.hashCode()
     actual override fun equals(other: Any?): Boolean =
-            other is NetworkPeer && CRYPTO_TRUE == cryptoPeerIsIdentical(core, other.core)
+            other is NetworkPeer && WK_TRUE == wkPeerIsIdentical(core, other.core)
 
     actual override fun close() {
-        cryptoPeerGive(core)
+        wkPeerGive(core)
     }
 }

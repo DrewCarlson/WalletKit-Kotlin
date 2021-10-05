@@ -1,14 +1,14 @@
 package drewcarlson.walletkit.common
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoCipher
+import com.blockset.walletkit.nativex.WKCipher
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import drewcarlson.walletkit.Closeable
 
 public actual class Cipher internal constructor(
-        core: BRCryptoCipher?
+        core: WKCipher?
 ) : Closeable {
 
-    internal val core: BRCryptoCipher = checkNotNull(core)
+    internal val core: WKCipher = checkNotNull(core)
 
     init {
         ReferenceCleaner.register(core, ::close)
@@ -26,15 +26,15 @@ public actual class Cipher internal constructor(
 
     public actual companion object {
         public actual fun createForAesEcb(key: ByteArray): Cipher =
-                BRCryptoCipher.createAesEcb(key)
+                WKCipher.createAesEcb(key)
                         .orNull().run(::Cipher)
 
         public actual fun createForChaCha20Poly1305(key: Key, nonce12: ByteArray, ad: ByteArray): Cipher =
-                BRCryptoCipher.createChaCha20Poly1305(key.core, nonce12, ad)
+                WKCipher.createChaCha20Poly1305(key.core, nonce12, ad)
                         .orNull().run(::Cipher)
 
         public actual fun createForPigeon(privKey: Key, pubKey: Key, nonce12: ByteArray): Cipher =
-                BRCryptoCipher.createPigeon(privKey.core, pubKey.core, nonce12)
+                WKCipher.createPigeon(privKey.core, pubKey.core, nonce12)
                         .orNull().run(::Cipher)
     }
 }

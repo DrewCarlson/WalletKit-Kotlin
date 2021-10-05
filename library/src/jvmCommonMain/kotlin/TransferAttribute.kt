@@ -1,9 +1,9 @@
 package drewcarlson.walletkit
 
-import com.breadwallet.corenative.crypto.BRCryptoTransferAttribute
+import com.blockset.walletkit.nativex.WKTransferAttribute
 
 public actual class TransferAttribute(
-        internal val core: BRCryptoTransferAttribute
+        internal val core: WKTransferAttribute
 ) {
 
     public actual val key: String

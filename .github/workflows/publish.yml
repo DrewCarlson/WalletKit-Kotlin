@@ -7,8 +7,10 @@ on:
     branches: [ main ]
 
 env:
-  BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-  BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
+  ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+  ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
+  ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEPASSWORD }}
+  ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPEUSERNAME }}
 
 jobs:
   gradle:
@@ -18,6 +20,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v1
+        with:
+          submodules: 'recursive'
       - uses: actions/setup-java@v1
         with:
           java-version: 11
@@ -32,7 +36,7 @@ jobs:
       - uses: eskatos/gradle-command-action@v1
         name: Publish (macos)
         with:
-          arguments: clean publish dokkaHtml patchDocs
+          arguments: clean walletkit:publish dokkaHtml
         if: ${{ !startsWith(matrix.os, 'windows') }}
 #      - name: Publish (windows)
 #        shell: bash

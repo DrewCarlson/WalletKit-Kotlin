@@ -1,14 +1,14 @@
 package drewcarlson.walletkit.common
 
-import com.breadwallet.corenative.cleaner.ReferenceCleaner
-import com.breadwallet.corenative.crypto.BRCryptoHasher
+import com.blockset.walletkit.nativex.WKHasher
+import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import drewcarlson.walletkit.Closeable
 
 public actual class Hasher internal constructor(
-        core: BRCryptoHasher?
+        core: WKHasher?
 ) : Closeable {
 
-    internal val core: BRCryptoHasher = checkNotNull(core)
+    internal val core: WKHasher = checkNotNull(core)
 
     init {
         ReferenceCleaner.register(core, ::close)
@@ -24,17 +24,17 @@ public actual class Hasher internal constructor(
     public actual companion object {
         public actual fun createForAlgorithm(algorithm: HashAlgorithm): Hasher =
                 when (algorithm) {
-                    HashAlgorithm.SHA1 -> BRCryptoHasher.createSha1()
-                    HashAlgorithm.SHA224 -> BRCryptoHasher.createSha224()
-                    HashAlgorithm.SHA256 -> BRCryptoHasher.createSha256()
-                    HashAlgorithm.SHA256_2 -> BRCryptoHasher.createSha256_2()
-                    HashAlgorithm.SHA384 -> BRCryptoHasher.createSha384()
-                    HashAlgorithm.SHA512 -> BRCryptoHasher.createSha512()
-                    HashAlgorithm.SHA3 -> BRCryptoHasher.createSha3()
-                    HashAlgorithm.RMD160 -> BRCryptoHasher.createRmd160()
-                    HashAlgorithm.HASH160 -> BRCryptoHasher.createHash160()
-                    HashAlgorithm.KECCAK256 -> BRCryptoHasher.createKeccak256()
-                    HashAlgorithm.MD5 -> BRCryptoHasher.createMd5()
+                    HashAlgorithm.SHA1 -> WKHasher.createSha1()
+                    HashAlgorithm.SHA224 -> WKHasher.createSha224()
+                    HashAlgorithm.SHA256 -> WKHasher.createSha256()
+                    HashAlgorithm.SHA256_2 -> WKHasher.createSha256_2()
+                    HashAlgorithm.SHA384 -> WKHasher.createSha384()
+                    HashAlgorithm.SHA512 -> WKHasher.createSha512()
+                    HashAlgorithm.SHA3 -> WKHasher.createSha3()
+                    HashAlgorithm.RMD160 -> WKHasher.createRmd160()
+                    HashAlgorithm.HASH160 -> WKHasher.createHash160()
+                    HashAlgorithm.KECCAK256 -> WKHasher.createKeccak256()
+                    HashAlgorithm.MD5 -> WKHasher.createMd5()
                 }.orNull().run(::Hasher)
     }
 }
