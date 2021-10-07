@@ -33,11 +33,11 @@ val privateApiHeaders = (file("$corePath/src/crypto").listFiles() ?: emptyArray(
         .filter { it.name.endsWith(".h") }
 
 kotlin {
+    val wkn = gradle.includedBuild("WalletKitJava")
     ios()
     jvm {
         compilations.all {
             // TODO: Build with native-model.gradle tasks
-            val wkn = gradle.includedBuild("WalletKitJava")
             compileKotlinTask
                     .dependsOn(wkn.task(":WalletKitNative-JRE:blake2SharedLibrary"))
                     .dependsOn(wkn.task(":WalletKitNative-JRE:ed25519SharedLibrary"))
@@ -129,8 +129,8 @@ kotlin {
 
         val commonTest by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test-common:$KOTLIN_VERSION")
-                implementation("org.jetbrains.kotlin:kotlin-test-annotations-common:$KOTLIN_VERSION")
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
             }
         }
 
@@ -141,14 +141,15 @@ kotlin {
                 implementation("io.ktor:ktor-client-okhttp:$KTOR_VERSION")
 
                 compileOnly("com.blockset.walletkit:WalletKitNative-JRE")
-
-                // TODO(fix): Guava is missing from the published corenative-jre pom
-                implementation("com.google.guava:guava:28.1-jre")
             }
         }
 
         val jvmCommonTest by creating {
             dependsOn(commonTest)
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(kotlin("test-junit"))
+            }
         }
 
         val jvmMain by getting {
@@ -162,10 +163,6 @@ kotlin {
             dependsOn(jvmCommonTest)
             // TODO: Link jvm compile step to native-model.gradle task output
             resources.srcDirs("../walletkit/WalletKitJava/WalletKitNative-JRE/build/resources/main")
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-test:$KOTLIN_VERSION")
-                implementation("org.jetbrains.kotlin:kotlin-test-junit:$KOTLIN_VERSION")
-            }
         }
 
         if (hasAndroid) {
@@ -178,6 +175,9 @@ kotlin {
 
             val androidTest by getting {
                 dependsOn(jvmCommonTest)
+                dependencies {
+                    implementation("com.blockset.walletkit:WalletKitNative-JRE")
+                }
             }
         }
 

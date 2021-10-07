@@ -214,6 +214,8 @@ model {
                     source {
                         srcDirs cppCryptoSrcDirs
                         include "**/*.c"
+                        excludeNativeSourceFolder(file("$corePath/src/ethereum/les"), it)
+                        excludeNativeSourceFolder(file("$corePath/src/ethereum/bcs"), it)
                     }
                 }
             }
@@ -257,5 +259,19 @@ model {
                         kCompileTask.dependsOn spec.tasks.getBuild()
                     }
                 }
+    }
+}
+
+static def excludeNativeSourceFolder(excludeDir, sources) {
+    def rootFiles = excludeDir.listFiles()?.toList()
+    rootFiles.forEach { file ->
+        if (file.isDirectory()) {
+            def subFiles = file.listFiles().toList()
+            subFiles.forEach { subFile ->
+                sources.exclude "**/${subFile.name}"
+            }
+        } else {
+            sources.exclude "**/${file.name}"
+        }
     }
 }
