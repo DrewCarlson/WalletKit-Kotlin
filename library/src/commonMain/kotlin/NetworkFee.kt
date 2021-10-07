@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
 /**
  * A Network Fee represents the 'amount per cost factor' paid to mine a transfer.

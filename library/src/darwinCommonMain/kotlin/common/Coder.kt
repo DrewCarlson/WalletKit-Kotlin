@@ -1,11 +1,18 @@
-package drewcarlson.walletkit.common
+/*
+ * Created by Drew Carlson.
+ * Copyright (c) 2021 Breadwinner AG.  All right reserved.
+ *
+ * See the LICENSE file at the project root for license information.
+ * See the CONTRIBUTORS file at the project root for a list of contributors.
+ */
+package com.blockset.walletkit
 
 import walletkit.core.*
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.usePinned
-import drewcarlson.walletkit.Closeable
+import com.blockset.walletkit.Closeable
 import kotlin.native.concurrent.*
 
 public actual class Coder internal constructor(

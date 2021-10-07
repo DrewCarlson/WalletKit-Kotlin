@@ -1,6 +1,6 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
-import drewcarlson.walletkit.common.Key
+import com.blockset.walletkit.Key
 import kotlin.coroutines.cancellation.CancellationException
 
 /**

@@ -1,7 +1,14 @@
-package drewcarlson.walletkit.common
+/*
+ * Created by Drew Carlson.
+ * Copyright (c) 2021 Breadwinner AG.  All right reserved.
+ *
+ * See the LICENSE file at the project root for license information.
+ * See the CONTRIBUTORS file at the project root for a list of contributors.
+ */
+package com.blockset.walletkit
 
-import drewcarlson.walletkit.assertContentEquals
-import drewcarlson.walletkit.createSecret
+import com.blockset.walletkit.assertContentEquals
+import com.blockset.walletkit.createSecret
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

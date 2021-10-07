@@ -111,6 +111,7 @@ kotlin {
         all {
             languageSettings.apply {
                 optIn("kotlin.RequiresOptIn")
+                optIn("kotlin.ExperimentalUnsignedTypes")
                 explicitApi()
             }
         }

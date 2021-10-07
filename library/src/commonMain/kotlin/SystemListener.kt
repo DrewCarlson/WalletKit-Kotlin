@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
 public open class DefaultSystemListener : SystemListener
 

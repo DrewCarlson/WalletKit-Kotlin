@@ -1,4 +1,11 @@
-package drewcarlson.walletkit
+/*
+ * Created by Drew Carlson.
+ * Copyright (c) 2021 Breadwinner AG.  All right reserved.
+ *
+ * See the LICENSE file at the project root for license information.
+ * See the CONTRIBUTORS file at the project root for a list of contributors.
+ */
+package com.blockset.walletkit
 
 import com.blockset.walletkit.nativex.*
 import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
@@ -6,7 +13,7 @@ import com.blockset.walletkit.nativex.utility.Cookie
 import com.google.common.primitives.*
 import drewcarlson.blockset.*
 import drewcarlson.blockset.model.*
-import drewcarlson.walletkit.client.*
+import com.blockset.walletkit.client.*
 import kotlinx.coroutines.*
 import java.io.*
 import java.util.concurrent.*

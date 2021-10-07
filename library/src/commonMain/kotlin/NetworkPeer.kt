@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
 /**
  * A NetworkPeer is a Peer on a Network.

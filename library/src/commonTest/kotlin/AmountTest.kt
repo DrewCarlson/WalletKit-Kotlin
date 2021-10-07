@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
 import kotlin.test.*
 

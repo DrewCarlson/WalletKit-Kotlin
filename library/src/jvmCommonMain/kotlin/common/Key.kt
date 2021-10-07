@@ -1,9 +1,16 @@
-package drewcarlson.walletkit.common
+/*
+ * Created by Drew Carlson.
+ * Copyright (c) 2021 Breadwinner AG.  All right reserved.
+ *
+ * See the LICENSE file at the project root for license information.
+ * See the CONTRIBUTORS file at the project root for a list of contributors.
+ */
+package com.blockset.walletkit
 
 import com.blockset.walletkit.nativex.WKKey
-import drewcarlson.walletkit.Secret
+import com.blockset.walletkit.Secret
 import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
-import drewcarlson.walletkit.Closeable
+import com.blockset.walletkit.Closeable
 
 public actual class Key internal constructor(
         internal val core: WKKey

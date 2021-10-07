@@ -9,7 +9,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import drewcarlson.walletkit.*
+import com.blockset.walletkit.*
 import java.util.*
 
 fun main() {

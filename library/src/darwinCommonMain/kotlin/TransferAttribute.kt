@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
 import walletkit.core.*
 import kotlinx.cinterop.toKStringFromUtf8

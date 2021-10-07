@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
 import drewcarlson.blockset.BdbService
 import drewcarlson.blockset.model.BdbCurrency

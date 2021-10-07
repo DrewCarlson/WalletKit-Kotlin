@@ -1,4 +1,4 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
 import com.blockset.walletkit.nativex.WKNetworkFee
 import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner

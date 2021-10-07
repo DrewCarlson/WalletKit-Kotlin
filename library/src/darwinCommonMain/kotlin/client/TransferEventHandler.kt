@@ -1,8 +1,15 @@
-package drewcarlson.walletkit
+/*
+ * Created by Drew Carlson.
+ * Copyright (c) 2021 Breadwinner AG.  All right reserved.
+ *
+ * See the LICENSE file at the project root for license information.
+ * See the CONTRIBUTORS file at the project root for a list of contributors.
+ */
+package com.blockset.walletkit
 
 import walletkit.core.*
 import walletkit.core.WKTransferEventType.*
-import drewcarlson.walletkit.System.Companion.system
+import com.blockset.walletkit.System.Companion.system
 import kotlinx.cinterop.*
 
 internal fun transferEventHandler(

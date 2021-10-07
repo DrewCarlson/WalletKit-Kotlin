@@ -4,7 +4,7 @@ import cli.createBdbService
 import cli.deleteData
 import cli.quit
 import cli.storagePath
-import drewcarlson.walletkit.*
+import com.blockset.walletkit.*
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main

@@ -1,10 +1,17 @@
-package drewcarlson.walletkit
+/*
+ * Created by Drew Carlson.
+ * Copyright (c) 2021 Breadwinner AG.  All right reserved.
+ *
+ * See the LICENSE file at the project root for license information.
+ * See the CONTRIBUTORS file at the project root for a list of contributors.
+ */
+package com.blockset.walletkit
 
 import walletkit.core.*
 import walletkit.core.WKSyncDepth.*
-import drewcarlson.walletkit.WalletManagerState.*
-import drewcarlson.walletkit.WalletManagerSyncDepth.*
-import drewcarlson.walletkit.common.*
+import com.blockset.walletkit.WalletManagerState.*
+import com.blockset.walletkit.WalletManagerSyncDepth.*
+import com.blockset.walletkit.*
 import kotlinx.cinterop.*
 import kotlinx.coroutines.*
 import platform.posix.*

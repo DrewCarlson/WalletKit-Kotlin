@@ -1,8 +1,8 @@
-package drewcarlson.walletkit
+package com.blockset.walletkit
 
 import walletkit.core.*
 import walletkit.core.WKWalletManagerEventType.*
-import drewcarlson.walletkit.System.Companion.system
+import com.blockset.walletkit.System.Companion.system
 import kotlinx.cinterop.*
 
 internal fun walletManagerEventHandler(

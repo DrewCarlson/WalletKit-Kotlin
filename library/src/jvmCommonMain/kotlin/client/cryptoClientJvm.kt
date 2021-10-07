@@ -1,4 +1,11 @@
-package drewcarlson.walletkit.client
+/*
+ * Created by Drew Carlson.
+ * Copyright (c) 2021 Breadwinner AG.  All right reserved.
+ *
+ * See the LICENSE file at the project root for license information.
+ * See the CONTRIBUTORS file at the project root for a list of contributors.
+ */
+package com.blockset.walletkit.client
 
 import com.blockset.walletkit.nativex.WKClient
 import com.blockset.walletkit.nativex.WKClient.EstimateTransactionFeeCallback
@@ -12,8 +19,9 @@ import com.blockset.walletkit.nativex.WKTransferStateType
 import com.blockset.walletkit.nativex.support.WKConstants.BLOCK_HEIGHT_UNBOUND
 import com.blockset.walletkit.nativex.utility.Cookie
 import com.google.common.primitives.*
-import drewcarlson.walletkit.*
-import drewcarlson.walletkit.System.Companion.system
+import com.blockset.walletkit.*
+import com.blockset.walletkit.System.Companion.system
+import com.blockset.walletkit.internal.decodeBase64Bytes
 import kotlinx.coroutines.*
 import java.time.*
 

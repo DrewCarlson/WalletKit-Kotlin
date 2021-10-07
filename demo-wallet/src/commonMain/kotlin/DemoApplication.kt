@@ -1,7 +1,7 @@
 package demo
 
 import drewcarlson.blockset.BdbService
-import drewcarlson.walletkit.*
+import com.blockset.walletkit.*
 import kotlinx.coroutines.*
 
 const val PHRASE = "under chief october surface cause ivory visa wreck fall caution taxi genius"

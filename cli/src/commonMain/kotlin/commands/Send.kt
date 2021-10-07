@@ -1,7 +1,7 @@
 package cli.commands
 
 import cli.*
-import drewcarlson.walletkit.*
+import com.blockset.walletkit.*
 import io.ktor.utils.io.core.*
 import kotlinx.cli.*
 import kotlinx.coroutines.runBlocking

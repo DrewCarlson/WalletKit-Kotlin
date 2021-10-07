@@ -1,9 +1,9 @@
-package drewcarlson.walletkit.client
+package com.blockset.walletkit.client
 
 import com.blockset.walletkit.nativex.*
 import com.blockset.walletkit.nativex.utility.Cookie
-import drewcarlson.walletkit.*
-import drewcarlson.walletkit.System.Companion.system
+import com.blockset.walletkit.*
+import com.blockset.walletkit.System.Companion.system
 import kotlinx.coroutines.*
 
 internal val SystemEventCallback = WKListener.SystemEventCallback { context, coreSystem, event ->

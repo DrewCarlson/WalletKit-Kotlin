@@ -1,13 +1,20 @@
-package drewcarlson.walletkit.client
+/*
+ * Created by Drew Carlson.
+ * Copyright (c) 2021 Breadwinner AG.  All right reserved.
+ *
+ * See the LICENSE file at the project root for license information.
+ * See the CONTRIBUTORS file at the project root for a list of contributors.
+ */
+package com.blockset.walletkit.client
 
 import com.blockset.walletkit.nativex.WKListener
 import com.blockset.walletkit.nativex.WKWalletManagerEventType
-import drewcarlson.walletkit.System.Companion.system
+import com.blockset.walletkit.System.Companion.system
 import com.google.common.primitives.UnsignedLong
-import drewcarlson.walletkit.WalletManagerEvent
-import drewcarlson.walletkit.WalletManagerSyncDepth
-import drewcarlson.walletkit.asApiReason
-import drewcarlson.walletkit.asApiState
+import com.blockset.walletkit.WalletManagerEvent
+import com.blockset.walletkit.WalletManagerSyncDepth
+import com.blockset.walletkit.asApiReason
+import com.blockset.walletkit.asApiState
 import kotlinx.coroutines.launch
 
 internal val WalletManagerEventCallback =

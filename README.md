@@ -80,10 +80,10 @@ class Listener : DefaultSystemListener {
 }
 
 let bdbAuthToken = "..."
-let uids = UUID.init().uuidString
+let uids = UUID().uuidString
 let phrase = "house ...".data(using: .utf8)!
-let account = Account.Companion.init().createFromPhrase(phrase: phrase, timestamp: 0, uids_: uids)!
-let bdbService = BdbServiceCompanion.init().createForTest(bdbAuthToken: bdbAuthToken)
+let account = Account.Companion().createFromPhrase(phrase: phrase, timestamp: 0, uids_: uids)!
+let bdbService = BdbServiceCompanion().createForTest(bdbAuthToken: bdbAuthToken)
 
 let system = System.Companion.init().create(
     listener: Listener(),
@@ -113,13 +113,12 @@ Artifacts are available on [Bintray](https://bintray.com/drewcarlson/WalletKit-K
 
 ```kotlin
 repositories {
-  jcenter()
-  // Or snapshots
-  maven { setUrl("http://oss.jfrog.org/artifactory/oss-snapshot-local") }
+  // Only snapshots are published
+  maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
-  implementation("drewcarlson.walletkit:walletkit:$WALLETKIT_VERSION")
+  implementation("org.drewcarlson:walletkit:0.0.3-SNAPSHOT")
 }
 ```
 
