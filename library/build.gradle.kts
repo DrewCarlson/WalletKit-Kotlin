@@ -51,6 +51,10 @@ val publicApiHeaders = (project.file("$corePath/include").listFiles() ?: emptyAr
 val privateApiHeaders = (project.file("$corePath/src/crypto").listFiles() ?: emptyArray())
         .filter { it.name.endsWith(".h") }
 
+apiValidation {
+    ignoredPackages.add("com.blockset.walletkit.nativex")
+}
+
 kotlin {
     val wkn = gradle.includedBuild("WalletKitJava")
     ios()
