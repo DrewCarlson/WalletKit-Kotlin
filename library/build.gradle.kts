@@ -25,13 +25,30 @@ if (hasAndroid) {
             minSdk = 23
             targetSdk = 28
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            externalNativeBuild {
+                cmake.arguments("-DANDROID_STL=none", "-DANDROID_TOOLCHAIN=clang")
+            }
+            ndk.abiFilters.addAll(listOf("x86", "x86_64", "armeabi-v7a", "arm64-v8a"))
+        }
+
+        externalNativeBuild {
+            cmake {
+                path = rootProject.file("walletkit/WalletKitCore/CMakeLists.txt")
+                version = "3.10.2"
+            }
+        }
+
+        sourceSets {
+            named("main") {
+                java.srcDir(rootProject.file("walletkit/WalletKitJava/WalletKitNative/src/main/java"))
+            }
         }
     }
 }
 
-val publicApiHeaders = (file("$corePath/include").listFiles() ?: emptyArray())
+val publicApiHeaders = (project.file("$corePath/include").listFiles() ?: emptyArray())
         .filter { it.name.endsWith(".h") }
-val privateApiHeaders = (file("$corePath/src/crypto").listFiles() ?: emptyArray())
+val privateApiHeaders = (project.file("$corePath/src/crypto").listFiles() ?: emptyArray())
         .filter { it.name.endsWith(".h") }
 
 kotlin {
@@ -59,10 +76,10 @@ kotlin {
 
     configure(nativeTargets) {
         // TODO: Resolve linking paths from native build plugin
-        val coreStaticPath = file("build/libs/walletKitCore/static/$name").absolutePath
-        val sqliteStaticPath = file("build/libs/sqlite3/static/$name").absolutePath
-        val ed25519StaticPath = file("build/libs/ed25519/static/$name").absolutePath
-        val blake2StaticPath = file("build/libs/blake2/static/$name").absolutePath
+        val coreStaticPath = project.file("build/libs/walletKitCore/static/$name").absolutePath
+        val sqliteStaticPath = project.file("build/libs/sqlite3/static/$name").absolutePath
+        val ed25519StaticPath = project.file("build/libs/ed25519/static/$name").absolutePath
+        val blake2StaticPath = project.file("build/libs/blake2/static/$name").absolutePath
         val darwinLinkerOpts = listOf(
                 "-L$coreStaticPath",
                 "-L$sqliteStaticPath",
@@ -172,7 +189,8 @@ kotlin {
             val androidMain by getting {
                 dependsOn(jvmCommonMain)
                 dependencies {
-                    implementation("com.blockset.walletkit:WalletKitNative-Android")
+                    implementation("net.java.dev.jna:jna:${libs.versions.jnaAndroid.get()}")
+                    implementation(libs.guava.android)
                 }
             }
 
@@ -206,4 +224,3 @@ kotlin {
         }
     }
 }
-

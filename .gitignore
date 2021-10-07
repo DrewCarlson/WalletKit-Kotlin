@@ -125,3 +125,5 @@ DerivedData/
 
 ## Gcc Patch
 /*.gcno
+
+**/.cxx

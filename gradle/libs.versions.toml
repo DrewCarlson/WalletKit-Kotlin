@@ -1,0 +1,17 @@
+[versions]
+kotlin = "1.5.31"
+jna = "5.4.0"
+jnaAndroid = "5.4.0@aar"
+guava = "28.1"
+guavaAndroid = "28.1-android"
+
+[plugins]
+multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+[libraries]
+jna-jre = "net.java.dev.jna:jna:5.4.0"
+jna-android = "net.java.dev.jna:jna:5.4.0@aar"
+guava-jre = { module = "com.google.guava:guava", version.ref = "guava" }
+guava-android = { module = "com.google.guava:guava", version.ref = "guavaAndroid" }

@@ -8,6 +8,9 @@ pluginManagement {
 
 rootProject.name = "WalletKit-Kotlin"
 
+enableFeaturePreview("VERSION_CATALOGS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(":library")
 include(":cli")
 include(":demo-wallet")
@@ -24,8 +27,6 @@ includeBuild("walletkit/WalletKitJava") {
     dependencySubstitution {
         substitute(module("com.blockset.walletkit:WalletKitNative-JRE"))
                 .using(project(":WalletKitNative-JRE"))
-        substitute(module("com.blockset.walletkit:WalletKitNative-Android"))
-                .using(project(":WalletKitNative-Android"))
     }
 }
 
