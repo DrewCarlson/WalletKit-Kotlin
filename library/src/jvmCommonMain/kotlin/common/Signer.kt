@@ -5,11 +5,12 @@
  * See the LICENSE file at the project root for license information.
  * See the CONTRIBUTORS file at the project root for a list of contributors.
  */
+@file:Suppress("PackageDirectoryMismatch")
+
 package com.blockset.walletkit
 
 import com.blockset.walletkit.nativex.WKSigner
 import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
-import com.blockset.walletkit.Closeable
 
 public actual class Signer internal constructor(
         internal val core: WKSigner

@@ -5,6 +5,8 @@
  * See the LICENSE file at the project root for license information.
  * See the CONTRIBUTORS file at the project root for a list of contributors.
  */
+@file:Suppress("PackageDirectoryMismatch")
+
 package com.blockset.walletkit
 
 import walletkit.core.*
