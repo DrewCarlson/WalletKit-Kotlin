@@ -23,6 +23,7 @@ if (hasAndroid) {
         defaultConfig {
             minSdk = 23
             targetSdk = 28
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
     }
 }
@@ -177,7 +178,7 @@ kotlin {
             val androidTest by getting {
                 dependsOn(jvmCommonTest)
                 dependencies {
-                    implementation("com.blockset.walletkit:WalletKitNative-JRE")
+                    implementation("androidx.test:runner:1.4.0")
                 }
             }
         }

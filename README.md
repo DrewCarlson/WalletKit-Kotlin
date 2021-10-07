@@ -96,6 +96,26 @@ let system = System.Companion.init().create(
 system.configure(appCurrencies: [])
 ```
 
+### Tests
+
+Run tests with any of the following tasks:
+```shell
+# Test all supported platforms
+./gradlew :walletkit:allTest
+
+# Test macOS native
+./gradlew :walletkit:macosTest
+
+# Test iOS Simulator
+./gradlew :walletkit:iosX64Test
+
+# Test Jvm on macOS
+./gradlew :walletkit:jvmTest
+
+# Test Android on emulator/device
+./gradlew :walletkit:connectedCheck
+```
+
 ## Download
 
 ![](https://img.shields.io/static/v1?label=&message=Platforms&color=grey)
@@ -108,8 +128,6 @@ system.configure(appCurrencies: [])
 ![](https://img.shields.io/static/v1?label=&message=tvOS&color=red)
 ![](https://img.shields.io/static/v1?label=&message=watchOS&color=red)
 ![](https://img.shields.io/static/v1?label=&message=Js&color=red)
-
-Artifacts are available on [Bintray](https://bintray.com/drewcarlson/WalletKit-Kotlin).
 
 ```kotlin
 repositories {
