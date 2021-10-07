@@ -13,7 +13,6 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkSignerReco
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkSignerSign
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkSignerSignLength
 import com.blockset.walletkit.nativex.utility.SizeT
-import com.google.common.base.Function
 import com.google.common.base.Optional
 import com.google.common.base.Preconditions
 import com.google.common.primitives.Ints

@@ -7,7 +7,6 @@
  */
 package com.blockset.walletkit.nativex
 
-import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferEqual
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferGetAmount
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferGetAmountDirected
@@ -26,7 +25,6 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferGe
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferGive
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferTake
 import com.blockset.walletkit.nativex.utility.SizeT
-import com.google.common.base.Function
 import com.google.common.base.Optional
 import com.google.common.primitives.UnsignedLong
 import com.sun.jna.Pointer

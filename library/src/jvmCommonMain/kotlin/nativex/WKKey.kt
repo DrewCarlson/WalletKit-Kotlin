@@ -86,7 +86,7 @@ internal class WKKey : PointerType {
         fun isProtectedPrivateKeyString(keyString: ByteArray): Boolean {
             // ensure string is null terminated
             var keyString = keyString
-            keyString = Arrays.copyOf(keyString, keyString.size + 1)
+            keyString = keyString.copyOf(keyString.size + 1)
             return try {
                 val keyMemory = Memory(keyString.size.toLong())
                 try {
@@ -107,7 +107,7 @@ internal class WKKey : PointerType {
             val wordsArray = StringArray(words.toTypedArray(), "UTF-8")
 
             // ensure string is null terminated
-            phraseUtf8 = Arrays.copyOf(phraseUtf8, phraseUtf8.size + 1)
+            phraseUtf8 = phraseUtf8.copyOf(phraseUtf8.size + 1)
             return try {
                 val phraseMemory = Memory(phraseUtf8.size.toLong())
                 try {
@@ -131,7 +131,7 @@ internal class WKKey : PointerType {
         fun createFromPrivateKeyString(keyString: ByteArray): Optional<WKKey> {
             // ensure string is null terminated
             var keyString = keyString
-            keyString = Arrays.copyOf(keyString, keyString.size + 1)
+            keyString = keyString.copyOf(keyString.size + 1)
             return try {
                 val keyMemory = Memory(keyString.size.toLong())
                 try {
@@ -155,8 +155,8 @@ internal class WKKey : PointerType {
             // ensure strings are null terminated
             var keyString = keyString
             var phraseString = phraseString
-            keyString = Arrays.copyOf(keyString, keyString.size + 1)
-            phraseString = Arrays.copyOf(phraseString, phraseString.size + 1)
+            keyString = keyString.copyOf(keyString.size + 1)
+            phraseString = phraseString.copyOf(phraseString.size + 1)
             return try {
                 val memory = Memory((keyString.size + phraseString.size).toLong())
                 try {
@@ -183,7 +183,7 @@ internal class WKKey : PointerType {
         fun createFromPublicKeyString(keyString: ByteArray): Optional<WKKey> {
             // ensure string is null terminated
             var keyString = keyString
-            keyString = Arrays.copyOf(keyString, keyString.size + 1)
+            keyString = keyString.copyOf(keyString.size + 1)
             return try {
                 val keyMemory = Memory(keyString.size.toLong())
                 try {
@@ -218,7 +218,7 @@ internal class WKKey : PointerType {
             val wordsArray = StringArray(words.toTypedArray(), "UTF-8")
 
             // ensure string is null terminated
-            phraseUtf8 = Arrays.copyOf(phraseUtf8, phraseUtf8.size + 1)
+            phraseUtf8 = phraseUtf8.copyOf(phraseUtf8.size + 1)
             return try {
                 val phraseMemory = Memory(phraseUtf8.size.toLong())
                 try {
@@ -244,7 +244,7 @@ internal class WKKey : PointerType {
             val wordsArray = StringArray(words.toTypedArray(), "UTF-8")
 
             // ensure string is null terminated
-            phraseUtf8 = Arrays.copyOf(phraseUtf8, phraseUtf8.size + 1)
+            phraseUtf8 = phraseUtf8.copyOf(phraseUtf8.size + 1)
             return try {
                 val phraseMemory = Memory(phraseUtf8.size.toLong())
                 try {

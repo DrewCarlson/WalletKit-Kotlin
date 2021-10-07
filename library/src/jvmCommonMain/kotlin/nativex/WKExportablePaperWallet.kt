@@ -7,7 +7,11 @@
  */
 package com.blockset.walletkit.nativex
 
-import com.google.common.base.Function
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletCreate
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletGetAddress
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletGetKey
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletRelease
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletValidateSupported
 import com.google.common.base.Optional
 import com.sun.jna.Pointer
 import com.sun.jna.PointerType
@@ -20,27 +24,27 @@ internal class WKExportablePaperWallet : PointerType {
         get() {
             val thisPtr = pointer
             return Optional.fromNullable<Pointer>(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletGetKey(thisPtr)
-            ).transform(Function { address: Pointer? -> WKKey(address) })
+                    wkExportablePaperWalletGetKey(thisPtr)
+            ).transform { address: Pointer? -> WKKey(address) }
         }
     val address: Optional<WKAddress>
         get() {
             val thisPtr = pointer
             return Optional.fromNullable<Pointer>(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletGetAddress(thisPtr)
-            ).transform(Function { address: Pointer? -> WKAddress(address) })
+                    wkExportablePaperWalletGetAddress(thisPtr)
+            ).transform { address: Pointer? -> WKAddress(address) }
         }
 
     fun give() {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletRelease(thisPtr)
+        wkExportablePaperWalletRelease(thisPtr)
     }
 
     companion object {
         fun validateSupported(network: WKNetwork,
                               currency: WKCurrency): WKExportablePaperWalletStatus {
             return WKExportablePaperWalletStatus.fromCore(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletValidateSupported(
+                    wkExportablePaperWalletValidateSupported(
                             network.pointer,
                             currency.pointer
                     )
@@ -50,7 +54,7 @@ internal class WKExportablePaperWallet : PointerType {
         fun create(network: WKNetwork,
                    currency: WKCurrency): Optional<WKExportablePaperWallet> {
             return Optional.fromNullable<Pointer>(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkExportablePaperWalletCreate(
+                    wkExportablePaperWalletCreate(
                             network.pointer,
                             currency.pointer)
             ).transform { address: Pointer? -> WKExportablePaperWallet(address) }

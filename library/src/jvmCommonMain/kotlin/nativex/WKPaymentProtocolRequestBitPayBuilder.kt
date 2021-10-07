@@ -7,7 +7,11 @@
  */
 package com.blockset.walletkit.nativex
 
-import com.google.common.base.Function
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestBitPayBuilderAddOutput
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestBitPayBuilderBuild
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestBitPayBuilderCreate
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestBitPayBuilderGive
+import com.blockset.walletkit.nativex.utility.SizeT
 import com.google.common.base.Optional
 import com.google.common.primitives.UnsignedLong
 import com.sun.jna.Pointer
@@ -21,19 +25,19 @@ internal class WKPaymentProtocolRequestBitPayBuilder : PointerType {
 
     fun give() {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestBitPayBuilderGive(thisPtr)
+        wkPaymentProtocolRequestBitPayBuilderGive(thisPtr)
     }
 
     fun addOutput(address: String?, amount: UnsignedLong) {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestBitPayBuilderAddOutput(thisPtr, address, amount.toLong())
+        wkPaymentProtocolRequestBitPayBuilderAddOutput(thisPtr, address, amount.toLong())
     }
 
     fun build(): Optional<WKPaymentProtocolRequest> {
         val thisPtr = pointer
         return Optional.fromNullable<Pointer>(
-                com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestBitPayBuilderBuild(thisPtr)
-        ).transform(Function { address: Pointer? -> WKPaymentProtocolRequest(address) })
+                wkPaymentProtocolRequestBitPayBuilderBuild(thisPtr)
+        ).transform { address: Pointer? -> WKPaymentProtocolRequest(address) }
     }
 
     companion object {
@@ -48,7 +52,7 @@ internal class WKPaymentProtocolRequestBitPayBuilder : PointerType {
                    paymentUrl: String?,
                    merchantData: ByteArray?): Optional<WKPaymentProtocolRequestBitPayBuilder> {
             return Optional.fromNullable<Pointer>(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestBitPayBuilderCreate(
+                    wkPaymentProtocolRequestBitPayBuilderCreate(
                             network.pointer,
                             currency.pointer,
                             callbacks.toByValue(),
@@ -59,7 +63,7 @@ internal class WKPaymentProtocolRequestBitPayBuilder : PointerType {
                             memo,
                             paymentUrl,
                             merchantData,
-                            com.blockset.walletkit.nativex.utility.SizeT(merchantData?.size ?: 0)
+                            SizeT(merchantData?.size ?: 0)
                     )
             ).transform { address: Pointer? -> WKPaymentProtocolRequestBitPayBuilder(address) }
         }

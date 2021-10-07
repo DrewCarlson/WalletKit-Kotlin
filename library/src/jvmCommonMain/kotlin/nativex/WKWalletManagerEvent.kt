@@ -41,7 +41,7 @@ internal open class WKWalletManagerEvent : Structure {
             constructor() : super()
 
             override fun getFieldOrder(): List<String> {
-                return Arrays.asList("oldValue", "newValue")
+                return listOf("oldValue", "newValue")
             }
 
             constructor(oldValue: WKWalletManagerState?, newValue: WKWalletManagerState?) : super() {
@@ -64,7 +64,7 @@ internal open class WKWalletManagerEvent : Structure {
             constructor() : super()
 
             override fun getFieldOrder(): List<String> {
-                return Arrays.asList("timestamp", "percentComplete")
+                return listOf("timestamp", "percentComplete")
             }
 
             constructor(timestamp: Int, percentComplete: Float) : super() {
@@ -85,7 +85,7 @@ internal open class WKWalletManagerEvent : Structure {
             constructor() : super()
 
             override fun getFieldOrder(): List<String> {
-                return Arrays.asList("reason")
+                return listOf("reason")
             }
 
             constructor(reason: WKSyncStoppedReason?) : super() {
@@ -105,7 +105,7 @@ internal open class WKWalletManagerEvent : Structure {
             constructor() : super()
 
             override fun getFieldOrder(): List<String> {
-                return Arrays.asList("depthEnum")
+                return listOf("depthEnum")
             }
 
             constructor(depth: Int) : super() {
@@ -166,7 +166,7 @@ internal open class WKWalletManagerEvent : Structure {
     }
 
     override fun getFieldOrder(): List<String> {
-        return Arrays.asList("typeEnum", "u")
+        return listOf("typeEnum", "u")
     }
 
     constructor(type: Int, u: u_union?) : super() {

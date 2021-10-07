@@ -18,7 +18,7 @@ internal open class WKWalletMigratorStatus : Structure {
     constructor() : super()
 
     override fun getFieldOrder(): List<String> {
-        return Arrays.asList("type")
+        return listOf("type")
     }
 
     constructor(type: Int) : super() {

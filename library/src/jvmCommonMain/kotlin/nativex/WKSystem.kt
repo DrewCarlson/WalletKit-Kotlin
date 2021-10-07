@@ -33,7 +33,6 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryIndirect.wkClientAn
 import com.blockset.walletkit.nativex.library.WKNativeLibraryIndirect.wkSystemCreateWalletManager
 import com.blockset.walletkit.nativex.utility.SizeT
 import com.blockset.walletkit.nativex.utility.SizeTByReference
-import com.google.common.base.Function
 import com.google.common.base.Optional
 import com.google.common.primitives.UnsignedInts
 import com.google.common.primitives.UnsignedLong
@@ -187,19 +186,15 @@ internal class WKSystem : PointerType {
                       network: WKNetwork,
                       mode: WKSyncMode,
                       scheme: WKAddressScheme,
-                      currencies: List<WKCurrency?>): Optional<WKWalletManager> {
-        val thisPtr = pointer
-        val currenciesCount = currencies.size
-        val currenciesRefs = mutableListOf<WKCurrency>()
-        for (i in 0 until currenciesCount) currenciesRefs[i] = checkNotNull(currencies[i])
+                      currencies: List<WKCurrency>): Optional<WKWalletManager> {
         return Optional.fromNullable<Pointer>(
                 wkSystemCreateWalletManager(
-                        thisPtr,
+                        pointer,
                         network.pointer,
                         mode.toCore(),
                         scheme.toCore(),
-                        currenciesRefs.toTypedArray(),
-                        SizeT(currenciesCount))
+                        currencies.toTypedArray(),
+                        SizeT(currencies.size))
         ).transform { address: Pointer? -> WKWalletManager(address) }
     }
 

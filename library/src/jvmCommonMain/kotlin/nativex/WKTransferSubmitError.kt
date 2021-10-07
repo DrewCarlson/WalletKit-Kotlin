@@ -32,7 +32,7 @@ internal open class WKTransferSubmitError : Structure {
             constructor() : super()
 
             override fun getFieldOrder(): List<String> {
-                return Arrays.asList("errnum")
+                return listOf("errnum")
             }
 
             constructor(errnum: Int) : super() {
@@ -64,7 +64,7 @@ internal open class WKTransferSubmitError : Structure {
     }
 
     override fun getFieldOrder(): List<String> {
-        return Arrays.asList("typeEnum", "u")
+        return listOf("typeEnum", "u")
     }
 
     constructor(type: Int, u: u_union?) : super() {

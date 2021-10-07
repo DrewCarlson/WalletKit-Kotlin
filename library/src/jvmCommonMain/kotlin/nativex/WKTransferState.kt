@@ -7,6 +7,12 @@
  */
 package com.blockset.walletkit.nativex
 
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkMemoryFreeExtern
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateExtractError
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateExtractIncluded
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateGetType
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateGive
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateTake
 import com.google.common.base.Optional
 import com.google.common.primitives.UnsignedLong
 import com.sun.jna.Pointer
@@ -21,7 +27,7 @@ internal class WKTransferState : PointerType {
 
     fun type(): WKTransferStateType {
         return WKTransferStateType.fromCore(
-                com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateGetType(
+                wkTransferStateGetType(
                         pointer))
     }
 
@@ -39,7 +45,7 @@ internal class WKTransferState : PointerType {
         val feeBasis = PointerByReference()
         val success = IntByReference()
         val error = PointerByReference()
-        check(WKBoolean.WK_FALSE != com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateExtractIncluded(
+        check(WKBoolean.WK_FALSE != wkTransferStateExtractIncluded(
                 pointer,
                 blockNumber,
                 blockTimestamp,
@@ -52,31 +58,26 @@ internal class WKTransferState : PointerType {
                     UnsignedLong.fromLongBits(blockNumber.value),
                     UnsignedLong.fromLongBits(blockTimestamp.value),
                     UnsignedLong.fromLongBits(transactionIndex.value),
-                    com.blockset.walletkit.nativex.WKFeeBasis(feeBasis.value),
+                    WKFeeBasis(feeBasis.value),
                     WKBoolean.WK_TRUE == success.value,
-                    Optional.fromNullable(error.value).transform<String> { p: Pointer? -> p!!.getString(0) })
+                    Optional.fromNullable(error.value).transform { p: Pointer? -> p!!.getString(0) })
         } finally {
-            com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkMemoryFreeExtern(error.value)
+            wkMemoryFreeExtern(error.value)
         }
     }
 
     fun errored(): WKTransferSubmitError {
         val error = WKTransferSubmitError.ByValue()
-        check(WKBoolean.WK_FALSE != com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateExtractError(
-                pointer,
-                error))
+        check(WKBoolean.WK_FALSE != wkTransferStateExtractError(pointer, error))
         return error
     }
 
     fun take(): WKTransferState {
-        return WKTransferState(
-                com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateTake(
-                        pointer))
+        return WKTransferState(wkTransferStateTake(pointer))
     }
 
     fun give() {
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkTransferStateGive(
-                pointer)
+        wkTransferStateGive(pointer)
     }
 
     companion object {

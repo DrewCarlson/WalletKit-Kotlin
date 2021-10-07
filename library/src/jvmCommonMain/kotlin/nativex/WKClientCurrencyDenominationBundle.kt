@@ -7,6 +7,7 @@
  */
 package com.blockset.walletkit.nativex
 
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkClientCurrencyDenominationBundleCreate
 import com.google.common.primitives.UnsignedInteger
 import com.sun.jna.Pointer
 import com.sun.jna.PointerType
@@ -22,7 +23,7 @@ internal class WKClientCurrencyDenominationBundle : PointerType {
                 symbol: String?,
                 decimals: UnsignedInteger): WKClientCurrencyDenominationBundle {
             return WKClientCurrencyDenominationBundle(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkClientCurrencyDenominationBundleCreate(
+                    wkClientCurrencyDenominationBundleCreate(
                             name,
                             code,
                             symbol,

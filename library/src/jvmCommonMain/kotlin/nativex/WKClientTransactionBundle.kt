@@ -8,6 +8,7 @@
 package com.blockset.walletkit.nativex
 
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkClientTransactionBundleCreate
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkClientTransactionBundleRelease
 import com.blockset.walletkit.nativex.utility.SizeT
 import com.google.common.primitives.UnsignedLong
 import com.sun.jna.Pointer
@@ -15,9 +16,7 @@ import com.sun.jna.PointerType
 
 internal class WKClientTransactionBundle : PointerType {
     fun release() {
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkClientTransactionBundleRelease(
-                pointer
-        )
+        wkClientTransactionBundleRelease(pointer)
     }
 
     constructor() : super()

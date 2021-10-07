@@ -20,7 +20,6 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentPro
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestIsValid
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkPaymentProtocolRequestValidateSupported
 import com.blockset.walletkit.nativex.utility.SizeT
-import com.google.common.base.Function
 import com.google.common.base.Optional
 import com.sun.jna.Native
 import com.sun.jna.Pointer

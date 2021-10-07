@@ -7,7 +7,14 @@
  */
 package com.blockset.walletkit.nativex
 
-import com.google.common.base.Function
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerCreateWalletSweeper
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerWalletSweeperValidateSupported
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperAddTransactionFromBundle
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperGetAddress
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperGetBalance
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperGetKey
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperRelease
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperValidate
 import com.google.common.base.Optional
 import com.sun.jna.Pointer
 import com.sun.jna.PointerType
@@ -19,28 +26,28 @@ internal class WKWalletSweeper : PointerType {
     val key: WKKey
         get() {
             val thisPtr = pointer
-            return com.blockset.walletkit.nativex.WKKey(com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperGetKey(thisPtr))
+            return WKKey(wkWalletSweeperGetKey(thisPtr))
         }
     val balance: Optional<WKAmount>
         get() {
             val thisPtr = pointer
             return Optional.fromNullable<Pointer>(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperGetBalance(
+                    wkWalletSweeperGetBalance(
                             thisPtr
                     )
-            ).transform(Function { address: Pointer? -> WKAmount(address) })
+            ).transform { address: Pointer? -> WKAmount(address) }
         }
     val address: Optional<WKAddress>
         get() {
             val thisPtr = pointer
             return Optional.fromNullable<Pointer>(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperGetAddress(thisPtr)
-            ).transform(Function { address: Pointer? -> WKAddress(address) })
+                    wkWalletSweeperGetAddress(thisPtr)
+            ).transform { address: Pointer? -> WKAddress(address) }
         }
 
     fun handleTransactionAsBtc(bundle: WKClientTransactionBundle): WKWalletSweeperStatus {
         return WKWalletSweeperStatus.fromCore(
-                com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperAddTransactionFromBundle(
+                wkWalletSweeperAddTransactionFromBundle(
                         pointer,
                         bundle.pointer)
         )
@@ -49,13 +56,13 @@ internal class WKWalletSweeper : PointerType {
     fun validate(): WKWalletSweeperStatus {
         val thisPtr = pointer
         return WKWalletSweeperStatus.fromCore(
-                com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperValidate(thisPtr)
+                wkWalletSweeperValidate(thisPtr)
         )
     }
 
     fun give() {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletSweeperRelease(thisPtr)
+        wkWalletSweeperRelease(thisPtr)
     }
 
     companion object {
@@ -63,7 +70,7 @@ internal class WKWalletSweeper : PointerType {
                               wallet: WKWallet,
                               key: WKKey): WKWalletSweeperStatus {
             return WKWalletSweeperStatus.fromCore(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerWalletSweeperValidateSupported(
+                    wkWalletManagerWalletSweeperValidateSupported(
                             cwm.pointer,
                             wallet.pointer,
                             key.pointer
@@ -75,7 +82,7 @@ internal class WKWalletSweeper : PointerType {
                         wallet: WKWallet,
                         key: WKKey): WKWalletSweeper {
             return WKWalletSweeper(
-                    com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerCreateWalletSweeper(
+                    wkWalletManagerCreateWalletSweeper(
                             cwm.pointer,
                             wallet.pointer,
                             key.pointer

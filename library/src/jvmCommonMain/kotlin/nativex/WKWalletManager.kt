@@ -13,8 +13,10 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkClientAnno
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerConnect
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerCreate
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerCreateWallet
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerDisconnect
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerEstimateFeeBasisForPaymentProtocolRequest
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerEstimateFeeBasisForWalletSweep
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerEstimateLimit
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerGetAccount
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerGetAddressScheme
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerGetMode
@@ -28,6 +30,13 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletMana
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSetAddressScheme
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSetMode
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSetNetworkReachable
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSign
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerStop
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSubmit
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSubmitForKey
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSubmitSigned
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSync
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSyncToDepth
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerTake
 import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerWipe
 import com.blockset.walletkit.nativex.library.WKNativeLibraryIndirect.wkClientAnnounceEstimateTransactionFee
@@ -37,7 +46,6 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryIndirect.wkWalletMa
 import com.blockset.walletkit.nativex.utility.Cookie
 import com.blockset.walletkit.nativex.utility.SizeT
 import com.blockset.walletkit.nativex.utility.SizeTByReference
-import com.google.common.base.Function
 import com.google.common.base.Optional
 import com.google.common.primitives.UnsignedInts
 import com.google.common.primitives.UnsignedLong
@@ -95,7 +103,7 @@ internal class WKWalletManager : PointerType {
                         thisPtr,
                         currency.pointer
                 )
-        ).transform(Function { address: Pointer? -> WKWallet(address) })
+        ).transform { address: Pointer? -> WKWallet(address) }
     }
 
     fun setNetworkReachable(isNetworkReachable: Boolean) {
@@ -142,22 +150,22 @@ internal class WKWalletManager : PointerType {
 
     fun disconnect() {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerDisconnect(thisPtr)
+        wkWalletManagerDisconnect(thisPtr)
     }
 
     fun sync() {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSync(thisPtr)
+        wkWalletManagerSync(thisPtr)
     }
 
     fun stop() {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerStop(thisPtr)
+        wkWalletManagerStop(thisPtr)
     }
 
     fun syncToDepth(depth: WKSyncDepth) {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSyncToDepth(thisPtr, depth.toCore())
+        wkWalletManagerSyncToDepth(thisPtr, depth.toCore())
     }
 
     fun sign(wallet: WKWallet, transfer: WKTransfer, phraseUtf8: ByteArray): Boolean {
@@ -165,13 +173,13 @@ internal class WKWalletManager : PointerType {
         val thisPtr = pointer
 
         // ensure string is null terminated
-        phraseUtf8 = Arrays.copyOf(phraseUtf8, phraseUtf8.size + 1)
+        phraseUtf8 = phraseUtf8.copyOf(phraseUtf8.size + 1)
         return try {
             val phraseMemory = Memory(phraseUtf8.size.toLong())
             try {
                 phraseMemory.write(0, phraseUtf8, 0, phraseUtf8.size)
                 val phraseBuffer = phraseMemory.getByteBuffer(0, phraseUtf8.size.toLong())
-                val success: Int = com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSign(thisPtr, wallet.pointer, transfer.pointer, phraseBuffer)
+                val success: Int = wkWalletManagerSign(thisPtr, wallet.pointer, transfer.pointer, phraseBuffer)
                 WKBoolean.WK_TRUE == success
             } finally {
                 phraseMemory.clear()
@@ -187,13 +195,13 @@ internal class WKWalletManager : PointerType {
         val thisPtr = pointer
 
         // ensure string is null terminated
-        phraseUtf8 = Arrays.copyOf(phraseUtf8, phraseUtf8.size + 1)
+        phraseUtf8 = phraseUtf8.copyOf(phraseUtf8.size + 1)
         try {
             val phraseMemory = Memory(phraseUtf8.size.toLong())
             try {
                 phraseMemory.write(0, phraseUtf8, 0, phraseUtf8.size)
                 val phraseBuffer = phraseMemory.getByteBuffer(0, phraseUtf8.size.toLong())
-                com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSubmit(thisPtr, wallet.pointer, transfer.pointer, phraseBuffer)
+                wkWalletManagerSubmit(thisPtr, wallet.pointer, transfer.pointer, phraseBuffer)
             } finally {
                 phraseMemory.clear()
             }
@@ -205,12 +213,12 @@ internal class WKWalletManager : PointerType {
 
     fun submit(wallet: WKWallet, transfer: WKTransfer, key: WKKey) {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSubmitForKey(thisPtr, wallet.pointer, transfer.pointer, key.pointer)
+        wkWalletManagerSubmitForKey(thisPtr, wallet.pointer, transfer.pointer, key.pointer)
     }
 
     fun submit(wallet: WKWallet, transfer: WKTransfer) {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerSubmitSigned(thisPtr, wallet.pointer, transfer.pointer)
+        wkWalletManagerSubmitSigned(thisPtr, wallet.pointer, transfer.pointer)
     }
 
     class EstimateLimitResult internal constructor(var amount: WKAmount?, var needFeeEstimate: Boolean, var isZeroIfInsuffientFunds: Boolean)
@@ -218,7 +226,7 @@ internal class WKWalletManager : PointerType {
     fun estimateLimit(wallet: WKWallet, asMaximum: Boolean, coreAddress: WKAddress, coreFee: WKNetworkFee): EstimateLimitResult {
         val needFeeEstimateRef = IntByReference(WKBoolean.WK_FALSE)
         val isZeroIfInsuffientFundsRef = IntByReference(WKBoolean.WK_FALSE)
-        val maybeAmount = Optional.fromNullable<Pointer>(com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkWalletManagerEstimateLimit(
+        val maybeAmount = Optional.fromNullable<Pointer>(wkWalletManagerEstimateLimit(
                 pointer,
                 wallet.pointer,
                 if (asMaximum) WKBoolean.WK_TRUE else WKBoolean.WK_FALSE,
@@ -226,7 +234,7 @@ internal class WKWalletManager : PointerType {
                 coreFee.pointer,
                 needFeeEstimateRef,
                 isZeroIfInsuffientFundsRef
-        )).transform(Function<Pointer, WKAmount> { address: Pointer? -> WKAmount(address) })
+        )).transform { address: Pointer? -> WKAmount(address) }
         return EstimateLimitResult(
                 maybeAmount.orNull(),
                 needFeeEstimateRef.value == WKBoolean.WK_TRUE,
@@ -236,19 +244,15 @@ internal class WKWalletManager : PointerType {
 
     fun estimateFeeBasis(wallet: WKWallet, cookie: Cookie,
                          target: WKAddress, amount: WKAmount, fee: WKNetworkFee, attributes: List<WKTransferAttribute>) {
-        val thisPtr = pointer
-        val attributesCount = attributes.size
-        val attributeRefs = mutableListOf<WKTransferAttribute>()
-        for (i in 0 until attributesCount) attributeRefs[i] = attributes[i]
         wkWalletManagerEstimateFeeBasis(
-                thisPtr,
+                pointer,
                 wallet.pointer,
-                cookie.getPointer(),
+                cookie.pointer,
                 target.pointer,
                 amount.pointer,
                 fee.pointer,
-                SizeT(attributesCount),
-                attributeRefs.toTypedArray())
+                SizeT(attributes.size),
+                attributes.toTypedArray())
     }
 
     fun estimateFeeBasisForWalletSweep(wallet: WKWallet, cookie: Cookie,
@@ -257,7 +261,7 @@ internal class WKWalletManager : PointerType {
                 sweeper.pointer,
                 pointer,
                 wallet.pointer,
-                cookie.getPointer(),
+                cookie.pointer,
                 fee.pointer)
     }
 
@@ -266,7 +270,7 @@ internal class WKWalletManager : PointerType {
         wkWalletManagerEstimateFeeBasisForPaymentProtocolRequest(
                 pointer,
                 wallet.pointer,
-                cookie.getPointer(),
+                cookie.pointer,
                 request.pointer,
                 fee.pointer)
     }
@@ -350,7 +354,7 @@ internal class WKWalletManager : PointerType {
         }
 
         override fun getFieldOrder(): List<String> {
-            return Arrays.asList(
+            return listOf(
                     "listener",
                     "system"
             )

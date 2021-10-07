@@ -109,7 +109,7 @@ internal class WKAccount : PointerType {
         fun createFromPhrase(phraseUtf8: ByteArray, timestamp: UnsignedLong, uids: String?): Optional<WKAccount> {
             // ensure string is null terminated
             var phraseUtf8 = phraseUtf8
-            phraseUtf8 = Arrays.copyOf(phraseUtf8, phraseUtf8.size + 1)
+            phraseUtf8 = phraseUtf8.copyOf(phraseUtf8.size + 1)
             return try {
                 val phraseMemory = Memory(phraseUtf8.size.toLong())
                 try {

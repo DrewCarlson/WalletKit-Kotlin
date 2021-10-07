@@ -29,7 +29,6 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryIndirect.wkWalletCr
 import com.blockset.walletkit.nativex.library.WKNativeLibraryIndirect.wkWalletValidateTransferAttributes
 import com.blockset.walletkit.nativex.utility.SizeT
 import com.blockset.walletkit.nativex.utility.SizeTByReference
-import com.google.common.base.Function
 import com.google.common.base.Optional
 import com.google.common.primitives.UnsignedInts
 import com.google.common.primitives.UnsignedLong
@@ -123,14 +122,12 @@ internal class WKWallet : PointerType {
     fun validateTransferAttributes(attributes: List<WKTransferAttribute>): Optional<WKTransferAttributeValidationError> {
         val thisPtr = pointer
         val validates = IntByReference(WKBoolean.WK_FALSE)
-        val attributesCount = attributes.size
-        val attributeRefs = mutableListOf<WKTransferAttribute>()
-        for (i in 0 until attributesCount) attributeRefs[i] = attributes[i]
+        val attributeRefs = Array(attributes.size) { attributes[it] }
         val error = WKTransferAttributeValidationError.fromCore(
                 wkWalletValidateTransferAttributes(
                         thisPtr,
                         SizeT(attributes.size),
-                        attributeRefs.toTypedArray(),
+                        attributeRefs,
                         validates
                 ))
         return if (WKBoolean.WK_TRUE == validates.value) Optional.absent() else Optional.of(error)
@@ -172,20 +169,16 @@ internal class WKWallet : PointerType {
     fun createTransfer(target: WKAddress, amount: WKAmount,
                        estimatedFeeBasis: WKFeeBasis,
                        attributes: List<WKTransferAttribute>): Optional<WKTransfer> {
-        val thisPtr = pointer
-        val attributesCount = attributes.size
-        val attributeRefs = mutableListOf<WKTransferAttribute>()
-        for (i in 0 until attributesCount) attributeRefs[i] = attributes[i]
         return Optional.fromNullable<Pointer>(
                 wkWalletCreateTransfer(
-                        thisPtr,
+                        pointer,
                         target.pointer,
                         amount.pointer,
                         estimatedFeeBasis.pointer,
-                        SizeT(attributesCount),
-                        attributeRefs.toTypedArray()
+                        SizeT(attributes.size),
+                        attributes.toTypedArray()
                 )
-        ).transform(Function { address: Pointer? -> WKTransfer(address) })
+        ).transform { address: Pointer? -> WKTransfer(address) }
     }
 
     fun createTransferForWalletSweep(sweeper: WKWalletSweeper, manager: WKWalletManager, estimatedFeeBasis: WKFeeBasis): Optional<WKTransfer> {

@@ -29,7 +29,7 @@ internal open class WKWalletManagerState : Structure {
             constructor() : super()
 
             override fun getFieldOrder(): List<String> {
-                return Arrays.asList("reason")
+                return listOf("reason")
             }
 
             constructor(reason: WKWalletManagerDisconnectReason?) : super() {
@@ -61,7 +61,7 @@ internal open class WKWalletManagerState : Structure {
     }
 
     override fun getFieldOrder(): List<String> {
-        return Arrays.asList("typeEnum", "u")
+        return listOf("typeEnum", "u")
     }
 
     constructor(type: Int, u: u_union?) : super() {

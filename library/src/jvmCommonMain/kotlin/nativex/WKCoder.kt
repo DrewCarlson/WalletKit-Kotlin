@@ -39,7 +39,7 @@ internal class WKCoder : PointerType {
 
         // ensure string is null terminated
         val inputWithoutTerminator = inputStr.toByteArray(StandardCharsets.UTF_8)
-        val inputWithTerminator = Arrays.copyOf(inputWithoutTerminator, inputWithoutTerminator.size + 1)
+        val inputWithTerminator = inputWithoutTerminator.copyOf(inputWithoutTerminator.size + 1)
         val length = wkCoderDecodeLength(thisPtr, inputWithTerminator)
         val lengthAsInt = Ints.checkedCast(length?.toLong() ?: 0)
         if (0 == lengthAsInt) return Optional.absent()

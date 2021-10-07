@@ -43,7 +43,6 @@ import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkNetworkTak
 import com.blockset.walletkit.nativex.library.WKNativeLibraryIndirect.wkNetworkSetNetworkFees
 import com.blockset.walletkit.nativex.utility.SizeT
 import com.blockset.walletkit.nativex.utility.SizeTByReference
-import com.google.common.base.Function
 import com.google.common.base.Optional
 import com.google.common.primitives.UnsignedInteger
 import com.google.common.primitives.UnsignedInts
@@ -105,10 +104,7 @@ internal class WKNetwork : PointerType {
             return fees
         }
         set(fees) {
-            val thisPtr = pointer
-            val cryptoFees = mutableListOf<WKNetworkFee>()
-            for (i in fees.indices) cryptoFees[i] = fees[i]
-            wkNetworkSetNetworkFees(thisPtr, cryptoFees.toTypedArray(), SizeT(cryptoFees.size))
+            wkNetworkSetNetworkFees(pointer, fees.toTypedArray(), SizeT(fees.size))
         }
     val uids: String
         get() {

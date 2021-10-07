@@ -214,7 +214,7 @@ internal open class WKClient : Structure {
     }
 
     override fun getFieldOrder(): List<String> {
-        return Arrays.asList(
+        return listOf(
                 "context",
                 "funcGetBlockNumber",
                 "funcGetTransactions",

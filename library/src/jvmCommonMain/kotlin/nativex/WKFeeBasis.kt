@@ -7,7 +7,12 @@
  */
 package com.blockset.walletkit.nativex
 
-import com.google.common.base.Function
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisGetCostFactor
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisGetFee
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisGetPricePerCostFactor
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisGive
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisIsEqual
+import com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisTake
 import com.google.common.base.Optional
 import com.sun.jna.Pointer
 import com.sun.jna.PointerType
@@ -19,7 +24,7 @@ internal class WKFeeBasis : PointerType {
     val costFactor: Double
         get() {
             val thisPtr = pointer
-            return com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisGetCostFactor(thisPtr)
+            return wkFeeBasisGetCostFactor(thisPtr)
         }
     val pricePerCostFactorUnit: WKUnit?
         get() {
@@ -29,28 +34,25 @@ internal class WKFeeBasis : PointerType {
     val pricePerCostFactor: WKAmount
         get() {
             val thisPtr = pointer
-            return com.blockset.walletkit.nativex.WKAmount(com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisGetPricePerCostFactor(thisPtr))
+            return WKAmount(wkFeeBasisGetPricePerCostFactor(thisPtr))
         }
     val fee: Optional<WKAmount>
         get() {
             val thisPtr = pointer
-            return Optional.fromNullable<Pointer>(com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisGetFee(thisPtr)).transform(Function { address: Pointer? -> WKAmount(address) })
+            return Optional.fromNullable<Pointer>(wkFeeBasisGetFee(thisPtr)).transform { address: Pointer? -> WKAmount(address) }
         }
 
     fun isIdentical(other: WKFeeBasis): Boolean {
         val thisPtr = pointer
-        return WKBoolean.WK_TRUE == com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisIsEqual(thisPtr, other.pointer)
+        return WKBoolean.WK_TRUE == wkFeeBasisIsEqual(thisPtr, other.pointer)
     }
 
     fun take(): WKFeeBasis {
-        return WKFeeBasis(
-                com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisTake(
-                        pointer
-                ))
+        return WKFeeBasis(wkFeeBasisTake(pointer))
     }
 
     fun give() {
         val thisPtr = pointer
-        com.blockset.walletkit.nativex.library.WKNativeLibraryDirect.wkFeeBasisGive(thisPtr)
+        wkFeeBasisGive(thisPtr)
     }
 }

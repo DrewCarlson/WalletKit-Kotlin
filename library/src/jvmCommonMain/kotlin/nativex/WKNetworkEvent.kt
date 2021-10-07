@@ -22,7 +22,7 @@ internal open class WKNetworkEvent : Structure {
     }
 
     override fun getFieldOrder(): List<String> {
-        return Arrays.asList("typeEnum")
+        return listOf("typeEnum")
     }
 
     constructor(type: Int) : super() {

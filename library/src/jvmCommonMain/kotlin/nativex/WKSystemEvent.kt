@@ -35,7 +35,7 @@ internal open class WKSystemEvent : Structure {
             constructor() : super()
 
             override fun getFieldOrder(): List<String> {
-                return Arrays.asList("oldState", "newState")
+                return listOf("oldState", "newState")
             }
 
             constructor(oldState: Int, newState: Int) : super() {
@@ -86,7 +86,7 @@ internal open class WKSystemEvent : Structure {
     }
 
     override fun getFieldOrder(): List<String> {
-        return Arrays.asList("typeEnum", "u")
+        return listOf("typeEnum", "u")
     }
 
     constructor(type: Int, u: u_union?) : super() {

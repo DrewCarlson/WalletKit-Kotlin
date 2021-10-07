@@ -139,7 +139,7 @@ internal open class WKPayProtReqBitPayAndBip70Callbacks : Structure {
     }
 
     override fun getFieldOrder(): List<String> {
-        return Arrays.asList("context", "validator", "nameExtractor")
+        return listOf("context", "validator", "nameExtractor")
     }
 
     fun toByValue(): ByValue {
