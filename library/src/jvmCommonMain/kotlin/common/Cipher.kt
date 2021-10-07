@@ -18,7 +18,7 @@ public actual class Cipher internal constructor(
     internal val core: WKCipher = checkNotNull(core)
 
     init {
-        ReferenceCleaner.register(core, ::close)
+        ReferenceCleaner.register(this.core, ::close)
     }
 
     public actual fun encrypt(data: ByteArray): ByteArray? =

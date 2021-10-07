@@ -96,7 +96,7 @@ public actual class Transfer internal constructor(
                             WKTransferSubmitErrorType.UNKNOWN -> TransferSubmitError.UNKNOWN
                             WKTransferSubmitErrorType.POSIX ->
                                 TransferSubmitError.POSIX(
-                                    errNum = coreError.u.posix.errnum,
+                                    errNum = coreError!!.u!!.posix!!.errnum,
                                     errMessage = coreError.message.orNull()
                                 )
                             else -> error("Unknown core error type (${coreError.type()})")

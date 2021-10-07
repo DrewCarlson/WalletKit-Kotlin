@@ -60,7 +60,7 @@ public actual class Key internal constructor(
 
         public actual fun createFromPhrase(phrase: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
-                else WKKey.createFromPhrase(phrase.toByteArray(), words)
+                else WKKey.createFromPhrase(phrase.toByteArray(), words!!)
                         .orNull()
                         ?.run(::Key)
 
@@ -84,13 +84,13 @@ public actual class Key internal constructor(
 
         public actual fun createForBIP32ApiAuth(phrase: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
-                else WKKey.createForBIP32ApiAuth(phrase.toByteArray(), words)
+                else WKKey.createForBIP32ApiAuth(phrase.toByteArray(), words!!)
                         .orNull()
                         ?.run(::Key)
 
         public actual fun createForBIP32BitID(phrase: String, index: Int, uri: String, words: List<String>?): Key? =
                 if (words == null && wordList == null) null
-                else WKKey.createForBIP32BitID(phrase.toByteArray(), index, uri, words)
+                else WKKey.createForBIP32BitID(phrase.toByteArray(), index, uri, words!!)
                         .orNull()
                         ?.run(::Key)
     }

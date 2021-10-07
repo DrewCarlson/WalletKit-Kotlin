@@ -9,7 +9,7 @@ package com.blockset.walletkit
 
 import com.blockset.walletkit.nativex.WKTransferAttribute
 
-public actual class TransferAttribute(
+public actual class TransferAttribute internal constructor(
         internal val core: WKTransferAttribute
 ) {
 

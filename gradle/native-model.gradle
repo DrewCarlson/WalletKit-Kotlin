@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 apply(plugin: "c")
 apply(plugin: "kotlin-multiplatform")
 
@@ -65,6 +67,17 @@ def cppCryptoSrcDirs = [
         "support"
 ].collect { "$corePath/src/$it" }
 
+def cppCryptoTestSrcDirs = [
+        "walletkit",
+        "bitcoin",
+        "ethereum",
+        "hedera",
+        "ripple",
+        "tezos",
+        "stellar",
+        "support",
+].collect { "$corePath/WalletKitCoreTests/test/$it" }
+
 def cppCryptoIncDirs = cppCryptoSrcDirs + [
         "src",
         "src/support",
@@ -72,6 +85,10 @@ def cppCryptoIncDirs = cppCryptoSrcDirs + [
         "vendor",
         "vendor/secp256k1"
 ].collect { "$corePath/$it" }
+
+def cppCryptoTestIncDirs = [
+        "include"
+].collect { "$corePath/WalletKitCoreTests/test/$it"}
 
 model {
     toolChains {
@@ -221,17 +238,62 @@ model {
             }
             binaries {
                 all {
-                    cppCryptoIncDirs.forEach {
-                        cCompiler.args "-I$it"
-                    }
+                    cppCryptoIncDirs.forEach { cCompiler.args "-I$it" }
 
                     lib library: "sqlite3", linkage: "static"
                     lib library: "ed25519", linkage: "static"
                     lib library: "blake2", linkage: "static"
                 }
                 withType(SharedLibraryBinarySpec) {
-                    buildable = false
                     def os = targetPlatform.operatingSystem.name
+                    buildable = os != "ios"
+                    if (os == "osx" || os == "ios") {
+                        linker.args "-framework", "Security"
+                        linker.args "-lresolv"
+                    }
+                }
+                withType(StaticLibraryBinarySpec) {
+                    def os = targetPlatform.operatingSystem.name
+                    if (os == "osx" || os == "ios") {
+                        linker.args "-framework", "Security"
+                        linker.args "-lresolv"
+                    }
+                }
+            }
+        }
+        WalletKitCoreTest(NativeLibrarySpec) {
+            if (kotlin.targets.macos.publishable) {
+                targetPlatform "macos"
+                targetPlatform "iosArm64"
+                targetPlatform "iosX64"
+            }
+            sources {
+                c {
+                    source {
+                        srcDirs cppCryptoSrcDirs
+                        srcDirs cppCryptoTestSrcDirs
+                        include "**/*.c"
+
+                        excludeNativeSourceFolder(file("$corePath/src/ethereum/les"), it)
+                        excludeNativeSourceFolder(file("$corePath/src/ethereum/bcs"), it)
+                    }
+                }
+            }
+            binaries {
+                binaries.all {
+                    cppCryptoIncDirs.forEach { cCompiler.args "-I$it" }
+                    cppCryptoTestIncDirs.forEach { cCompiler.args "-I$it" }
+
+                    cCompiler.define "DEBUG"
+                    cCompiler.define "BITCOIN_DEBUG"
+
+                    lib library: 'sqlite3', linkage: 'static'
+                    lib library: 'ed25519', linkage: 'static'
+                    lib library: 'blake2', linkage: 'static'
+                }
+                withType(SharedLibraryBinarySpec) {
+                    def os = targetPlatform.operatingSystem.name
+                    buildable = os != "ios"
                     if (os == "osx" || os == "ios") {
                         linker.args "-framework", "Security"
                         linker.args "-lresolv"
@@ -257,6 +319,10 @@ model {
                     def kCompileTask = project.tasks.findByName("compileKotlin$targetName")
                     if (kCompileTask != null) {
                         kCompileTask.dependsOn spec.tasks.getBuild()
+                    }
+
+                    if (targetName == "Macos") {
+                        project.tasks.findByName("compileKotlinJvm").dependsOn spec.tasks.getBuild()
                     }
                 }
     }

@@ -11,6 +11,7 @@ import com.blockset.walletkit.nativex.WKAddressScheme
 import com.blockset.walletkit.nativex.WKTransfer
 import com.blockset.walletkit.nativex.WKWallet
 import com.blockset.walletkit.nativex.WKWalletState
+import com.blockset.walletkit.nativex.utility.Cookie
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
@@ -85,7 +86,7 @@ public actual class Wallet internal constructor(
             fee: NetworkFee,
             attributes: Set<TransferAttribute>
     ): TransferFeeBasis {
-        manager.core.estimateFeeBasis(core, null, target.core, amount.core, fee.core, attributes.map { it.core })
+        manager.core.estimateFeeBasis(core, Cookie(1), target.core, amount.core, fee.core, attributes.map { it.core })
         TODO("not implemented")
     }
 

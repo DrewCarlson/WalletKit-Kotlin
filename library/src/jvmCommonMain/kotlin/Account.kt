@@ -12,7 +12,7 @@ import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import com.google.common.primitives.UnsignedLong
 
 
-public actual class Account(
+public actual class Account internal constructor(
         internal val core: WKAccount
 ) : Closeable {
 
@@ -34,7 +34,7 @@ public actual class Account(
         return core.isInitialized(network.core)
     }
 
-    public actual fun getInitializationData(network: Network): ByteArray {
+    public actual fun getInitializationData(network: Network): ByteArray? {
         return core.getInitializationData(network.core)
     }
 

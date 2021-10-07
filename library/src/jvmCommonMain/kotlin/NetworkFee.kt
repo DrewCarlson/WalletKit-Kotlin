@@ -5,7 +5,7 @@ import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 import com.google.common.primitives.UnsignedLong
 import java.util.*
 
-public actual class NetworkFee(
+public actual class NetworkFee internal constructor(
         internal val core: WKNetworkFee
 ) : Closeable {
 

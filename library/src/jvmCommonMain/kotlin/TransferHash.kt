@@ -10,7 +10,7 @@ package com.blockset.walletkit
 import com.blockset.walletkit.nativex.WKHash
 import com.blockset.walletkit.nativex.cleaner.ReferenceCleaner
 
-public actual class TransferHash(
+public actual class TransferHash internal constructor(
         internal val core: WKHash
 ) : Closeable {
 

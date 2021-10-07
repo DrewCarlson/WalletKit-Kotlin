@@ -22,11 +22,3 @@ include(":demo-wallet")
 )*/
 
 project(":library").name = "walletkit"
-
-includeBuild("walletkit/WalletKitJava") {
-    dependencySubstitution {
-        substitute(module("com.blockset.walletkit:WalletKitNative-JRE"))
-                .using(project(":WalletKitNative-JRE"))
-    }
-}
-

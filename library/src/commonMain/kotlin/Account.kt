@@ -29,7 +29,7 @@ public expect class Account : Closeable {
 
     public fun isInitialized(network: Network): Boolean
 
-    public fun getInitializationData(network: Network): ByteArray
+    public fun getInitializationData(network: Network): ByteArray?
 
     public fun initialize(network: Network, data: ByteArray)
 

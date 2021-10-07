@@ -19,7 +19,7 @@ public actual class TransferFeeBasis internal constructor(
     }
 
     public actual val unit: UnitWK
-        get() = UnitWK(core.pricePerCostFactorUnit)
+        get() = UnitWK(checkNotNull(core.pricePerCostFactorUnit))
 
     public actual val currency: Currency
         get() = unit.currency

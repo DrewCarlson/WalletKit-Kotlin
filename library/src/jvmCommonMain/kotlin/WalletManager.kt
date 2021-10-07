@@ -12,7 +12,7 @@ import com.blockset.walletkit.Key
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
-public actual class WalletManager(
+public actual class WalletManager internal constructor(
         internal val core: WKWalletManager,
         public actual val system: System,
         private val scope: CoroutineScope

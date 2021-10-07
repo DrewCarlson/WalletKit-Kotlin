@@ -18,7 +18,7 @@ public actual class Hasher internal constructor(
     internal val core: WKHasher = checkNotNull(core)
 
     init {
-        ReferenceCleaner.register(core, ::close)
+        ReferenceCleaner.register(this.core, ::close)
     }
 
     public actual fun hash(data: ByteArray): ByteArray? =

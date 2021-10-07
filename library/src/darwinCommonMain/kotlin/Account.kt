@@ -58,11 +58,10 @@ public actual class Account(
         return WK_TRUE == wkNetworkIsAccountInitialized(network.core, core)
     }
 
-    public actual fun getInitializationData(network: Network): ByteArray = memScoped {
+    public actual fun getInitializationData(network: Network): ByteArray? = memScoped {
         val length = alloc<ULongVar>()
-        checkNotNull(
-                wkNetworkGetAccountInitializationData(network.core, core, length.ptr)
-        ).readBytes(length.value.toInt())
+        wkNetworkGetAccountInitializationData(network.core, core, length.ptr)
+                ?.readBytes(length.value.toInt())
     }
 
     public actual fun initialize(network: Network, data: ByteArray): Unit = memScoped {

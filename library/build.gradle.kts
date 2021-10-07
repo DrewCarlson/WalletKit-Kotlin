@@ -17,6 +17,44 @@ val corePath = rootProject.file("walletkit/WalletKitCore").absolutePath
 val cppCryptoSrcDir = "$corePath/src"
 val cppCryptoIncludeDir = "$corePath/include"
 
+fun jnaOsFromGradle(os: String): String {
+    return when (os) {
+        "osx" -> "darwin"
+        "linux" -> os
+        else -> error("Unsupported OS: $os")
+    }
+}
+
+fun jnaArchFromGradle(arch: String): String {
+    return when (arch) {
+        "x86-64" -> arch
+        "x86" -> arch
+        else -> error("Unsupported ARCH: $arch")
+    }
+}
+
+// JNA attempts to load libraries from the classpath using the logic outlined
+// at https://github.com/java-native-access/jna/blob/master/src/com/sun/jna/Platform.java.
+// To take advantage of that behaviour, package our libraries in the correct directory.
+fun jnaResourceFromGradle(os: String, arch: String): String {
+    val jos = jnaOsFromGradle(os)
+    val jarch = jnaArchFromGradle(arch)
+    return when (os) {
+        "osx" -> "darwin"
+        else -> "$jos-$jarch"
+    }
+}
+
+task<Copy>("copyJreLibs") {
+    from(project.file("build/libs/walletKitCore/shared/macos").absolutePath)
+    into(project.file("build/processedResources/jvm/main/darwin"))
+}
+
+task<Copy>("copyJreTestLibs") {
+    from(project.file("build/libs/walletKitCoreTest/shared/macos").absolutePath)
+    into(project.file("build/processedResources/jvm/test/darwin"))
+}
+
 if (hasAndroid) {
     apply(plugin = "com.android.library")
     configure<LibraryExtension> {
@@ -37,12 +75,6 @@ if (hasAndroid) {
                 version = "3.10.2"
             }
         }
-
-        sourceSets {
-            named("main") {
-                java.srcDir(rootProject.file("walletkit/WalletKitJava/WalletKitNative/src/main/java"))
-            }
-        }
     }
 }
 
@@ -56,16 +88,17 @@ apiValidation {
 }
 
 kotlin {
-    val wkn = gradle.includedBuild("WalletKitJava")
     ios()
     jvm {
-        compilations.all {
-            // TODO: Build with native-model.gradle tasks
-            compileKotlinTask
-                    .dependsOn(wkn.task(":WalletKitNative-JRE:blake2SharedLibrary"))
-                    .dependsOn(wkn.task(":WalletKitNative-JRE:ed25519SharedLibrary"))
-                    .dependsOn(wkn.task(":WalletKitNative-JRE:sqlite3SharedLibrary"))
-                    .dependsOn(wkn.task(":WalletKitNative-JRE:WalletKitCoreSharedLibrary"))
+        compilations.getByName("main") {
+            tasks.getByName(processResourcesTaskName) {
+                dependsOn(":walletkit:copyJreLibs")
+            }
+        }
+        compilations.getByName("test") {
+            tasks.getByName(processResourcesTaskName) {
+                dependsOn(":walletkit:copyJreTestLibs")
+            }
         }
     }
     if (hasAndroid) {
@@ -135,7 +168,7 @@ kotlin {
             languageSettings.apply {
                 optIn("kotlin.RequiresOptIn")
                 optIn("kotlin.ExperimentalUnsignedTypes")
-                explicitApi()
+                explicitApiWarning()// TODO: Cleanup jvm nativex explicitApi()
             }
         }
 
@@ -164,7 +197,10 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:$KTOR_VERSION")
 
-                compileOnly("com.blockset.walletkit:WalletKitNative-JRE")
+                if (ideaActive) {
+                    compileOnly("net.java.dev.jna:jna:${libs.versions.jna.get()}")
+                    compileOnly("com.google.guava:guava:${libs.versions.guava.get()}")
+                }
             }
         }
 
@@ -179,14 +215,13 @@ kotlin {
         val jvmMain by getting {
             dependsOn(jvmCommonMain)
             dependencies {
-                implementation("com.blockset.walletkit:WalletKitNative-JRE")
+                implementation("net.java.dev.jna:jna:${libs.versions.jna.get()}")
+                implementation("com.google.guava:guava:${libs.versions.guava.get()}")
             }
         }
 
         val jvmTest by getting {
             dependsOn(jvmCommonTest)
-            // TODO: Link jvm compile step to native-model.gradle task output
-            resources.srcDirs("../walletkit/WalletKitJava/WalletKitNative-JRE/build/resources/main")
         }
 
         if (hasAndroid) {
@@ -194,7 +229,7 @@ kotlin {
                 dependsOn(jvmCommonMain)
                 dependencies {
                     implementation("net.java.dev.jna:jna:${libs.versions.jnaAndroid.get()}")
-                    implementation(libs.guava.android)
+                    implementation("com.google.guava:guava:${libs.versions.guavaAndroid.get()}")
                 }
             }
 

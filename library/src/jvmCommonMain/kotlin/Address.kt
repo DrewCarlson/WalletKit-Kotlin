@@ -31,7 +31,7 @@ public actual class Address internal constructor(
     public actual companion object {
         public actual fun create(string: String, network: Network): Address? {
             return WKAddress.create(string, network.core)
-                    ?.orNull()
+                    .orNull()
                     ?.run(::Address)
         }
     }

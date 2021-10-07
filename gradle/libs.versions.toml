@@ -2,7 +2,7 @@
 kotlin = "1.5.31"
 jna = "5.4.0"
 jnaAndroid = "5.4.0@aar"
-guava = "28.1"
+guava = "28.1-jre"
 guavaAndroid = "28.1-android"
 
 [plugins]

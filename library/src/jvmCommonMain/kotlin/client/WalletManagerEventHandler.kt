@@ -36,8 +36,8 @@ internal val WalletManagerEventCallback =
                             system.announceWalletManagerEvent(walletManager, WalletManagerEvent.Created)
                         }
                         WKWalletManagerEventType.CHANGED -> {
-                            val oldState = event.u.state.oldValue.asApiState()
-                            val newState = event.u.state.newValue.asApiState()
+                            val oldState = event.u!!.state!!.oldValue!!.asApiState()
+                            val newState = event.u!!.state!!.newValue!!.asApiState()
 
                             // Log.log(Level.FINE, String.format("WalletManagerChanged (%s -> %s)", oldState, newState));
 
@@ -61,7 +61,7 @@ internal val WalletManagerEventCallback =
                             }
                         }
                         WKWalletManagerEventType.WALLET_ADDED -> {
-                            val coreWallet = event.u.wallet
+                            val coreWallet = event.u!!.wallet!!
                             try {
                                 // Log.log(Level.FINE, "WalletManagerWalletAdded");
                                 val walletManager = system.getWalletManager(coreWalletManager)
@@ -80,7 +80,7 @@ internal val WalletManagerEventCallback =
                             }
                         }
                         WKWalletManagerEventType.WALLET_CHANGED -> {
-                            val coreWallet = event.u.wallet
+                            val coreWallet = event.u!!.wallet!!
                             try {
                                 // Log.log(Level.FINE, "WalletManagerWalletChanged");
                                 val walletManager = system.getWalletManager(coreWalletManager)
@@ -99,7 +99,7 @@ internal val WalletManagerEventCallback =
                             }
                         }
                         WKWalletManagerEventType.WALLET_DELETED -> {
-                            val coreWallet = event.u.wallet
+                            val coreWallet = event.u!!.wallet!!
                             try {
                                 // Log.log(Level.FINE, "WalletManagerWalletDeleted");
                                 val walletManager = system.getWalletManager(coreWalletManager)
@@ -128,8 +128,8 @@ internal val WalletManagerEventCallback =
                             }
                         }
                         WKWalletManagerEventType.SYNC_CONTINUES -> {
-                            val percent = event.u.syncContinues.percentComplete
-                            val timestamp = event.u.syncContinues.timestamp.let { if (0 == it) null else it.toLong() }
+                            val percent = event.u!!.syncContinues!!.percentComplete
+                            val timestamp = event.u!!.syncContinues!!.timestamp.let { if (0 == it) null else it.toLong() }
 
                             // Log.log(Level.FINE, String.format("WalletManagerSyncProgress (%s)", percent));
 
@@ -141,7 +141,7 @@ internal val WalletManagerEventCallback =
                             }
                         }
                         WKWalletManagerEventType.SYNC_STOPPED -> {
-                            val reason = event.u.syncStopped.reason.asApiReason()
+                            val reason = event.u!!.syncStopped!!.reason!!.asApiReason()
 
                             // Log.log(Level.FINE, String.format("WalletManagerSyncStopped: (%s)", reason));
 
@@ -153,7 +153,7 @@ internal val WalletManagerEventCallback =
                             }
                         }
                         WKWalletManagerEventType.SYNC_RECOMMENDED -> {
-                            val coreDepth = event.u.syncRecommended.depth().toCore().toUInt()
+                            val coreDepth = event.u!!.syncRecommended!!.depth().toCore().toUInt()
                             val depth = WalletManagerSyncDepth.fromSerialization(coreDepth)
 
                             // Log.log(Level.FINE, String.format("WalletManagerSyncRecommended: (%s)", depth));
@@ -166,7 +166,7 @@ internal val WalletManagerEventCallback =
                             }
                         }
                         WKWalletManagerEventType.BLOCK_HEIGHT_UPDATED -> {
-                            val blockHeight = UnsignedLong.fromLongBits(event.u.blockHeight).toLong().toULong()
+                            val blockHeight = UnsignedLong.fromLongBits(event.u!!.blockHeight).toLong().toULong()
 
                             // Log.log(Level.FINE, String.format("WalletManagerBlockHeightUpdated (%s)", blockHeight));
 

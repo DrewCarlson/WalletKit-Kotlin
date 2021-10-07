@@ -16,7 +16,7 @@ internal fun WKSyncStoppedReason.asApiReason(): SyncStoppedReason =
             WKSyncStoppedReasonType.COMPLETE -> COMPLETE
             WKSyncStoppedReasonType.REQUESTED -> REQUESTED
             WKSyncStoppedReasonType.UNKNOWN -> UNKNOWN
-            WKSyncStoppedReasonType.POSIX -> POSIX(u.posix.errnum, message.orNull())
+            WKSyncStoppedReasonType.POSIX -> POSIX(u!!.posix!!.errnum, message.orNull())
             else -> error("unknown sync stopped reason")
         }
 
@@ -26,7 +26,7 @@ internal fun WKWalletManagerDisconnectReason.asApiReason(): WalletManagerDisconn
             WKWalletManagerDisconnectReasonType.REQUESTED -> WalletManagerDisconnectReason.REQUESTED
             WKWalletManagerDisconnectReasonType.UNKNOWN -> WalletManagerDisconnectReason.UNKNOWN
             WKWalletManagerDisconnectReasonType.POSIX ->
-                WalletManagerDisconnectReason.POSIX(u.posix.errnum, message.orNull())
+                WalletManagerDisconnectReason.POSIX(u!!.posix!!.errnum, message.orNull())
             else -> error("unknown disconnect reason")
         }
 
@@ -34,7 +34,7 @@ internal fun WKWalletManagerState.asApiState(): WalletManagerState =
         when (type()) {
             WKWalletManagerStateType.CREATED -> WalletManagerState.CREATED
             WKWalletManagerStateType.DISCONNECTED ->
-                WalletManagerState.DISCONNECTED(u.disconnected.reason.asApiReason())
+                WalletManagerState.DISCONNECTED(u!!.disconnected!!.reason!!.asApiReason())
             WKWalletManagerStateType.CONNECTED -> WalletManagerState.CONNECTED
             WKWalletManagerStateType.SYNCING -> WalletManagerState.SYNCING
             WKWalletManagerStateType.DELETED -> WalletManagerState.DELETED

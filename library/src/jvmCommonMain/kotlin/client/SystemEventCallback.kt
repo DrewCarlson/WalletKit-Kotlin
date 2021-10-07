@@ -45,8 +45,8 @@ private fun handleSystemCreated(context: Cookie, coreSystem: WKSystem) {
 }
 
 private fun handleSystemChanged(context: Cookie, coreSystem: WKSystem, event: WKSystemEvent) {
-    val oldState = event.u.state.oldState().toSystemState()
-    val newState = event.u.state.newState().toSystemState()
+    val oldState = event.u!!.state!!.oldState().toSystemState()
+    val newState = event.u!!.state!!.newState().toSystemState()
 
     val system = context.system
     if (system == null) {
@@ -70,7 +70,7 @@ private fun handleSystemNetworkAdded(context: Cookie, coreSystem: WKSystem, even
     if (system == null) {
         // todo: log
     } else {
-        val network = system.getNetwork(event.u.network)
+        val network = system.getNetwork(event.u!!.network!!)
         if (network == null) {
             // todo: log
         } else {
@@ -84,7 +84,7 @@ private fun handleSystemManagerAdded(context: Cookie, coreSystem: WKSystem, even
     if (system == null) {
         // todo: log
     } else {
-        val manager = system.getWalletManager(event.u.walletManager)
+        val manager = system.getWalletManager(event.u!!.walletManager!!)
         if (manager == null) {
             // todo: log
         } else {
