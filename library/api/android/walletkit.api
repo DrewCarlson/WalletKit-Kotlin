@@ -1,6 +1,5 @@
 public final class com/blockset/walletkit/Account : com/blockset/walletkit/Closeable {
 	public static final field Companion Lcom/blockset/walletkit/Account$Companion;
-	public fun <init> (Lcom/blockset/walletkit/nativex/WKAccount;)V
 	public fun close ()V
 	public final fun getFilesystemIdentifier ()Ljava/lang/String;
 	public final fun getInitializationData (Lcom/blockset/walletkit/Network;)[B
@@ -318,7 +317,6 @@ public final class com/blockset/walletkit/NetworkEvent$FeesUpdated : com/blockse
 }
 
 public final class com/blockset/walletkit/NetworkFee : com/blockset/walletkit/Closeable {
-	public fun <init> (Lcom/blockset/walletkit/nativex/WKNetworkFee;)V
 	public fun close ()V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getTimeIntervalInMilliseconds-s-VKNKU ()J
@@ -572,7 +570,6 @@ public final class com/blockset/walletkit/Transfer {
 }
 
 public final class com/blockset/walletkit/TransferAttribute {
-	public fun <init> (Lcom/blockset/walletkit/nativex/WKTransferAttribute;)V
 	public final fun getKey ()Ljava/lang/String;
 	public final fun getValue ()Ljava/lang/String;
 	public final fun isRequired ()Z
@@ -644,7 +641,6 @@ public final class com/blockset/walletkit/TransferFeeBasis {
 }
 
 public final class com/blockset/walletkit/TransferHash : com/blockset/walletkit/Closeable {
-	public fun <init> (Lcom/blockset/walletkit/nativex/WKHash;)V
 	public fun close ()V
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
@@ -868,7 +864,6 @@ public abstract interface class com/blockset/walletkit/WalletListener {
 }
 
 public final class com/blockset/walletkit/WalletManager {
-	public fun <init> (Lcom/blockset/walletkit/nativex/WKWalletManager;Lcom/blockset/walletkit/System;Lkotlinx/coroutines/CoroutineScope;)V
 	public final fun connect (Lcom/blockset/walletkit/NetworkPeer;)V
 	public static synthetic fun connect$default (Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/NetworkPeer;ILjava/lang/Object;)V
 	public final fun createSweeper (Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
