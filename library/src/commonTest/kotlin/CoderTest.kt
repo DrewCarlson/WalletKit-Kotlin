@@ -7,8 +7,6 @@
  */
 package com.blockset.walletkit
 
-import com.blockset.walletkit.Coder
-import com.blockset.walletkit.CoderAlgorithm
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -24,27 +22,27 @@ class CoderTest {
         // HEX
         d = byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte())
         a = "deadbeef"
-        r = Coder.createForAlgorithm(CoderAlgorithm.HEX).encode(d)
+        r = Coder.createForHex().encode(d)
         assertEquals(a, r)
-        assertContentEquals(assertNotNull(d), Coder.createForAlgorithm(CoderAlgorithm.HEX).decode(assertNotNull(r)))
+        assertContentEquals(assertNotNull(d), Coder.createForHex().decode(assertNotNull(r)))
         // BASE58
         s = "#&$@*^(*#!^"
-        assertNull(Coder.createForAlgorithm(CoderAlgorithm.BASE58).decode(s))
+        assertNull(Coder.createForBase58().decode(s))
         s = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-        d = Coder.createForAlgorithm(CoderAlgorithm.BASE58).decode(s)
-        assertEquals(assertNotNull(s), Coder.createForAlgorithm(CoderAlgorithm.BASE58).encode(assertNotNull(d)))
+        d = Coder.createForBase58().decode(s)
+        assertEquals(assertNotNull(s), Coder.createForBase58().encode(assertNotNull(d)))
         s = "z"
-        d = Coder.createForAlgorithm(CoderAlgorithm.BASE58).decode(s)
-        assertEquals(s, Coder.createForAlgorithm(CoderAlgorithm.BASE58).encode(assertNotNull(d)))
+        d = Coder.createForBase58().decode(s)
+        assertEquals(s, Coder.createForBase58().encode(assertNotNull(d)))
         //  BASE58CHECK
         d = byteArrayOf(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
-        s = Coder.createForAlgorithm(CoderAlgorithm.BASE58CHECK).encode(d)
-        assertContentEquals(d, Coder.createForAlgorithm(CoderAlgorithm.BASE58CHECK).decode(assertNotNull(s)))
+        s = Coder.createForBase58Check().encode(d)
+        assertContentEquals(d, Coder.createForBase58Check().decode(assertNotNull(s)))
         d = byteArrayOf(
                 0x05.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(),
                 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(),
                 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte(), 0xFF.toByte())
-        s = Coder.createForAlgorithm(CoderAlgorithm.BASE58CHECK).encode(d)
-        assertContentEquals(d, Coder.createForAlgorithm(CoderAlgorithm.BASE58CHECK).decode(assertNotNull(s)))
+        s = Coder.createForBase58Check().encode(d)
+        assertContentEquals(d, Coder.createForBase58Check().decode(assertNotNull(s)))
     }
 }

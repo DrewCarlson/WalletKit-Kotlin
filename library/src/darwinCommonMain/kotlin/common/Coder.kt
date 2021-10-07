@@ -59,11 +59,16 @@ public actual class Coder internal constructor(
     }
 
     public actual companion object {
-        public actual fun createForAlgorithm(algorithm: CoderAlgorithm): Coder =
-                when (algorithm) {
-                    CoderAlgorithm.HEX -> WKCoderType.WK_CODER_HEX
-                    CoderAlgorithm.BASE58 -> WKCoderType.WK_CODER_BASE58
-                    CoderAlgorithm.BASE58CHECK -> WKCoderType.WK_CODER_BASE58CHECK
-                }.let { Coder(checkNotNull(wkCoderCreate(it))) }
+        public actual fun createForHex(): Coder {
+            return Coder(checkNotNull(wkCoderCreate(WKCoderType.WK_CODER_HEX)))
+        }
+
+        public actual fun createForBase58(): Coder {
+            return Coder(checkNotNull(wkCoderCreate(WKCoderType.WK_CODER_BASE58)))
+        }
+
+        public actual fun createForBase58Check(): Coder {
+            return Coder(checkNotNull(wkCoderCreate(WKCoderType.WK_CODER_BASE58CHECK)))
+        }
     }
 }

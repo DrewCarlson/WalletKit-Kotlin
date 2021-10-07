@@ -11,8 +11,6 @@ package com.blockset.walletkit
 
 import walletkit.core.*
 import walletkit.core.WKSignerType.*
-import com.blockset.walletkit.Closeable
-import com.blockset.walletkit.SignerAlgorithm.*
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toCValues
 import kotlinx.cinterop.usePinned
@@ -62,12 +60,16 @@ public actual class Signer internal constructor(
     }
 
     public actual companion object {
-        public actual fun createForAlgorithm(algorithm: SignerAlgorithm): Signer =
-                when (algorithm) {
-                    BASIC_DER -> WK_SIGNER_BASIC_DER
-                    BASIC_JOSE -> WK_SIGNER_BASIC_JOSE
-                    COMPACT -> WK_SIGNER_COMPACT
-                }.run(::wkSignerCreate)
-                        .run(::Signer)
+        public actual fun createForBasicDer(): Signer {
+            return Signer(wkSignerCreate(WK_SIGNER_BASIC_DER))
+        }
+
+        public actual fun createForBasicJose(): Signer {
+            return Signer(wkSignerCreate(WK_SIGNER_BASIC_JOSE))
+        }
+
+        public actual fun createForCompact(): Signer {
+            return Signer(wkSignerCreate(WK_SIGNER_COMPACT))
+        }
     }
 }

@@ -7,8 +7,6 @@
  */
 package com.blockset.walletkit
 
-import com.blockset.walletkit.HashAlgorithm
-import com.blockset.walletkit.Hasher
 import kotlin.test.Test
 
 
@@ -25,7 +23,7 @@ class HasherTest {
                 0xc6.toByte(), 0xd4.toByte(), 0x8f.toByte(), 0x60.toByte(), 0x7d.toByte(),
                 0x42.toByte(), 0xc1.toByte(), 0xd2.toByte(), 0xa2.toByte(), 0x15.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.SHA1).hash(d))
+        assertContentEquals(a, Hasher.createForSha1().hash(d))
         // SHA256
         d = "Free online SHA256 Calculator, type text here...".encodeToByteArray()
         a = byteArrayOf(
@@ -37,7 +35,7 @@ class HasherTest {
                 0x1c.toByte(), 0x10.toByte(), 0xad.toByte(), 0x6e.toByte(), 0xb0.toByte(),
                 0x57.toByte(), 0xd0.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.SHA256).hash(d))
+        assertContentEquals(a, Hasher.createForSha256().hash(d))
         // SHA256_2
         d = "Free online SHA256_2 Calculator, type text here...".encodeToByteArray()
         a = byteArrayOf(
@@ -49,7 +47,7 @@ class HasherTest {
                 0x1e.toByte(), 0xdf.toByte(), 0xb9.toByte(), 0xc1.toByte(), 0x8d.toByte(),
                 0x89.toByte(), 0xb8.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.SHA256_2).hash(d))
+        assertContentEquals(a, Hasher.createForSha256Double().hash(d))
         // SHA224
         d = "Free online SHA224 Calculator, type text here...".encodeToByteArray()
         a = byteArrayOf(
@@ -60,7 +58,7 @@ class HasherTest {
                 0xc4.toByte(), 0x92.toByte(), 0xeb.toByte(), 0x77.toByte(), 0xd8.toByte(),
                 0x22.toByte(), 0x6a.toByte(), 0x64.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.SHA224).hash(d))
+        assertContentEquals(a, Hasher.createForSha224().hash(d))
         // SHA384
         d = "Free online SHA384 Calculator, type text here...".encodeToByteArray()
         a = byteArrayOf(
@@ -75,7 +73,7 @@ class HasherTest {
                 0xd7.toByte(), 0xfa.toByte(), 0xcb.toByte(), 0x84.toByte(), 0xdf.toByte(),
                 0x2b.toByte(), 0xa2.toByte(), 0x17.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.SHA384).hash(d))
+        assertContentEquals(a, Hasher.createForSha384().hash(d))
         // SHA512
         d = "Free online SHA512 Calculator, type text here...".encodeToByteArray()
         a = byteArrayOf(
@@ -93,7 +91,7 @@ class HasherTest {
                 0x82.toByte(), 0x9e.toByte(), 0xd0.toByte(), 0xa2.toByte(), 0xec.toByte(),
                 0x89.toByte(), 0x13.toByte(), 0x21.toByte(), 0xf3.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.SHA512).hash(d))
+        assertContentEquals(a, Hasher.createForSha512().hash(d))
         // SHA3
         d = "abc".encodeToByteArray()
         a = byteArrayOf(
@@ -105,7 +103,7 @@ class HasherTest {
                 0xbf.toByte(), 0xe2.toByte(), 0x45.toByte(), 0x11.toByte(), 0x43.toByte(),
                 0x15.toByte(), 0x32.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.SHA3).hash(d))
+        assertContentEquals(a, Hasher.createForSha3().hash(d))
         // RMD160
         d = "Free online RIPEMD160 Calculator, type text here...".encodeToByteArray()
         a = byteArrayOf(
@@ -114,7 +112,7 @@ class HasherTest {
                 0xf0.toByte(), 0xcc.toByte(), 0xc4.toByte(), 0x91.toByte(), 0xf0.toByte(),
                 0xec.toByte(), 0xbc.toByte(), 0x7f.toByte(), 0x94.toByte(), 0x5b.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.RMD160).hash(d))
+        assertContentEquals(a, Hasher.createForRmd160().hash(d))
         // HASH160
         d = "Free online HASH160 Calculator, type text here...".encodeToByteArray()
         a = byteArrayOf(
@@ -123,7 +121,7 @@ class HasherTest {
                 0x7f.toByte(), 0x63.toByte(), 0x4d.toByte(), 0x34.toByte(), 0xc5.toByte(),
                 0xec.toByte(), 0xd5.toByte(), 0x23.toByte(), 0x36.toByte(), 0x72.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.HASH160).hash(d))
+        assertContentEquals(a, Hasher.createForHash160().hash(d))
         // KECCAK256
         d = "".encodeToByteArray()
         a = byteArrayOf(
@@ -135,7 +133,7 @@ class HasherTest {
                 0xfa.toByte(), 0xd8.toByte(), 0x04.toByte(), 0x5d.toByte(), 0x85.toByte(),
                 0xa4.toByte(), 0x70.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.KECCAK256).hash(d))
+        assertContentEquals(a, Hasher.createForKeccack256().hash(d))
         // MD5
         d = "Free online MD5 Calculator, type text here...".encodeToByteArray()
         a = byteArrayOf(
@@ -144,6 +142,6 @@ class HasherTest {
                 0x1a.toByte(), 0x3b.toByte(), 0xbd.toByte(), 0xd3.toByte(), 0x0c.toByte(),
                 0xef.toByte()
         )
-        assertContentEquals(a, Hasher.createForAlgorithm(HashAlgorithm.MD5).hash(d))
+        assertContentEquals(a, Hasher.createForMd5().hash(d))
     }
 }

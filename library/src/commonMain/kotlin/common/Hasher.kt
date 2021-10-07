@@ -16,20 +16,16 @@ public expect class Hasher : Closeable {
     override fun close()
 
     public companion object {
-        public fun createForAlgorithm(algorithm: HashAlgorithm): Hasher
+        public fun createForSha1(): Hasher
+        public fun createForSha224(): Hasher
+        public fun createForSha256(): Hasher
+        public fun createForSha256Double(): Hasher
+        public fun createForSha384(): Hasher
+        public fun createForSha512(): Hasher
+        public fun createForSha3(): Hasher
+        public fun createForRmd160(): Hasher
+        public fun createForHash160(): Hasher
+        public fun createForKeccack256(): Hasher
+        public fun createForMd5(): Hasher
     }
-}
-
-public enum class HashAlgorithm {
-    SHA1,
-    SHA224,
-    SHA256,
-    SHA256_2,
-    SHA384,
-    SHA512,
-    SHA3,
-    RMD160,
-    HASH160,
-    KECCAK256,
-    MD5
 }

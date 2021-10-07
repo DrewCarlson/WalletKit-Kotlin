@@ -31,11 +31,17 @@ public actual class Coder internal constructor(
     }
 
     public actual companion object {
-        public actual fun createForAlgorithm(algorithm: CoderAlgorithm): Coder =
-                when (algorithm) {
-                    CoderAlgorithm.HEX -> WKCoder.createHex().orNull()
-                    CoderAlgorithm.BASE58 -> WKCoder.createBase58().orNull()
-                    CoderAlgorithm.BASE58CHECK -> WKCoder.createBase58Check().orNull()
-                }.let { coreCoder -> Coder(checkNotNull(coreCoder)) }
+
+        actual fun createForHex(): Coder {
+            return Coder(checkNotNull(WKCoder.createHex().orNull()))
+        }
+
+        actual fun createForBase58(): Coder {
+            return Coder(checkNotNull(WKCoder.createBase58().orNull()))
+        }
+
+        actual fun createForBase58Check(): Coder {
+            return Coder(checkNotNull(WKCoder.createBase58Check().orNull()))
+        }
     }
 }

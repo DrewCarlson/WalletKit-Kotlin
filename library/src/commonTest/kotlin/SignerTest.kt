@@ -7,8 +7,6 @@
  */
 package com.blockset.walletkit
 
-import com.blockset.walletkit.assertContentEquals
-import com.blockset.walletkit.createSecret
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -27,8 +25,8 @@ class SignerTest {
         ))
         // Basic DER
         msg = "How wonderful that we have met with a paradox. Now we have some hope of making progress."
-        digest = Hasher.createForAlgorithm(HashAlgorithm.SHA256).hash(msg.encodeToByteArray())
-        signer = Signer.createForAlgorithm(SignerAlgorithm.BASIC_DER)
+        digest = Hasher.createForSha256().hash(msg.encodeToByteArray())
+        signer = Signer.createForBasicDer()
         signature = signer.sign(assertNotNull(digest), key)
         answer = byteArrayOf(
                 0x30.toByte(), 0x45.toByte(), 0x02.toByte(), 0x21.toByte(), 0x00.toByte(),
@@ -49,8 +47,8 @@ class SignerTest {
         assertContentEquals(answer, signature)
         // Basic JOSE
         msg = "How wonderful that we have met with a paradox. Now we have some hope of making progress."
-        digest = Hasher.createForAlgorithm(HashAlgorithm.SHA256).hash(msg.encodeToByteArray())
-        signer = Signer.createForAlgorithm(SignerAlgorithm.BASIC_JOSE)
+        digest = Hasher.createForSha256().hash(msg.encodeToByteArray())
+        signer = Signer.createForBasicJose()
         signature = signer.sign(assertNotNull(digest), key)
         answer = byteArrayOf(
                 0xc0.toByte(), 0xda.toByte(), 0xfe.toByte(), 0xc8.toByte(), 0x25.toByte(),
@@ -69,8 +67,8 @@ class SignerTest {
         assertContentEquals(answer, signature)
         // Compact
         msg = "foo"
-        digest = Hasher.createForAlgorithm(HashAlgorithm.SHA256).hash(msg.encodeToByteArray())
-        signer = Signer.createForAlgorithm(SignerAlgorithm.COMPACT)
+        digest = Hasher.createForSha256().hash(msg.encodeToByteArray())
+        signer = Signer.createForCompact()
         signature = signer.sign(assertNotNull(digest), key)
         val keyPublic: Key? = signer.recover(assertNotNull(digest), assertNotNull(signature))
         assertNotNull(keyPublic)
@@ -89,13 +87,13 @@ class SignerTest {
                 "1c52d8a32079c11e79db95af63bb9600c5b04f21a9ca33dc129c2bfa8ac9dc1cd561d8ae5e0f6c1a16bde3719c64c2fd70e404b6428ab9a69566962e8771b5944d",
                 "205dbbddda71772d95ce91cd2d14b592cfbc1dd0aabd6a394b6c2d377bbe59d31d14ddda21494a4e221f0824f0b8b924c43fa43c0ad57dccdaa11f81a6bd4582f6",
                 "2052d8a32079c11e79db95af63bb9600c5b04f21a9ca33dc129c2bfa8ac9dc1cd561d8ae5e0f6c1a16bde3719c64c2fd70e404b6428ab9a69566962e8771b5944d")
-        val message: ByteArray = assertNotNull(Hasher.createForAlgorithm(HashAlgorithm.SHA256_2)
+        val message: ByteArray = assertNotNull(Hasher.createForSha256Double()
                 .hash("Very deterministic message".encodeToByteArray()))
         for (i in secrets.indices) {
             val maybeKey: Key? = Key.createFromPrivateKey(secrets[i].decodeToString())
             assertNotNull(maybeKey)
-            val outputSig: ByteArray? = Signer.createForAlgorithm(SignerAlgorithm.COMPACT).sign(message, maybeKey)
-            val outputSigHex: String? = Coder.createForAlgorithm(CoderAlgorithm.HEX).encode(assertNotNull(outputSig))
+            val outputSig: ByteArray? = Signer.createForCompact().sign(message, maybeKey)
+            val outputSigHex: String? = Coder.createForHex().encode(assertNotNull(outputSig))
             assertEquals(assertNotNull(outputSigHex), assertNotNull(signatures[i]))
         }
     }

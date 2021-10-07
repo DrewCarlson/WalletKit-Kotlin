@@ -7,10 +7,6 @@
  */
 package com.blockset.walletkit
 
-import com.blockset.walletkit.Cipher
-import com.blockset.walletkit.Coder
-import com.blockset.walletkit.CoderAlgorithm
-import com.blockset.walletkit.Key
 import kotlin.test.*
 
 

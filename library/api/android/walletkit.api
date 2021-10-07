@@ -108,15 +108,9 @@ public final class com/blockset/walletkit/Coder : com/blockset/walletkit/Closeab
 }
 
 public final class com/blockset/walletkit/Coder$Companion {
-	public final fun createForAlgorithm (Lcom/blockset/walletkit/CoderAlgorithm;)Lcom/blockset/walletkit/Coder;
-}
-
-public final class com/blockset/walletkit/CoderAlgorithm : java/lang/Enum {
-	public static final field BASE58 Lcom/blockset/walletkit/CoderAlgorithm;
-	public static final field BASE58CHECK Lcom/blockset/walletkit/CoderAlgorithm;
-	public static final field HEX Lcom/blockset/walletkit/CoderAlgorithm;
-	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/CoderAlgorithm;
-	public static fun values ()[Lcom/blockset/walletkit/CoderAlgorithm;
+	public final fun createForBase58 ()Lcom/blockset/walletkit/Coder;
+	public final fun createForBase58Check ()Lcom/blockset/walletkit/Coder;
+	public final fun createForHex ()Lcom/blockset/walletkit/Coder;
 }
 
 public final class com/blockset/walletkit/Currency : com/blockset/walletkit/Closeable {
@@ -183,22 +177,6 @@ public final class com/blockset/walletkit/FeeEstimationError$ServiceUnavailable 
 	public static final field INSTANCE Lcom/blockset/walletkit/FeeEstimationError$ServiceUnavailable;
 }
 
-public final class com/blockset/walletkit/HashAlgorithm : java/lang/Enum {
-	public static final field HASH160 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field KECCAK256 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field MD5 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field RMD160 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field SHA1 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field SHA224 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field SHA256 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field SHA256_2 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field SHA3 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field SHA384 Lcom/blockset/walletkit/HashAlgorithm;
-	public static final field SHA512 Lcom/blockset/walletkit/HashAlgorithm;
-	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/HashAlgorithm;
-	public static fun values ()[Lcom/blockset/walletkit/HashAlgorithm;
-}
-
 public final class com/blockset/walletkit/Hasher : com/blockset/walletkit/Closeable {
 	public static final field Companion Lcom/blockset/walletkit/Hasher$Companion;
 	public fun close ()V
@@ -206,7 +184,17 @@ public final class com/blockset/walletkit/Hasher : com/blockset/walletkit/Closea
 }
 
 public final class com/blockset/walletkit/Hasher$Companion {
-	public final fun createForAlgorithm (Lcom/blockset/walletkit/HashAlgorithm;)Lcom/blockset/walletkit/Hasher;
+	public final fun createForHash160 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForKeccack256 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForMd5 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForRmd160 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForSha1 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForSha224 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForSha256 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForSha256Double ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForSha3 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForSha384 ()Lcom/blockset/walletkit/Hasher;
+	public final fun createForSha512 ()Lcom/blockset/walletkit/Hasher;
 }
 
 public final class com/blockset/walletkit/Key : com/blockset/walletkit/Closeable {
@@ -396,15 +384,9 @@ public final class com/blockset/walletkit/Signer : com/blockset/walletkit/Closea
 }
 
 public final class com/blockset/walletkit/Signer$Companion {
-	public final fun createForAlgorithm (Lcom/blockset/walletkit/SignerAlgorithm;)Lcom/blockset/walletkit/Signer;
-}
-
-public final class com/blockset/walletkit/SignerAlgorithm : java/lang/Enum {
-	public static final field BASIC_DER Lcom/blockset/walletkit/SignerAlgorithm;
-	public static final field BASIC_JOSE Lcom/blockset/walletkit/SignerAlgorithm;
-	public static final field COMPACT Lcom/blockset/walletkit/SignerAlgorithm;
-	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/SignerAlgorithm;
-	public static fun values ()[Lcom/blockset/walletkit/SignerAlgorithm;
+	public final fun createForBasicDer ()Lcom/blockset/walletkit/Signer;
+	public final fun createForBasicJose ()Lcom/blockset/walletkit/Signer;
+	public final fun createForCompact ()Lcom/blockset/walletkit/Signer;
 }
 
 public abstract class com/blockset/walletkit/SyncStoppedReason {

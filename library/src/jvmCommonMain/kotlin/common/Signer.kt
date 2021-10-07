@@ -31,11 +31,16 @@ public actual class Signer internal constructor(
     }
 
     public actual companion object {
-        public actual fun createForAlgorithm(algorithm: SignerAlgorithm): Signer =
-                when (algorithm) {
-                    SignerAlgorithm.COMPACT -> WKSigner.createCompact().orNull()
-                    SignerAlgorithm.BASIC_DER -> WKSigner.createBasicDer().orNull()
-                    SignerAlgorithm.BASIC_JOSE -> WKSigner.createBasicJose().orNull()
-                }.let { coreSigner -> Signer(checkNotNull(coreSigner)) }
+        public actual fun createForBasicDer(): Signer {
+            return Signer(checkNotNull(WKSigner.createBasicDer().orNull()))
+        }
+
+        public actual fun createForBasicJose(): Signer {
+            return Signer(checkNotNull(WKSigner.createBasicJose().orNull()))
+        }
+
+        public actual fun createForCompact(): Signer {
+            return Signer(checkNotNull(WKSigner.createCompact().orNull()))
+        }
     }
 }

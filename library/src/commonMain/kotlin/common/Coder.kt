@@ -17,10 +17,8 @@ public expect class Coder : Closeable {
     override fun close()
 
     public companion object {
-        public fun createForAlgorithm(algorithm: CoderAlgorithm): Coder
+        public fun createForHex(): Coder
+        public fun createForBase58(): Coder
+        public fun createForBase58Check(): Coder
     }
-}
-
-public enum class CoderAlgorithm {
-    HEX, BASE58, BASE58CHECK
 }

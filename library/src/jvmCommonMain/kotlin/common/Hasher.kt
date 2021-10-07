@@ -30,19 +30,49 @@ public actual class Hasher internal constructor(
     }
 
     public actual companion object {
-        public actual fun createForAlgorithm(algorithm: HashAlgorithm): Hasher =
-                when (algorithm) {
-                    HashAlgorithm.SHA1 -> WKHasher.createSha1()
-                    HashAlgorithm.SHA224 -> WKHasher.createSha224()
-                    HashAlgorithm.SHA256 -> WKHasher.createSha256()
-                    HashAlgorithm.SHA256_2 -> WKHasher.createSha256_2()
-                    HashAlgorithm.SHA384 -> WKHasher.createSha384()
-                    HashAlgorithm.SHA512 -> WKHasher.createSha512()
-                    HashAlgorithm.SHA3 -> WKHasher.createSha3()
-                    HashAlgorithm.RMD160 -> WKHasher.createRmd160()
-                    HashAlgorithm.HASH160 -> WKHasher.createHash160()
-                    HashAlgorithm.KECCAK256 -> WKHasher.createKeccak256()
-                    HashAlgorithm.MD5 -> WKHasher.createMd5()
-                }.orNull().run(::Hasher)
+
+        public actual fun createForSha1(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createSha1().orNull()))
+        }
+
+        public actual fun createForSha224(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createSha224().orNull()))
+        }
+
+        public actual fun createForSha256(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createSha256().orNull()))
+        }
+
+        public actual fun createForSha256Double(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createSha256_2().orNull()))
+        }
+
+        public actual fun createForSha384(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createSha384().orNull()))
+        }
+
+        public actual fun createForSha512(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createSha512().orNull()))
+        }
+
+        public actual fun createForSha3(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createSha3().orNull()))
+        }
+
+        public actual fun createForRmd160(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createRmd160().orNull()))
+        }
+
+        public actual fun createForHash160(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createHash160().orNull()))
+        }
+
+        public actual fun createForKeccack256(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createKeccak256().orNull()))
+        }
+
+        public actual fun createForMd5(): Hasher {
+            return Hasher(checkNotNull(WKHasher.createMd5().orNull()))
+        }
     }
 }

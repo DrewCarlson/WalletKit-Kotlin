@@ -17,10 +17,8 @@ public expect class Signer : Closeable {
     override fun close()
 
     public companion object {
-        public fun createForAlgorithm(algorithm: SignerAlgorithm): Signer
+        public fun createForBasicDer(): Signer
+        public fun createForBasicJose(): Signer
+        public fun createForCompact(): Signer
     }
-}
-
-public enum class SignerAlgorithm {
-    BASIC_DER, BASIC_JOSE, COMPACT
 }
