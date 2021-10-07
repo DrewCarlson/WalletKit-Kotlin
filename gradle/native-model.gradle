@@ -1,5 +1,3 @@
-import java.nio.file.Paths
-
 apply(plugin: "c")
 apply(plugin: "kotlin-multiplatform")
 
@@ -86,55 +84,33 @@ def cppCryptoIncDirs = cppCryptoSrcDirs + [
         "vendor/secp256k1"
 ].collect { "$corePath/$it" }
 
-def cppCryptoTestIncDirs = [
-        "include"
-].collect { "$corePath/WalletKitCoreTests/test/$it"}
+def cppCryptoTestIncDirs = ["include"]
+        .collect { "$corePath/WalletKitCoreTests/test/$it" }
 
 model {
     toolChains {
         clang(Clang) {
-            // TODO: Share iOS config and select correct sdk path
-            target("macos") {
-                path clangPath
-                cCompiler.executable "clang"
-                cCompiler.withArguments { args ->
-                    iosClangCompilerArgs(args, macosSdk, "x86_64")
-                }
-                linker.withArguments { args ->
-                    args.add("-v")
-                    args.add("-isysroot${macosSdk}")
-                }
-            }
-            target("iosX64") {
-                path clangPath
-                cCompiler.executable "clang"
-                cCompiler.withArguments { args ->
-                    iosClangCompilerArgs(args, iphoneSimSdk, "x86_64")
-                }
+            [
+                    ["macos", macosSdk, "x86_64"],
+                    ["iosX64", iphoneSimSdk, "x86_64"],
+                    ["iosArm64", iphoneOsSdk, "arm64"]
+            ].each { config ->
+                def (targetName, sdk, arch) = config
+                target(targetName) {
+                    path clangPath
+                    cCompiler.executable "clang"
+                    cCompiler.withArguments { args ->
+                        iosClangCompilerArgs(args, sdk, arch)
+                    }
 
-                linker.withArguments { args ->
-                    args.add("-v")
-                    args.add("-isysroot${iphoneSimSdk}")
-                    args.remove("-Wl,-soname,libWalletKitCore.so")
-                    args.remove("-Wl,-soname,libsqlite3.so")
-                    args.remove("-Wl,-soname,libed25519.so")
-                    args.remove("-Wl,-soname,libblake2.so")
-                }
-            }
-            target("iosArm64") {
-                path clangPath
-                cCompiler.executable "clang"
-                cCompiler.withArguments { args ->
-                    iosClangCompilerArgs(args, iphoneOsSdk, "arm64")
-                }
-
-                linker.withArguments { args ->
-                    args.add("-v")
-                    args.add("-isysroot${iphoneOsSdk}")
-                    args.remove("-Wl,-soname,libWalletKitCore.so")
-                    args.remove("-Wl,-soname,libsqlite3.so")
-                    args.remove("-Wl,-soname,libed25519.so")
-                    args.remove("-Wl,-soname,libblake2.so")
+                    linker.withArguments { args ->
+                        args.add("-v")
+                        args.add("-isysroot${sdk}")
+                        args.remove("-Wl,-soname,libWalletKitCore.so")
+                        args.remove("-Wl,-soname,libsqlite3.so")
+                        args.remove("-Wl,-soname,libed25519.so")
+                        args.remove("-Wl,-soname,libblake2.so")
+                    }
                 }
             }
         }
