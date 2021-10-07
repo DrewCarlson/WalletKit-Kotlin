@@ -1,0 +1,1159 @@
+public final class com/blockset/walletkit/Account : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Account$Companion;
+	public fun <init> (Lcom/blockset/walletkit/nativex/WKAccount;)V
+	public fun close ()V
+	public final fun getFilesystemIdentifier ()Ljava/lang/String;
+	public final fun getInitializationData (Lcom/blockset/walletkit/Network;)[B
+	public final fun getSerialize ()[B
+	public final fun getTimestamp ()J
+	public final fun getUids ()Ljava/lang/String;
+	public final fun initialize (Lcom/blockset/walletkit/Network;[B)V
+	public final fun isInitialized (Lcom/blockset/walletkit/Network;)Z
+	public final fun validate ([B)Z
+}
+
+public final class com/blockset/walletkit/Account$Companion {
+	public final fun createFromPhrase ([BJLjava/lang/String;)Lcom/blockset/walletkit/Account;
+	public final fun createFromSerialization ([BLjava/lang/String;)Lcom/blockset/walletkit/Account;
+	public final fun generatePhrase (Ljava/util/List;)[B
+	public final fun validatePhrase ([BLjava/util/List;)Z
+}
+
+public final class com/blockset/walletkit/Address : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Address$Companion;
+	public fun close ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/Address$Companion {
+	public final fun create (Ljava/lang/String;Lcom/blockset/walletkit/Network;)Lcom/blockset/walletkit/Address;
+}
+
+public final class com/blockset/walletkit/AddressScheme : java/lang/Enum {
+	public static final field BTCLegacy Lcom/blockset/walletkit/AddressScheme;
+	public static final field BTCSegwit Lcom/blockset/walletkit/AddressScheme;
+	public static final field Companion Lcom/blockset/walletkit/AddressScheme$Companion;
+	public static final field Native Lcom/blockset/walletkit/AddressScheme;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/AddressScheme;
+	public static fun values ()[Lcom/blockset/walletkit/AddressScheme;
+}
+
+public final class com/blockset/walletkit/AddressScheme$Companion {
+	public final fun fromCoreInt-WZ4Q5Ns (I)Lcom/blockset/walletkit/AddressScheme;
+}
+
+public final class com/blockset/walletkit/Amount : com/blockset/walletkit/Closeable, java/lang/Comparable {
+	public static final field Companion Lcom/blockset/walletkit/Amount$Companion;
+	public final fun asDouble (Lcom/blockset/walletkit/UnitWK;)Ljava/lang/Double;
+	public final fun asString (ILjava/lang/String;)Ljava/lang/String;
+	public final fun asString (Lcom/blockset/walletkit/CurrencyPair;)Ljava/lang/String;
+	public final fun asString (Lcom/blockset/walletkit/UnitWK;)Ljava/lang/String;
+	public static synthetic fun asString$default (Lcom/blockset/walletkit/Amount;ILjava/lang/String;ILjava/lang/Object;)Ljava/lang/String;
+	public fun close ()V
+	public fun compareTo (Lcom/blockset/walletkit/Amount;)I
+	public synthetic fun compareTo (Ljava/lang/Object;)I
+	public final fun convert (Lcom/blockset/walletkit/UnitWK;)Lcom/blockset/walletkit/Amount;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCurrency ()Lcom/blockset/walletkit/Currency;
+	public final fun getNegate ()Lcom/blockset/walletkit/Amount;
+	public final fun getUnit ()Lcom/blockset/walletkit/UnitWK;
+	public final fun hasCurrency (Lcom/blockset/walletkit/Currency;)Z
+	public fun hashCode ()I
+	public final fun isCompatible (Lcom/blockset/walletkit/Amount;)Z
+	public final fun isNegative ()Z
+	public final fun isZero ()Z
+	public final fun minus (Lcom/blockset/walletkit/Amount;)Lcom/blockset/walletkit/Amount;
+	public final fun plus (Lcom/blockset/walletkit/Amount;)Lcom/blockset/walletkit/Amount;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/Amount$Companion {
+	public final fun create (DLcom/blockset/walletkit/UnitWK;)Lcom/blockset/walletkit/Amount;
+	public final fun create (JLcom/blockset/walletkit/UnitWK;)Lcom/blockset/walletkit/Amount;
+	public final fun create (Ljava/lang/String;Lcom/blockset/walletkit/UnitWK;Z)Lcom/blockset/walletkit/Amount;
+	public static synthetic fun create$default (Lcom/blockset/walletkit/Amount$Companion;Ljava/lang/String;Lcom/blockset/walletkit/UnitWK;ZILjava/lang/Object;)Lcom/blockset/walletkit/Amount;
+}
+
+public final class com/blockset/walletkit/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public final class com/blockset/walletkit/Cipher : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Cipher$Companion;
+	public fun close ()V
+	public final fun decrypt ([B)[B
+	public final fun encrypt ([B)[B
+}
+
+public final class com/blockset/walletkit/Cipher$Companion {
+	public final fun createForAesEcb ([B)Lcom/blockset/walletkit/Cipher;
+	public final fun createForChaCha20Poly1305 (Lcom/blockset/walletkit/Key;[B[B)Lcom/blockset/walletkit/Cipher;
+	public final fun createForPigeon (Lcom/blockset/walletkit/Key;Lcom/blockset/walletkit/Key;[B)Lcom/blockset/walletkit/Cipher;
+}
+
+public abstract interface class com/blockset/walletkit/Closeable {
+	public abstract fun close ()V
+}
+
+public final class com/blockset/walletkit/Coder : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Coder$Companion;
+	public fun close ()V
+	public final fun decode (Ljava/lang/String;)[B
+	public final fun encode ([B)Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/Coder$Companion {
+	public final fun createForAlgorithm (Lcom/blockset/walletkit/CoderAlgorithm;)Lcom/blockset/walletkit/Coder;
+}
+
+public final class com/blockset/walletkit/CoderAlgorithm : java/lang/Enum {
+	public static final field BASE58 Lcom/blockset/walletkit/CoderAlgorithm;
+	public static final field BASE58CHECK Lcom/blockset/walletkit/CoderAlgorithm;
+	public static final field HEX Lcom/blockset/walletkit/CoderAlgorithm;
+	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/CoderAlgorithm;
+	public static fun values ()[Lcom/blockset/walletkit/CoderAlgorithm;
+}
+
+public final class com/blockset/walletkit/Currency : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Currency$Companion;
+	public fun close ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getIssuer ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getType ()Ljava/lang/String;
+	public final fun getUids ()Ljava/lang/String;
+	public fun hashCode ()I
+}
+
+public final class com/blockset/walletkit/Currency$Companion {
+	public final fun create (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lcom/blockset/walletkit/Currency;
+}
+
+public final class com/blockset/walletkit/CurrencyKt {
+	public static final field CURRENCY_CODE_AS_BCH Ljava/lang/String;
+	public static final field CURRENCY_CODE_AS_BTC Ljava/lang/String;
+	public static final field CURRENCY_CODE_AS_ETH Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/CurrencyPair {
+	public fun <init> (Lcom/blockset/walletkit/UnitWK;Lcom/blockset/walletkit/UnitWK;D)V
+	public final fun component1 ()Lcom/blockset/walletkit/UnitWK;
+	public final fun component2 ()Lcom/blockset/walletkit/UnitWK;
+	public final fun component3 ()D
+	public final fun copy (Lcom/blockset/walletkit/UnitWK;Lcom/blockset/walletkit/UnitWK;D)Lcom/blockset/walletkit/CurrencyPair;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/CurrencyPair;Lcom/blockset/walletkit/UnitWK;Lcom/blockset/walletkit/UnitWK;DILjava/lang/Object;)Lcom/blockset/walletkit/CurrencyPair;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun exchangeAsBase (Lcom/blockset/walletkit/Amount;)Lcom/blockset/walletkit/Amount;
+	public final fun exchangeAsQuote (Lcom/blockset/walletkit/Amount;)Lcom/blockset/walletkit/Amount;
+	public final fun getBaseUnit ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getExchangeRate ()D
+	public final fun getQuoteUnit ()Lcom/blockset/walletkit/UnitWK;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public class com/blockset/walletkit/DefaultSystemListener : com/blockset/walletkit/SystemListener {
+	public fun <init> ()V
+	public fun handleManagerEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/WalletManagerEvent;)V
+	public fun handleNetworkEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/Network;Lcom/blockset/walletkit/NetworkEvent;)V
+	public fun handleSystemEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/SystemEvent;)V
+	public fun handleTransferEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/Transfer;Lcom/blockset/walletkit/TransferEvent;)V
+	public fun handleWalletEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/WalletEvent;)V
+}
+
+public abstract class com/blockset/walletkit/FeeEstimationError : java/lang/Exception {
+	public final fun toLimitEstimationError ()Lcom/blockset/walletkit/LimitEstimationError;
+}
+
+public final class com/blockset/walletkit/FeeEstimationError$InsufficientFunds : com/blockset/walletkit/FeeEstimationError {
+	public static final field INSTANCE Lcom/blockset/walletkit/FeeEstimationError$InsufficientFunds;
+}
+
+public final class com/blockset/walletkit/FeeEstimationError$ServiceFailure : com/blockset/walletkit/FeeEstimationError {
+	public static final field INSTANCE Lcom/blockset/walletkit/FeeEstimationError$ServiceFailure;
+}
+
+public final class com/blockset/walletkit/FeeEstimationError$ServiceUnavailable : com/blockset/walletkit/FeeEstimationError {
+	public static final field INSTANCE Lcom/blockset/walletkit/FeeEstimationError$ServiceUnavailable;
+}
+
+public final class com/blockset/walletkit/HashAlgorithm : java/lang/Enum {
+	public static final field HASH160 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field KECCAK256 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field MD5 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field RMD160 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field SHA1 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field SHA224 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field SHA256 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field SHA256_2 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field SHA3 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field SHA384 Lcom/blockset/walletkit/HashAlgorithm;
+	public static final field SHA512 Lcom/blockset/walletkit/HashAlgorithm;
+	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/HashAlgorithm;
+	public static fun values ()[Lcom/blockset/walletkit/HashAlgorithm;
+}
+
+public final class com/blockset/walletkit/Hasher : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Hasher$Companion;
+	public fun close ()V
+	public final fun hash ([B)[B
+}
+
+public final class com/blockset/walletkit/Hasher$Companion {
+	public final fun createForAlgorithm (Lcom/blockset/walletkit/HashAlgorithm;)Lcom/blockset/walletkit/Hasher;
+}
+
+public final class com/blockset/walletkit/Key : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Key$Companion;
+	public fun close ()V
+	public final fun getEncodeAsPrivate ()[B
+	public final fun getEncodeAsPublic ()[B
+	public final fun getHasSecret ()Z
+	public final fun getSecret ()Lcom/blockset/walletkit/nativex/support/WKSecret;
+	public final fun publicKeyMatch (Lcom/blockset/walletkit/Key;)Z
+}
+
+public final class com/blockset/walletkit/Key$Companion {
+	public final fun createForBIP32ApiAuth (Ljava/lang/String;Ljava/util/List;)Lcom/blockset/walletkit/Key;
+	public static synthetic fun createForBIP32ApiAuth$default (Lcom/blockset/walletkit/Key$Companion;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/blockset/walletkit/Key;
+	public final fun createForBIP32BitID (Ljava/lang/String;ILjava/lang/String;Ljava/util/List;)Lcom/blockset/walletkit/Key;
+	public static synthetic fun createForBIP32BitID$default (Lcom/blockset/walletkit/Key$Companion;Ljava/lang/String;ILjava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/blockset/walletkit/Key;
+	public final fun createForPigeonFromKey (Lcom/blockset/walletkit/Key;[B)Lcom/blockset/walletkit/Key;
+	public final fun createFromPhrase (Ljava/lang/String;Ljava/util/List;)Lcom/blockset/walletkit/Key;
+	public static synthetic fun createFromPhrase$default (Lcom/blockset/walletkit/Key$Companion;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/blockset/walletkit/Key;
+	public final fun createFromPrivateKey (Ljava/lang/String;)Lcom/blockset/walletkit/Key;
+	public final fun createFromProtectedPrivateKey (Ljava/lang/String;Ljava/lang/String;)Lcom/blockset/walletkit/Key;
+	public final fun createFromPublicKey (Ljava/lang/String;)Lcom/blockset/walletkit/Key;
+	public final fun getWordList ()Ljava/util/List;
+	public final fun isProtectedPrivateKey (Ljava/lang/String;)Z
+	public final fun setWordList (Ljava/util/List;)V
+}
+
+public abstract class com/blockset/walletkit/LimitEstimationError : java/lang/Exception {
+	public final fun from (Lcom/blockset/walletkit/FeeEstimationError;)Lcom/blockset/walletkit/LimitEstimationError;
+}
+
+public final class com/blockset/walletkit/LimitEstimationError$InsufficientFunds : com/blockset/walletkit/LimitEstimationError {
+	public static final field INSTANCE Lcom/blockset/walletkit/LimitEstimationError$InsufficientFunds;
+}
+
+public final class com/blockset/walletkit/LimitEstimationError$ServiceFailure : com/blockset/walletkit/LimitEstimationError {
+	public static final field INSTANCE Lcom/blockset/walletkit/LimitEstimationError$ServiceFailure;
+}
+
+public final class com/blockset/walletkit/LimitEstimationError$ServiceUnavailable : com/blockset/walletkit/LimitEstimationError {
+	public static final field INSTANCE Lcom/blockset/walletkit/LimitEstimationError$ServiceUnavailable;
+}
+
+public final class com/blockset/walletkit/Network : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Network$Companion;
+	public final fun addCurrency (Lcom/blockset/walletkit/Currency;Lcom/blockset/walletkit/UnitWK;Lcom/blockset/walletkit/UnitWK;)V
+	public final fun addUnitFor (Lcom/blockset/walletkit/Currency;Lcom/blockset/walletkit/UnitWK;)V
+	public final fun addressFor (Ljava/lang/String;)Lcom/blockset/walletkit/Address;
+	public final fun baseUnitFor (Lcom/blockset/walletkit/Currency;)Lcom/blockset/walletkit/UnitWK;
+	public fun close ()V
+	public final fun createPeer-qEOnv9Y (Ljava/lang/String;SLjava/lang/String;)Lcom/blockset/walletkit/NetworkPeer;
+	public final fun currencyByCode (Ljava/lang/String;)Lcom/blockset/walletkit/Currency;
+	public final fun currencyByIssuer (Ljava/lang/String;)Lcom/blockset/walletkit/Currency;
+	public final fun defaultUnitFor (Lcom/blockset/walletkit/Currency;)Lcom/blockset/walletkit/UnitWK;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConfirmationsUntilFinal-pVg5ArA ()I
+	public final fun getCurrencies ()Ljava/util/Set;
+	public final fun getCurrency ()Lcom/blockset/walletkit/Currency;
+	public final fun getDefaultAddressScheme ()Lcom/blockset/walletkit/AddressScheme;
+	public final fun getDefaultWalletManagerMode ()Lcom/blockset/walletkit/WalletManagerMode;
+	public final fun getFees ()Ljava/util/List;
+	public final fun getHeight-s-VKNKU ()J
+	public final fun getMinimumFee ()Lcom/blockset/walletkit/NetworkFee;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSupportedAddressSchemes ()Ljava/util/List;
+	public final fun getSupportedWalletManagerModes ()Ljava/util/List;
+	public final fun getType ()Lcom/blockset/walletkit/NetworkType;
+	public final fun hasCurrency (Lcom/blockset/walletkit/Currency;)Z
+	public final fun hasUnitFor (Lcom/blockset/walletkit/Currency;Lcom/blockset/walletkit/UnitWK;)Ljava/lang/Boolean;
+	public fun hashCode ()I
+	public final fun isMainnet ()Z
+	public final fun setFees (Ljava/util/List;)V
+	public final fun supportsAddressScheme (Lcom/blockset/walletkit/AddressScheme;)Z
+	public final fun supportsWalletManagerMode (Lcom/blockset/walletkit/WalletManagerMode;)Z
+	public fun toString ()Ljava/lang/String;
+	public final fun unitsFor (Lcom/blockset/walletkit/Currency;)Ljava/util/Set;
+}
+
+public final class com/blockset/walletkit/Network$Companion {
+	public final fun findBuiltin (Ljava/lang/String;)Lcom/blockset/walletkit/Network;
+}
+
+public final class com/blockset/walletkit/NetworkAssociation {
+	public fun <init> (Lcom/blockset/walletkit/UnitWK;Lcom/blockset/walletkit/UnitWK;Ljava/util/Set;)V
+	public final fun component1 ()Lcom/blockset/walletkit/UnitWK;
+	public final fun component2 ()Lcom/blockset/walletkit/UnitWK;
+	public final fun component3 ()Ljava/util/Set;
+	public final fun copy (Lcom/blockset/walletkit/UnitWK;Lcom/blockset/walletkit/UnitWK;Ljava/util/Set;)Lcom/blockset/walletkit/NetworkAssociation;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/NetworkAssociation;Lcom/blockset/walletkit/UnitWK;Lcom/blockset/walletkit/UnitWK;Ljava/util/Set;ILjava/lang/Object;)Lcom/blockset/walletkit/NetworkAssociation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBaseUnit ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getDefaultUnit ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getUnits ()Ljava/util/Set;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/blockset/walletkit/NetworkEvent {
+}
+
+public final class com/blockset/walletkit/NetworkEvent$Created : com/blockset/walletkit/NetworkEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/NetworkEvent$Created;
+}
+
+public final class com/blockset/walletkit/NetworkEvent$FeesUpdated : com/blockset/walletkit/NetworkEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/NetworkEvent$FeesUpdated;
+}
+
+public final class com/blockset/walletkit/NetworkFee : com/blockset/walletkit/Closeable {
+	public fun <init> (Lcom/blockset/walletkit/nativex/WKNetworkFee;)V
+	public fun close ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTimeIntervalInMilliseconds-s-VKNKU ()J
+	public fun hashCode ()I
+}
+
+public abstract class com/blockset/walletkit/NetworkFeeUpdateError : java/lang/Exception {
+}
+
+public final class com/blockset/walletkit/NetworkFeeUpdateError$FeesUnavailable : com/blockset/walletkit/NetworkFeeUpdateError {
+	public static final field INSTANCE Lcom/blockset/walletkit/NetworkFeeUpdateError$FeesUnavailable;
+}
+
+public abstract interface class com/blockset/walletkit/NetworkListener {
+	public abstract fun handleNetworkEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/Network;Lcom/blockset/walletkit/NetworkEvent;)V
+}
+
+public final class com/blockset/walletkit/NetworkPeer : com/blockset/walletkit/Closeable {
+	public fun close ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAddress ()Ljava/lang/String;
+	public final fun getNetwork ()Lcom/blockset/walletkit/Network;
+	public final fun getPort-Mh2AYeg ()S
+	public final fun getPublicKey ()Ljava/lang/String;
+	public fun hashCode ()I
+}
+
+public abstract class com/blockset/walletkit/NetworkType {
+	public static final field Companion Lcom/blockset/walletkit/NetworkType$Companion;
+	public final fun toCoreInt ()I
+}
+
+public final class com/blockset/walletkit/NetworkType$BCH : com/blockset/walletkit/NetworkType {
+	public static final field INSTANCE Lcom/blockset/walletkit/NetworkType$BCH;
+}
+
+public final class com/blockset/walletkit/NetworkType$BTC : com/blockset/walletkit/NetworkType {
+	public static final field INSTANCE Lcom/blockset/walletkit/NetworkType$BTC;
+}
+
+public final class com/blockset/walletkit/NetworkType$Companion {
+	public final fun fromCoreInt (I)Lcom/blockset/walletkit/NetworkType;
+}
+
+public final class com/blockset/walletkit/NetworkType$ETH : com/blockset/walletkit/NetworkType {
+	public static final field INSTANCE Lcom/blockset/walletkit/NetworkType$ETH;
+}
+
+public abstract class com/blockset/walletkit/PaymentProtocolError : java/lang/Exception {
+}
+
+public final class com/blockset/walletkit/PaymentProtocolError$CertificateMissing : com/blockset/walletkit/PaymentProtocolError {
+	public static final field INSTANCE Lcom/blockset/walletkit/PaymentProtocolError$CertificateMissing;
+}
+
+public final class com/blockset/walletkit/PaymentProtocolError$CertificateNotTrusted : com/blockset/walletkit/PaymentProtocolError {
+	public static final field INSTANCE Lcom/blockset/walletkit/PaymentProtocolError$CertificateNotTrusted;
+}
+
+public final class com/blockset/walletkit/PaymentProtocolError$RequestExpired : com/blockset/walletkit/PaymentProtocolError {
+	public static final field INSTANCE Lcom/blockset/walletkit/PaymentProtocolError$RequestExpired;
+}
+
+public final class com/blockset/walletkit/PaymentProtocolError$SignatureTypeUnsupported : com/blockset/walletkit/PaymentProtocolError {
+	public static final field INSTANCE Lcom/blockset/walletkit/PaymentProtocolError$SignatureTypeUnsupported;
+}
+
+public final class com/blockset/walletkit/PaymentProtocolError$SignatureVerificationFailed : com/blockset/walletkit/PaymentProtocolError {
+	public static final field INSTANCE Lcom/blockset/walletkit/PaymentProtocolError$SignatureVerificationFailed;
+}
+
+public final class com/blockset/walletkit/Signer : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/Signer$Companion;
+	public fun close ()V
+	public final fun recover ([B[B)Lcom/blockset/walletkit/Key;
+	public final fun sign ([BLcom/blockset/walletkit/Key;)[B
+}
+
+public final class com/blockset/walletkit/Signer$Companion {
+	public final fun createForAlgorithm (Lcom/blockset/walletkit/SignerAlgorithm;)Lcom/blockset/walletkit/Signer;
+}
+
+public final class com/blockset/walletkit/SignerAlgorithm : java/lang/Enum {
+	public static final field BASIC_DER Lcom/blockset/walletkit/SignerAlgorithm;
+	public static final field BASIC_JOSE Lcom/blockset/walletkit/SignerAlgorithm;
+	public static final field COMPACT Lcom/blockset/walletkit/SignerAlgorithm;
+	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/SignerAlgorithm;
+	public static fun values ()[Lcom/blockset/walletkit/SignerAlgorithm;
+}
+
+public abstract class com/blockset/walletkit/SyncStoppedReason {
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/SyncStoppedReason$COMPLETE : com/blockset/walletkit/SyncStoppedReason {
+	public static final field INSTANCE Lcom/blockset/walletkit/SyncStoppedReason$COMPLETE;
+}
+
+public final class com/blockset/walletkit/SyncStoppedReason$POSIX : com/blockset/walletkit/SyncStoppedReason {
+	public fun <init> (ILjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;)Lcom/blockset/walletkit/SyncStoppedReason$POSIX;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/SyncStoppedReason$POSIX;ILjava/lang/String;ILjava/lang/Object;)Lcom/blockset/walletkit/SyncStoppedReason$POSIX;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getErrMessage ()Ljava/lang/String;
+	public final fun getErrNum ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/SyncStoppedReason$REQUESTED : com/blockset/walletkit/SyncStoppedReason {
+	public static final field INSTANCE Lcom/blockset/walletkit/SyncStoppedReason$REQUESTED;
+}
+
+public final class com/blockset/walletkit/SyncStoppedReason$UNKNOWN : com/blockset/walletkit/SyncStoppedReason {
+	public static final field INSTANCE Lcom/blockset/walletkit/SyncStoppedReason$UNKNOWN;
+}
+
+public final class com/blockset/walletkit/System {
+	public static final field Companion Lcom/blockset/walletkit/System$Companion;
+	public final fun configure ()V
+	public final fun createWalletManager (Lcom/blockset/walletkit/Network;Lcom/blockset/walletkit/WalletManagerMode;Lcom/blockset/walletkit/AddressScheme;Ljava/util/Set;)Z
+	public static synthetic fun createWalletManager$default (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/Network;Lcom/blockset/walletkit/WalletManagerMode;Lcom/blockset/walletkit/AddressScheme;Ljava/util/Set;ILjava/lang/Object;)Z
+	public final fun getAccount ()Lcom/blockset/walletkit/Account;
+	public final fun getNetworks ()Ljava/util/List;
+	public final fun getStoragePath ()Ljava/lang/String;
+	public final fun getWalletManagers ()Ljava/util/List;
+	public final fun getWallets ()Ljava/util/List;
+	public final fun pause ()V
+	public final fun resume ()V
+	public final fun setNetworkReachable (Z)V
+	public final fun subscribe (Ljava/lang/String;)V
+	public final fun updateCurrencies (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun updateNetworkFees (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun wipe (Lcom/blockset/walletkit/Network;)V
+}
+
+public final class com/blockset/walletkit/System$Companion {
+	public final fun asBdbCurrency-pqXDGC8 (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)Ldrewcarlson/blockset/model/BdbCurrency;
+	public final fun create (Lcom/blockset/walletkit/SystemListener;Lcom/blockset/walletkit/Account;ZLjava/lang/String;Ldrewcarlson/blockset/BdbService;Lkotlinx/coroutines/CoroutineDispatcher;)Lcom/blockset/walletkit/System;
+	public static synthetic fun create$default (Lcom/blockset/walletkit/System$Companion;Lcom/blockset/walletkit/SystemListener;Lcom/blockset/walletkit/Account;ZLjava/lang/String;Ldrewcarlson/blockset/BdbService;Lkotlinx/coroutines/CoroutineDispatcher;ILjava/lang/Object;)Lcom/blockset/walletkit/System;
+	public final fun wipe (Lcom/blockset/walletkit/System;)V
+	public final fun wipeAll (Ljava/lang/String;Ljava/util/List;)V
+}
+
+public abstract class com/blockset/walletkit/SystemEvent {
+}
+
+public final class com/blockset/walletkit/SystemEvent$Changed : com/blockset/walletkit/SystemEvent {
+	public fun <init> (Lcom/blockset/walletkit/SystemState;Lcom/blockset/walletkit/SystemState;)V
+	public final fun component1 ()Lcom/blockset/walletkit/SystemState;
+	public final fun component2 ()Lcom/blockset/walletkit/SystemState;
+	public final fun copy (Lcom/blockset/walletkit/SystemState;Lcom/blockset/walletkit/SystemState;)Lcom/blockset/walletkit/SystemEvent$Changed;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/SystemEvent$Changed;Lcom/blockset/walletkit/SystemState;Lcom/blockset/walletkit/SystemState;ILjava/lang/Object;)Lcom/blockset/walletkit/SystemEvent$Changed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNewState ()Lcom/blockset/walletkit/SystemState;
+	public final fun getOldState ()Lcom/blockset/walletkit/SystemState;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/SystemEvent$Created : com/blockset/walletkit/SystemEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/SystemEvent$Created;
+}
+
+public final class com/blockset/walletkit/SystemEvent$Deleted : com/blockset/walletkit/SystemEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/SystemEvent$Deleted;
+}
+
+public final class com/blockset/walletkit/SystemEvent$DiscoveredNetworks : com/blockset/walletkit/SystemEvent {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lcom/blockset/walletkit/SystemEvent$DiscoveredNetworks;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/SystemEvent$DiscoveredNetworks;Ljava/util/List;ILjava/lang/Object;)Lcom/blockset/walletkit/SystemEvent$DiscoveredNetworks;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNetworks ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/SystemEvent$ManagerAdded : com/blockset/walletkit/SystemEvent {
+	public fun <init> (Lcom/blockset/walletkit/WalletManager;)V
+	public final fun component1 ()Lcom/blockset/walletkit/WalletManager;
+	public final fun copy (Lcom/blockset/walletkit/WalletManager;)Lcom/blockset/walletkit/SystemEvent$ManagerAdded;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/SystemEvent$ManagerAdded;Lcom/blockset/walletkit/WalletManager;ILjava/lang/Object;)Lcom/blockset/walletkit/SystemEvent$ManagerAdded;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getManager ()Lcom/blockset/walletkit/WalletManager;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/SystemEvent$NetworkAdded : com/blockset/walletkit/SystemEvent {
+	public fun <init> (Lcom/blockset/walletkit/Network;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Network;
+	public final fun copy (Lcom/blockset/walletkit/Network;)Lcom/blockset/walletkit/SystemEvent$NetworkAdded;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/SystemEvent$NetworkAdded;Lcom/blockset/walletkit/Network;ILjava/lang/Object;)Lcom/blockset/walletkit/SystemEvent$NetworkAdded;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNetwork ()Lcom/blockset/walletkit/Network;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/blockset/walletkit/SystemListener : com/blockset/walletkit/NetworkListener, com/blockset/walletkit/TransferListener, com/blockset/walletkit/WalletListener, com/blockset/walletkit/WalletManagerListener {
+	public abstract fun handleManagerEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/WalletManagerEvent;)V
+	public abstract fun handleNetworkEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/Network;Lcom/blockset/walletkit/NetworkEvent;)V
+	public abstract fun handleSystemEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/SystemEvent;)V
+	public abstract fun handleTransferEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/Transfer;Lcom/blockset/walletkit/TransferEvent;)V
+	public abstract fun handleWalletEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/WalletEvent;)V
+}
+
+public final class com/blockset/walletkit/SystemListener$DefaultImpls {
+	public static fun handleManagerEvent (Lcom/blockset/walletkit/SystemListener;Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/WalletManagerEvent;)V
+	public static fun handleNetworkEvent (Lcom/blockset/walletkit/SystemListener;Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/Network;Lcom/blockset/walletkit/NetworkEvent;)V
+	public static fun handleSystemEvent (Lcom/blockset/walletkit/SystemListener;Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/SystemEvent;)V
+	public static fun handleTransferEvent (Lcom/blockset/walletkit/SystemListener;Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/Transfer;Lcom/blockset/walletkit/TransferEvent;)V
+	public static fun handleWalletEvent (Lcom/blockset/walletkit/SystemListener;Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/WalletEvent;)V
+}
+
+public abstract class com/blockset/walletkit/SystemState {
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/SystemState$Created : com/blockset/walletkit/SystemState {
+	public static final field INSTANCE Lcom/blockset/walletkit/SystemState$Created;
+}
+
+public final class com/blockset/walletkit/SystemState$Deleted : com/blockset/walletkit/SystemState {
+	public static final field INSTANCE Lcom/blockset/walletkit/SystemState$Deleted;
+}
+
+public final class com/blockset/walletkit/Transfer {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAmount ()Lcom/blockset/walletkit/Amount;
+	public final fun getAmountDirected ()Lcom/blockset/walletkit/Amount;
+	public final fun getConfirmation ()Lcom/blockset/walletkit/TransferConfirmation;
+	public final fun getConfirmations-6VbMDqA ()Lkotlin/ULong;
+	public final fun getConfirmationsAt-aouQNdc (J)Lkotlin/ULong;
+	public final fun getConfirmedFeeBasis ()Lcom/blockset/walletkit/TransferFeeBasis;
+	public final fun getDirection ()Lcom/blockset/walletkit/TransferDirection;
+	public final fun getEstimatedFeeBasis ()Lcom/blockset/walletkit/TransferFeeBasis;
+	public final fun getFee ()Lcom/blockset/walletkit/Amount;
+	public final fun getHash ()Lcom/blockset/walletkit/TransferHash;
+	public final fun getSource ()Lcom/blockset/walletkit/Address;
+	public final fun getState ()Lcom/blockset/walletkit/TransferState;
+	public final fun getTarget ()Lcom/blockset/walletkit/Address;
+	public final fun getUnit ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getUnitForFee ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getWallet ()Lcom/blockset/walletkit/Wallet;
+	public fun hashCode ()I
+}
+
+public final class com/blockset/walletkit/TransferAttribute {
+	public fun <init> (Lcom/blockset/walletkit/nativex/WKTransferAttribute;)V
+	public final fun getKey ()Ljava/lang/String;
+	public final fun getValue ()Ljava/lang/String;
+	public final fun isRequired ()Z
+	public final fun setValue (Ljava/lang/String;)V
+}
+
+public final class com/blockset/walletkit/TransferConfirmation {
+	public synthetic fun <init> (JJJLcom/blockset/walletkit/Amount;ZLjava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-s-VKNKU ()J
+	public final fun component2-s-VKNKU ()J
+	public final fun component3-s-VKNKU ()J
+	public final fun component4 ()Lcom/blockset/walletkit/Amount;
+	public final fun component5 ()Z
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy-UFK9srs (JJJLcom/blockset/walletkit/Amount;ZLjava/lang/String;)Lcom/blockset/walletkit/TransferConfirmation;
+	public static synthetic fun copy-UFK9srs$default (Lcom/blockset/walletkit/TransferConfirmation;JJJLcom/blockset/walletkit/Amount;ZLjava/lang/String;ILjava/lang/Object;)Lcom/blockset/walletkit/TransferConfirmation;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBlockNumber-s-VKNKU ()J
+	public final fun getError ()Ljava/lang/String;
+	public final fun getFee ()Lcom/blockset/walletkit/Amount;
+	public final fun getSuccess ()Z
+	public final fun getTimestamp-s-VKNKU ()J
+	public final fun getTransactionIndex-s-VKNKU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/TransferDirection : java/lang/Enum {
+	public static final field RECEIVED Lcom/blockset/walletkit/TransferDirection;
+	public static final field RECOVERED Lcom/blockset/walletkit/TransferDirection;
+	public static final field SENT Lcom/blockset/walletkit/TransferDirection;
+	public fun toString ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/TransferDirection;
+	public static fun values ()[Lcom/blockset/walletkit/TransferDirection;
+}
+
+public abstract class com/blockset/walletkit/TransferEvent {
+}
+
+public final class com/blockset/walletkit/TransferEvent$Changed : com/blockset/walletkit/TransferEvent {
+	public fun <init> (Lcom/blockset/walletkit/TransferState;Lcom/blockset/walletkit/TransferState;)V
+	public final fun component1 ()Lcom/blockset/walletkit/TransferState;
+	public final fun component2 ()Lcom/blockset/walletkit/TransferState;
+	public final fun copy (Lcom/blockset/walletkit/TransferState;Lcom/blockset/walletkit/TransferState;)Lcom/blockset/walletkit/TransferEvent$Changed;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/TransferEvent$Changed;Lcom/blockset/walletkit/TransferState;Lcom/blockset/walletkit/TransferState;ILjava/lang/Object;)Lcom/blockset/walletkit/TransferEvent$Changed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNewState ()Lcom/blockset/walletkit/TransferState;
+	public final fun getOldState ()Lcom/blockset/walletkit/TransferState;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/TransferEvent$Created : com/blockset/walletkit/TransferEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/TransferEvent$Created;
+}
+
+public final class com/blockset/walletkit/TransferEvent$Deleted : com/blockset/walletkit/TransferEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/TransferEvent$Deleted;
+}
+
+public final class com/blockset/walletkit/TransferFeeBasis {
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCostFactor ()D
+	public final fun getCurrency ()Lcom/blockset/walletkit/Currency;
+	public final fun getFee ()Lcom/blockset/walletkit/Amount;
+	public final fun getPricePerCostFactor ()Lcom/blockset/walletkit/Amount;
+	public final fun getUnit ()Lcom/blockset/walletkit/UnitWK;
+	public fun hashCode ()I
+}
+
+public final class com/blockset/walletkit/TransferHash : com/blockset/walletkit/Closeable {
+	public fun <init> (Lcom/blockset/walletkit/nativex/WKHash;)V
+	public fun close ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/blockset/walletkit/TransferListener {
+	public abstract fun handleTransferEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/Transfer;Lcom/blockset/walletkit/TransferEvent;)V
+}
+
+public abstract class com/blockset/walletkit/TransferState {
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/TransferState$CREATED : com/blockset/walletkit/TransferState {
+	public static final field INSTANCE Lcom/blockset/walletkit/TransferState$CREATED;
+}
+
+public final class com/blockset/walletkit/TransferState$DELETED : com/blockset/walletkit/TransferState {
+	public static final field INSTANCE Lcom/blockset/walletkit/TransferState$DELETED;
+}
+
+public final class com/blockset/walletkit/TransferState$FAILED : com/blockset/walletkit/TransferState {
+	public fun <init> (Lcom/blockset/walletkit/TransferSubmitError;)V
+	public final fun component1 ()Lcom/blockset/walletkit/TransferSubmitError;
+	public final fun copy (Lcom/blockset/walletkit/TransferSubmitError;)Lcom/blockset/walletkit/TransferState$FAILED;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/TransferState$FAILED;Lcom/blockset/walletkit/TransferSubmitError;ILjava/lang/Object;)Lcom/blockset/walletkit/TransferState$FAILED;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Lcom/blockset/walletkit/TransferSubmitError;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/TransferState$INCLUDED : com/blockset/walletkit/TransferState {
+	public fun <init> (Lcom/blockset/walletkit/TransferConfirmation;)V
+	public final fun component1 ()Lcom/blockset/walletkit/TransferConfirmation;
+	public final fun copy (Lcom/blockset/walletkit/TransferConfirmation;)Lcom/blockset/walletkit/TransferState$INCLUDED;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/TransferState$INCLUDED;Lcom/blockset/walletkit/TransferConfirmation;ILjava/lang/Object;)Lcom/blockset/walletkit/TransferState$INCLUDED;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConfirmation ()Lcom/blockset/walletkit/TransferConfirmation;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/TransferState$PENDING : com/blockset/walletkit/TransferState {
+	public static final field INSTANCE Lcom/blockset/walletkit/TransferState$PENDING;
+}
+
+public final class com/blockset/walletkit/TransferState$SIGNED : com/blockset/walletkit/TransferState {
+	public static final field INSTANCE Lcom/blockset/walletkit/TransferState$SIGNED;
+}
+
+public final class com/blockset/walletkit/TransferState$SUBMITTED : com/blockset/walletkit/TransferState {
+	public static final field INSTANCE Lcom/blockset/walletkit/TransferState$SUBMITTED;
+}
+
+public abstract class com/blockset/walletkit/TransferSubmitError : java/lang/Exception {
+}
+
+public final class com/blockset/walletkit/TransferSubmitError$POSIX : com/blockset/walletkit/TransferSubmitError {
+	public fun <init> (ILjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;)Lcom/blockset/walletkit/TransferSubmitError$POSIX;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/TransferSubmitError$POSIX;ILjava/lang/String;ILjava/lang/Object;)Lcom/blockset/walletkit/TransferSubmitError$POSIX;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getErrMessage ()Ljava/lang/String;
+	public final fun getErrNum ()I
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/TransferSubmitError$UNKNOWN : com/blockset/walletkit/TransferSubmitError {
+	public static final field INSTANCE Lcom/blockset/walletkit/TransferSubmitError$UNKNOWN;
+}
+
+public final class com/blockset/walletkit/UnitWK : com/blockset/walletkit/Closeable {
+	public static final field Companion Lcom/blockset/walletkit/UnitWK$Companion;
+	public fun close ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBase ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getCurrency ()Lcom/blockset/walletkit/Currency;
+	public final fun getDecimals-pVg5ArA ()I
+	public final fun getName ()Ljava/lang/String;
+	public final fun getSymbol ()Ljava/lang/String;
+	public final fun hasCurrency (Lcom/blockset/walletkit/Currency;)Z
+	public fun hashCode ()I
+	public final fun isCompatible (Lcom/blockset/walletkit/UnitWK;)Z
+}
+
+public final class com/blockset/walletkit/UnitWK$Companion {
+}
+
+public final class com/blockset/walletkit/Wallet {
+	public final fun createTransfer (Lcom/blockset/walletkit/Address;Lcom/blockset/walletkit/Amount;Lcom/blockset/walletkit/TransferFeeBasis;Ljava/util/Set;)Lcom/blockset/walletkit/Transfer;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun estimateFee (Lcom/blockset/walletkit/Address;Lcom/blockset/walletkit/Amount;Lcom/blockset/walletkit/NetworkFee;Ljava/util/Set;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun estimateLimitMaximum (Lcom/blockset/walletkit/Address;Lcom/blockset/walletkit/NetworkFee;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun estimateLimitMinimum (Lcom/blockset/walletkit/Address;Lcom/blockset/walletkit/NetworkFee;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getBalance ()Lcom/blockset/walletkit/Amount;
+	public final fun getCurrency ()Lcom/blockset/walletkit/Currency;
+	public final fun getManager ()Lcom/blockset/walletkit/WalletManager;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getScope ()Lkotlinx/coroutines/CoroutineScope;
+	public final fun getState ()Lcom/blockset/walletkit/WalletState;
+	public final fun getSystem ()Lcom/blockset/walletkit/System;
+	public final fun getTarget ()Lcom/blockset/walletkit/Address;
+	public final fun getTargetForScheme (Lcom/blockset/walletkit/AddressScheme;)Lcom/blockset/walletkit/Address;
+	public final fun getTransferByHash (Lcom/blockset/walletkit/TransferHash;)Lcom/blockset/walletkit/Transfer;
+	public final fun getTransfers ()Ljava/util/List;
+	public final fun getUnit ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getUnitForFee ()Lcom/blockset/walletkit/UnitWK;
+	public final fun hasAddress (Lcom/blockset/walletkit/Address;)Z
+	public fun hashCode ()I
+}
+
+public abstract class com/blockset/walletkit/WalletEvent {
+}
+
+public final class com/blockset/walletkit/WalletEvent$BalanceUpdated : com/blockset/walletkit/WalletEvent {
+	public fun <init> (Lcom/blockset/walletkit/Amount;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Amount;
+	public final fun copy (Lcom/blockset/walletkit/Amount;)Lcom/blockset/walletkit/WalletEvent$BalanceUpdated;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletEvent$BalanceUpdated;Lcom/blockset/walletkit/Amount;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletEvent$BalanceUpdated;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBalance ()Lcom/blockset/walletkit/Amount;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletEvent$Change : com/blockset/walletkit/WalletEvent {
+	public fun <init> (Lcom/blockset/walletkit/WalletState;Lcom/blockset/walletkit/WalletState;)V
+	public final fun component1 ()Lcom/blockset/walletkit/WalletState;
+	public final fun component2 ()Lcom/blockset/walletkit/WalletState;
+	public final fun copy (Lcom/blockset/walletkit/WalletState;Lcom/blockset/walletkit/WalletState;)Lcom/blockset/walletkit/WalletEvent$Change;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletEvent$Change;Lcom/blockset/walletkit/WalletState;Lcom/blockset/walletkit/WalletState;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletEvent$Change;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNewState ()Lcom/blockset/walletkit/WalletState;
+	public final fun getOldState ()Lcom/blockset/walletkit/WalletState;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletEvent$Created : com/blockset/walletkit/WalletEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletEvent$Created;
+}
+
+public final class com/blockset/walletkit/WalletEvent$Deleted : com/blockset/walletkit/WalletEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletEvent$Deleted;
+}
+
+public final class com/blockset/walletkit/WalletEvent$FeeBasisEstimated : com/blockset/walletkit/WalletEvent {
+	public fun <init> (Lcom/blockset/walletkit/TransferFeeBasis;)V
+	public final fun component1 ()Lcom/blockset/walletkit/TransferFeeBasis;
+	public final fun copy (Lcom/blockset/walletkit/TransferFeeBasis;)Lcom/blockset/walletkit/WalletEvent$FeeBasisEstimated;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletEvent$FeeBasisEstimated;Lcom/blockset/walletkit/TransferFeeBasis;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletEvent$FeeBasisEstimated;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFeeBasis ()Lcom/blockset/walletkit/TransferFeeBasis;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletEvent$FeeBasisUpdated : com/blockset/walletkit/WalletEvent {
+	public fun <init> (Lcom/blockset/walletkit/TransferFeeBasis;)V
+	public final fun component1 ()Lcom/blockset/walletkit/TransferFeeBasis;
+	public final fun copy (Lcom/blockset/walletkit/TransferFeeBasis;)Lcom/blockset/walletkit/WalletEvent$FeeBasisUpdated;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletEvent$FeeBasisUpdated;Lcom/blockset/walletkit/TransferFeeBasis;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletEvent$FeeBasisUpdated;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFeeBasis ()Lcom/blockset/walletkit/TransferFeeBasis;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletEvent$TransferAdded : com/blockset/walletkit/WalletEvent {
+	public fun <init> (Lcom/blockset/walletkit/Transfer;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Transfer;
+	public final fun copy (Lcom/blockset/walletkit/Transfer;)Lcom/blockset/walletkit/WalletEvent$TransferAdded;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletEvent$TransferAdded;Lcom/blockset/walletkit/Transfer;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletEvent$TransferAdded;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTransfer ()Lcom/blockset/walletkit/Transfer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletEvent$TransferChanged : com/blockset/walletkit/WalletEvent {
+	public fun <init> (Lcom/blockset/walletkit/Transfer;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Transfer;
+	public final fun copy (Lcom/blockset/walletkit/Transfer;)Lcom/blockset/walletkit/WalletEvent$TransferChanged;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletEvent$TransferChanged;Lcom/blockset/walletkit/Transfer;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletEvent$TransferChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTransfer ()Lcom/blockset/walletkit/Transfer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletEvent$TransferDeleted : com/blockset/walletkit/WalletEvent {
+	public fun <init> (Lcom/blockset/walletkit/Transfer;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Transfer;
+	public final fun copy (Lcom/blockset/walletkit/Transfer;)Lcom/blockset/walletkit/WalletEvent$TransferDeleted;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletEvent$TransferDeleted;Lcom/blockset/walletkit/Transfer;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletEvent$TransferDeleted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTransfer ()Lcom/blockset/walletkit/Transfer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletEvent$TransferSubmitted : com/blockset/walletkit/WalletEvent {
+	public fun <init> (Lcom/blockset/walletkit/Transfer;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Transfer;
+	public final fun copy (Lcom/blockset/walletkit/Transfer;)Lcom/blockset/walletkit/WalletEvent$TransferSubmitted;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletEvent$TransferSubmitted;Lcom/blockset/walletkit/Transfer;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletEvent$TransferSubmitted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTransfer ()Lcom/blockset/walletkit/Transfer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/blockset/walletkit/WalletListener {
+	public abstract fun handleWalletEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/WalletEvent;)V
+}
+
+public final class com/blockset/walletkit/WalletManager {
+	public fun <init> (Lcom/blockset/walletkit/nativex/WKWalletManager;Lcom/blockset/walletkit/System;Lkotlinx/coroutines/CoroutineScope;)V
+	public final fun connect (Lcom/blockset/walletkit/NetworkPeer;)V
+	public static synthetic fun connect$default (Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/NetworkPeer;ILjava/lang/Object;)V
+	public final fun createSweeper (Lcom/blockset/walletkit/Wallet;Lcom/blockset/walletkit/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun disconnect ()V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAccount ()Lcom/blockset/walletkit/Account;
+	public final fun getAddressScheme ()Lcom/blockset/walletkit/AddressScheme;
+	public final fun getBaseUnit ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getCurrency ()Lcom/blockset/walletkit/Currency;
+	public final fun getDefaultNetworkFee ()Lcom/blockset/walletkit/NetworkFee;
+	public final fun getDefaultUnit ()Lcom/blockset/walletkit/UnitWK;
+	public final fun getMode ()Lcom/blockset/walletkit/WalletManagerMode;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getNetwork ()Lcom/blockset/walletkit/Network;
+	public final fun getPath ()Ljava/lang/String;
+	public final fun getState ()Lcom/blockset/walletkit/WalletManagerState;
+	public final fun getSystem ()Lcom/blockset/walletkit/System;
+	public final fun getWallet ()Lcom/blockset/walletkit/Wallet;
+	public final fun getWallets ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun isActive ()Z
+	public final fun registerWalletFor (Lcom/blockset/walletkit/Currency;)Lcom/blockset/walletkit/Wallet;
+	public final fun setAddressScheme (Lcom/blockset/walletkit/AddressScheme;)V
+	public final fun setMode (Lcom/blockset/walletkit/WalletManagerMode;)V
+	public final fun stop ()V
+	public final fun submit (Lcom/blockset/walletkit/Transfer;[B)V
+	public final fun sync ()V
+	public final fun syncToDepth (Lcom/blockset/walletkit/WalletManagerSyncDepth;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract class com/blockset/walletkit/WalletManagerDisconnectReason {
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerDisconnectReason$POSIX : com/blockset/walletkit/WalletManagerDisconnectReason {
+	public fun <init> (ILjava/lang/String;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (ILjava/lang/String;)Lcom/blockset/walletkit/WalletManagerDisconnectReason$POSIX;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerDisconnectReason$POSIX;ILjava/lang/String;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerDisconnectReason$POSIX;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getErrMessage ()Ljava/lang/String;
+	public final fun getErrNum ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerDisconnectReason$REQUESTED : com/blockset/walletkit/WalletManagerDisconnectReason {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerDisconnectReason$REQUESTED;
+}
+
+public final class com/blockset/walletkit/WalletManagerDisconnectReason$UNKNOWN : com/blockset/walletkit/WalletManagerDisconnectReason {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerDisconnectReason$UNKNOWN;
+}
+
+public abstract class com/blockset/walletkit/WalletManagerEvent {
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$BlockUpdated : com/blockset/walletkit/WalletManagerEvent {
+	public synthetic fun <init> (JLkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-s-VKNKU ()J
+	public final fun copy-VKZWuLQ (J)Lcom/blockset/walletkit/WalletManagerEvent$BlockUpdated;
+	public static synthetic fun copy-VKZWuLQ$default (Lcom/blockset/walletkit/WalletManagerEvent$BlockUpdated;JILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerEvent$BlockUpdated;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHeight-s-VKNKU ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$Changed : com/blockset/walletkit/WalletManagerEvent {
+	public fun <init> (Lcom/blockset/walletkit/WalletManagerState;Lcom/blockset/walletkit/WalletManagerState;)V
+	public final fun component1 ()Lcom/blockset/walletkit/WalletManagerState;
+	public final fun component2 ()Lcom/blockset/walletkit/WalletManagerState;
+	public final fun copy (Lcom/blockset/walletkit/WalletManagerState;Lcom/blockset/walletkit/WalletManagerState;)Lcom/blockset/walletkit/WalletManagerEvent$Changed;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerEvent$Changed;Lcom/blockset/walletkit/WalletManagerState;Lcom/blockset/walletkit/WalletManagerState;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerEvent$Changed;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNewState ()Lcom/blockset/walletkit/WalletManagerState;
+	public final fun getOldState ()Lcom/blockset/walletkit/WalletManagerState;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$Created : com/blockset/walletkit/WalletManagerEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerEvent$Created;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$Deleted : com/blockset/walletkit/WalletManagerEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerEvent$Deleted;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$SyncProgress : com/blockset/walletkit/WalletManagerEvent {
+	public fun <init> (Ljava/lang/Long;F)V
+	public final fun component1 ()Ljava/lang/Long;
+	public final fun component2 ()F
+	public final fun copy (Ljava/lang/Long;F)Lcom/blockset/walletkit/WalletManagerEvent$SyncProgress;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerEvent$SyncProgress;Ljava/lang/Long;FILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerEvent$SyncProgress;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPercentComplete ()F
+	public final fun getTimestamp ()Ljava/lang/Long;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$SyncRecommended : com/blockset/walletkit/WalletManagerEvent {
+	public fun <init> (Lcom/blockset/walletkit/WalletManagerSyncDepth;)V
+	public final fun component1 ()Lcom/blockset/walletkit/WalletManagerSyncDepth;
+	public final fun copy (Lcom/blockset/walletkit/WalletManagerSyncDepth;)Lcom/blockset/walletkit/WalletManagerEvent$SyncRecommended;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerEvent$SyncRecommended;Lcom/blockset/walletkit/WalletManagerSyncDepth;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerEvent$SyncRecommended;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDepth ()Lcom/blockset/walletkit/WalletManagerSyncDepth;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$SyncStarted : com/blockset/walletkit/WalletManagerEvent {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerEvent$SyncStarted;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$SyncStopped : com/blockset/walletkit/WalletManagerEvent {
+	public fun <init> (Lcom/blockset/walletkit/SyncStoppedReason;)V
+	public final fun component1 ()Lcom/blockset/walletkit/SyncStoppedReason;
+	public final fun copy (Lcom/blockset/walletkit/SyncStoppedReason;)Lcom/blockset/walletkit/WalletManagerEvent$SyncStopped;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerEvent$SyncStopped;Lcom/blockset/walletkit/SyncStoppedReason;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerEvent$SyncStopped;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lcom/blockset/walletkit/SyncStoppedReason;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$WalletAdded : com/blockset/walletkit/WalletManagerEvent {
+	public fun <init> (Lcom/blockset/walletkit/Wallet;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Wallet;
+	public final fun copy (Lcom/blockset/walletkit/Wallet;)Lcom/blockset/walletkit/WalletManagerEvent$WalletAdded;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerEvent$WalletAdded;Lcom/blockset/walletkit/Wallet;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerEvent$WalletAdded;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getWallet ()Lcom/blockset/walletkit/Wallet;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$WalletChanged : com/blockset/walletkit/WalletManagerEvent {
+	public fun <init> (Lcom/blockset/walletkit/Wallet;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Wallet;
+	public final fun copy (Lcom/blockset/walletkit/Wallet;)Lcom/blockset/walletkit/WalletManagerEvent$WalletChanged;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerEvent$WalletChanged;Lcom/blockset/walletkit/Wallet;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerEvent$WalletChanged;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getWallet ()Lcom/blockset/walletkit/Wallet;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerEvent$WalletDeleted : com/blockset/walletkit/WalletManagerEvent {
+	public fun <init> (Lcom/blockset/walletkit/Wallet;)V
+	public final fun component1 ()Lcom/blockset/walletkit/Wallet;
+	public final fun copy (Lcom/blockset/walletkit/Wallet;)Lcom/blockset/walletkit/WalletManagerEvent$WalletDeleted;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerEvent$WalletDeleted;Lcom/blockset/walletkit/Wallet;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerEvent$WalletDeleted;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getWallet ()Lcom/blockset/walletkit/Wallet;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class com/blockset/walletkit/WalletManagerListener {
+	public abstract fun handleManagerEvent (Lcom/blockset/walletkit/System;Lcom/blockset/walletkit/WalletManager;Lcom/blockset/walletkit/WalletManagerEvent;)V
+}
+
+public final class com/blockset/walletkit/WalletManagerMode : java/lang/Enum {
+	public static final field API_ONLY Lcom/blockset/walletkit/WalletManagerMode;
+	public static final field API_WITH_P2P_SUBMIT Lcom/blockset/walletkit/WalletManagerMode;
+	public static final field Companion Lcom/blockset/walletkit/WalletManagerMode$Companion;
+	public static final field P2P_ONLY Lcom/blockset/walletkit/WalletManagerMode;
+	public static final field P2P_WITH_API_SYNC Lcom/blockset/walletkit/WalletManagerMode;
+	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/WalletManagerMode;
+	public static fun values ()[Lcom/blockset/walletkit/WalletManagerMode;
+}
+
+public final class com/blockset/walletkit/WalletManagerMode$Companion {
+	public final fun fromCoreInt-WZ4Q5Ns (I)Lcom/blockset/walletkit/WalletManagerMode;
+}
+
+public abstract class com/blockset/walletkit/WalletManagerState {
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerState$CONNECTED : com/blockset/walletkit/WalletManagerState {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerState$CONNECTED;
+}
+
+public final class com/blockset/walletkit/WalletManagerState$CREATED : com/blockset/walletkit/WalletManagerState {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerState$CREATED;
+}
+
+public final class com/blockset/walletkit/WalletManagerState$DELETED : com/blockset/walletkit/WalletManagerState {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerState$DELETED;
+}
+
+public final class com/blockset/walletkit/WalletManagerState$DISCONNECTED : com/blockset/walletkit/WalletManagerState {
+	public fun <init> (Lcom/blockset/walletkit/WalletManagerDisconnectReason;)V
+	public final fun component1 ()Lcom/blockset/walletkit/WalletManagerDisconnectReason;
+	public final fun copy (Lcom/blockset/walletkit/WalletManagerDisconnectReason;)Lcom/blockset/walletkit/WalletManagerState$DISCONNECTED;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletManagerState$DISCONNECTED;Lcom/blockset/walletkit/WalletManagerDisconnectReason;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletManagerState$DISCONNECTED;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Lcom/blockset/walletkit/WalletManagerDisconnectReason;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletManagerState$SYNCING : com/blockset/walletkit/WalletManagerState {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletManagerState$SYNCING;
+}
+
+public final class com/blockset/walletkit/WalletManagerSyncDepth : java/lang/Enum {
+	public static final field Companion Lcom/blockset/walletkit/WalletManagerSyncDepth$Companion;
+	public static final field FROM_CREATION Lcom/blockset/walletkit/WalletManagerSyncDepth;
+	public static final field FROM_LAST_CONFIRMED_SEND Lcom/blockset/walletkit/WalletManagerSyncDepth;
+	public static final field FROM_LAST_TRUSTED_BLOCK Lcom/blockset/walletkit/WalletManagerSyncDepth;
+	public final fun getDeeperValue ()Lcom/blockset/walletkit/WalletManagerSyncDepth;
+	public final fun getShallowerValue ()Lcom/blockset/walletkit/WalletManagerSyncDepth;
+	public final fun toSerialization-pVg5ArA ()I
+	public static fun valueOf (Ljava/lang/String;)Lcom/blockset/walletkit/WalletManagerSyncDepth;
+	public static fun values ()[Lcom/blockset/walletkit/WalletManagerSyncDepth;
+}
+
+public final class com/blockset/walletkit/WalletManagerSyncDepth$Companion {
+	public final fun fromSerialization-WZ4Q5Ns (I)Lcom/blockset/walletkit/WalletManagerSyncDepth;
+}
+
+public abstract class com/blockset/walletkit/WalletState {
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletState$CREATED : com/blockset/walletkit/WalletState {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletState$CREATED;
+}
+
+public final class com/blockset/walletkit/WalletState$DELETED : com/blockset/walletkit/WalletState {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletState$DELETED;
+}
+
+public abstract interface class com/blockset/walletkit/WalletSweeper {
+	public abstract fun estimate (Lcom/blockset/walletkit/NetworkFee;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getBalance ()Lcom/blockset/walletkit/Amount;
+	public abstract fun submit (Lcom/blockset/walletkit/TransferFeeBasis;)Lcom/blockset/walletkit/Transfer;
+}
+
+public abstract class com/blockset/walletkit/WalletSweeperError : java/lang/Exception {
+}
+
+public final class com/blockset/walletkit/WalletSweeperError$InsufficientFunds : com/blockset/walletkit/WalletSweeperError {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletSweeperError$InsufficientFunds;
+}
+
+public final class com/blockset/walletkit/WalletSweeperError$InvalidKey : com/blockset/walletkit/WalletSweeperError {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletSweeperError$InvalidKey;
+}
+
+public final class com/blockset/walletkit/WalletSweeperError$InvalidSourceWallet : com/blockset/walletkit/WalletSweeperError {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletSweeperError$InvalidSourceWallet;
+}
+
+public final class com/blockset/walletkit/WalletSweeperError$NoTransfersFound : com/blockset/walletkit/WalletSweeperError {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletSweeperError$NoTransfersFound;
+}
+
+public final class com/blockset/walletkit/WalletSweeperError$QueryError : com/blockset/walletkit/WalletSweeperError {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletSweeperError$QueryError;
+}
+
+public final class com/blockset/walletkit/WalletSweeperError$UnableToSweep : com/blockset/walletkit/WalletSweeperError {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletSweeperError$UnableToSweep;
+}
+
+public final class com/blockset/walletkit/WalletSweeperError$Unexpected : com/blockset/walletkit/WalletSweeperError {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/blockset/walletkit/WalletSweeperError$Unexpected;
+	public static synthetic fun copy$default (Lcom/blockset/walletkit/WalletSweeperError$Unexpected;Ljava/lang/String;ILjava/lang/Object;)Lcom/blockset/walletkit/WalletSweeperError$Unexpected;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/blockset/walletkit/WalletSweeperError$UnsupportedCurrency : com/blockset/walletkit/WalletSweeperError {
+	public static final field INSTANCE Lcom/blockset/walletkit/WalletSweeperError$UnsupportedCurrency;
+}
+

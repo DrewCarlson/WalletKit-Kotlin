@@ -3,6 +3,7 @@ import com.android.build.gradle.LibraryExtension
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("org.jetbrains.kotlinx.binary-compatibility-validator")
 }
 
 val ideaActive = System.getProperty("idea.active") == "true"

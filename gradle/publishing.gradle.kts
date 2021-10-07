@@ -19,7 +19,6 @@ val sonatypePassword: String? by project
 configure<PublishingExtension> {
     components.all {
         publications.withType<MavenPublication> {
-            //artifact(tasks.named("javadocJar"))
             with(pom) {
                 name.set(rootProject.name)
                 url.set("https://github.com/DrewCarlson/WalletKit-Kotlin")

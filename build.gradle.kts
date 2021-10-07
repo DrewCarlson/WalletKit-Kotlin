@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.serialization") version KOTLIN_VERSION apply false
     id("org.jetbrains.dokka") version DOKKA_VERSION apply false
     id("org.jetbrains.compose") version JB_COMPOSE_VERSION apply false
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version KOTLINX_BCV_VERSION apply false
 }
 
 buildscript {
