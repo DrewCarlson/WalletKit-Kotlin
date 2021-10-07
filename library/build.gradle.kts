@@ -47,7 +47,7 @@ kotlin {
         }
     }
     if (hasAndroid) {
-        android()
+        android { publishAllLibraryVariants() }
     }
 
     val nativeTargets = listOf(
